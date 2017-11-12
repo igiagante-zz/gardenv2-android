@@ -8,12 +8,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 13/8/16.
  */
-public class UpdateUserUseCase extends UseCase<User> {
+public class UpdateUserUseCase extends UseCase<User, User> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository

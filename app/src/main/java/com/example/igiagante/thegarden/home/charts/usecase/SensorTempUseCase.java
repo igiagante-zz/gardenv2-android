@@ -1,5 +1,6 @@
 package com.example.igiagante.thegarden.home.charts.usecase;
 
+import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.SensorTempRepositoryManager;
@@ -7,12 +8,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 19/8/16.
  */
-public class SensorTempUseCase extends UseCase<Void> {
+public class SensorTempUseCase extends UseCase<SensorTemp, Void> {
 
     private final SensorTempRepositoryManager sensorTempRepositoryManager;
 

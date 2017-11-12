@@ -2,7 +2,9 @@ package com.example.igiagante.thegarden.core.repository;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 15/4/16.

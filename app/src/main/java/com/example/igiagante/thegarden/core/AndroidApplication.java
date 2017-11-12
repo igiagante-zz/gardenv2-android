@@ -11,11 +11,11 @@ import com.example.igiagante.thegarden.R;
 import com.example.igiagante.thegarden.core.di.components.ApplicationComponent;
 import com.example.igiagante.thegarden.core.di.components.DaggerApplicationComponent;
 import com.example.igiagante.thegarden.core.di.modules.ApplicationModule;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.home.charts.services.ChartsDataService;
 import com.example.igiagante.thegarden.home.plants.usecase.PersistStaticDataUseCase;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
+import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 
@@ -67,7 +67,7 @@ public class AndroidApplication extends Application {
         applicationComponent.inject(this);
 
         // update database
-        persistStaticDataUseCase.execute(null, new ApplicationSubscriber());
+        persistStaticDataUseCase.execute(null, new ApplicationObserver());
 
         // create alarm in order to refresh weather data each two days
         createAlarmToCleanDatabase();
@@ -83,10 +83,10 @@ public class AndroidApplication extends Application {
         return this.applicationComponent;
     }
 
-    private final class ApplicationSubscriber extends DefaultSubscriber<String> {
+    private final class ApplicationObserver extends DefaultObserver<String> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

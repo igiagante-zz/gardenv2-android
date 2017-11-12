@@ -79,7 +79,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -129,13 +129,13 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
     /**
      * RecycleView for garden list of the navigation drawer
      */
-    @Bind(R.id.recycler_view_gardens)
+    @BindView(R.id.recycler_view_gardens)
     RecyclerView recyclerViewGardens;
 
-    @Bind(R.id.progress_bar_garden)
+    @BindView(R.id.progress_bar_garden)
     ProgressBar progressBar;
 
-    @Bind(R.id.add_main_button)
+    @BindView(R.id.add_main_button)
     FloatingActionButton fab;
 
     /**

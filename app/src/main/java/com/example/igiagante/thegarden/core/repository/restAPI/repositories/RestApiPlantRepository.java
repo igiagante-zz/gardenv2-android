@@ -22,9 +22,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Ignacio Giagante, on 19/4/16.
@@ -55,18 +55,18 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
     public Observable<Plant> add(@NonNull final Plant plant) {
 
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
-        Observable<Plant> apiResult = api.createPlant(builder.build()).asObservable();
+        Observable<Plant> apiResult = api.createPlant(builder.build());
 
         // get Data From api
         List<Plant> listOne = new ArrayList<>();
-        apiResult.subscribe(plant2 -> listOne.add(plant2));
+        apiResult.subscribe(listOne::add);
 
         // persist the garden into database
         PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
         Observable<Plant> dbResult = dataBase.add(listOne.get(0));
 
         List<Plant> list = new ArrayList<>();
-        dbResult.subscribe(plant1 -> list.add(plant1));
+        dbResult.subscribe(list::add);
 
         Observable<Plant> observable = Observable.just(list.get(0));
 
@@ -90,26 +90,23 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
     @Override
     public Observable<Plant> update(@NonNull final Plant plant) {
+
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
-        Observable<Plant> apiResult = api.updatePlant(plant.getId(), builder.build()).asObservable();
+        Observable<Plant> apiResult = api.updatePlant(plant.getId(), builder.build());
 
         // get Data From api
-        List<Plant> listOne = new ArrayList<>();
-        apiResult.subscribeOn(Schedulers.io()).toBlocking().subscribe(plant2 -> listOne.add(plant2));
+        Plant plantFromApi = apiResult.subscribeOn(Schedulers.io()).blockingFirst();
 
         // update the plant into database
         PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
-        Observable<Plant> dbResult = dataBase.update(listOne.get(0));
+        Observable<Plant> dbResult = dataBase.update(plantFromApi);
 
-        List<Plant> list = new ArrayList<>();
-        dbResult.toBlocking().subscribe(plantId -> list.add(plantId));
-
-        return Observable.just(list.get(0));
+        return Observable.just(dbResult.blockingFirst());
     }
 
     @Override
     public Observable<Integer> remove(@NonNull String plantId) {
-        return api.deletePlant(plantId).asObservable()
+        return api.deletePlant(plantId)
                 .map(response -> response.isSuccessful() ? 1 : -1);
     }
 

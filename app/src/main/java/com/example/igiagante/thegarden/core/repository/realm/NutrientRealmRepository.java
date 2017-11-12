@@ -18,10 +18,11 @@ import com.example.igiagante.thegarden.core.repository.realm.specification.nutri
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -36,7 +37,7 @@ public class NutrientRealmRepository implements Repository<Nutrient> {
 
     public NutrientRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -49,12 +50,12 @@ public class NutrientRealmRepository implements Repository<Nutrient> {
 
     @Override
     public Observable<Nutrient> getById(String id) {
-        return query(new NutrientByIdSpecification(id)).flatMap(Observable::from);
+        return query(new NutrientByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
     public Observable<Nutrient> getByName(String name) {
-        return query(new NutrientByNameSpecification(name)).flatMap(Observable::from);
+        return query(new NutrientByNameSpecification(name)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -133,12 +134,15 @@ public class NutrientRealmRepository implements Repository<Nutrient> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<NutrientRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<NutrientRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<NutrientRealm>> into Observable<List<Nutrient>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(nutrientRealm -> toNutrient.map(nutrientRealm))
-                        .toList());
+        // convert Flowable<RealmResults<NutrientRealm>> into Observable<List<Nutrient>>
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(nutrientRealm -> toNutrient.map(nutrientRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

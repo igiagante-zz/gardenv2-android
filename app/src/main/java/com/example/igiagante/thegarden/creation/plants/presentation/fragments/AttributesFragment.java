@@ -26,8 +26,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author igiagante on 10/5/16.
@@ -38,14 +39,16 @@ public class AttributesFragment extends CreationBaseFragment implements Attribut
     private static final String AVAILABLE_ATTRIBUTES = "AVAILABLE_ATTRIBUTES";
     private static final String SELECTED_ATTRIBUTES = "SELECTED_ATTRIBUTES";
 
-    @Bind(R.id.attributes_selected_id)
+    @BindView(R.id.attributes_selected_id)
     RecyclerView attributesSelected;
 
-    @Bind(R.id.attributes_available_id)
+    @BindView(R.id.attributes_available_id)
     RecyclerView availableAttributes;
 
     @Inject
     AttributesPresenter mAttributesPresenter;
+
+    private Unbinder unbinder;
 
     private AttributeAdapter attributeAdapter;
 
@@ -71,7 +74,7 @@ public class AttributesFragment extends CreationBaseFragment implements Attribut
         final View containerView = inflater.inflate(R.layout.attributes_fragment, container, false);
 
         this.getComponent(CreatePlantComponent.class).inject(this);
-        ButterKnife.bind(this, containerView);
+        unbinder = ButterKnife.bind(this, containerView);
 
         GridLayoutManager availableLayout;
 
@@ -142,7 +145,7 @@ public class AttributesFragment extends CreationBaseFragment implements Attribut
         super.onDestroyView();
         attributesSelected.setAdapter(null);
         availableAttributes.setAdapter(null);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

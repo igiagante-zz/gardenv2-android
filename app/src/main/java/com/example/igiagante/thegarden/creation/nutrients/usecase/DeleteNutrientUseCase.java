@@ -2,6 +2,7 @@ package com.example.igiagante.thegarden.creation.nutrients.usecase;
 
 import android.support.annotation.NonNull;
 
+import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.NutrientRepositoryManager;
@@ -9,12 +10,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 15/7/16.
  */
-public class DeleteNutrientUseCase extends UseCase<String> {
+public class DeleteNutrientUseCase extends UseCase<Nutrient, String> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository

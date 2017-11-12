@@ -17,57 +17,24 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class GardenRepositoryManager extends RepositoryManager<Repository<Garden>> {
+public class GardenRepositoryManager
+        extends BaseRepositoryManager<Garden, GardenRealmRepository, RestApiGardenRepository> {
 
     private Context context;
     private Session session;
 
     @Inject
     public GardenRepositoryManager(Context context, Session session) {
-        super(context);
+        super(context, new GardenRealmRepository(context), new RestApiGardenRepository(context, session));
         this.context = context;
         this.session = session;
-        mRepositories.add(new GardenRealmRepository(context));
-        mRepositories.add(new RestApiGardenRepository(context, session));
-    }
-
-    public Observable add(@NonNull Garden garden) {
-
-        // search a garden using the name
-        Specification gardenByNameSpecification = new GardenByNameSpecification(garden.getName());
-
-        // there should be only one garden with this name, so it will ask for the list's item
-        Observable<Garden> observableOne = mRepositories.get(0).query(gardenByNameSpecification)
-                .flatMap(list -> Observable.just(list.get(0)));
-
-        List<Garden> list = new ArrayList<>();
-        observableOne.map(plant1 -> list.add(garden));
-
-        Observable<List<Garden>> observable = Observable.just(list);
-
-        if (!checkInternet()) {
-            return Observable.just(list.get(0));
-        }
-
-        // check if the garden already exits. If the garden exists, it returns the garden. On the other
-        // side, it asks to the rest api to save the garden.
-        return observable.map(v -> !v.isEmpty()).firstOrDefault(false)
-                .flatMap(exists -> exists
-                        ? observableOne
-                        : mRepositories.get(1).add(garden));
-    }
-
-    public Observable update(@NonNull Garden garden) {
-        if (!checkInternet()) {
-            return Observable.just(garden);
-        }
-        return mRepositories.get(1).update(garden);
     }
 
     public Observable delete(@NonNull String gardenId, @NonNull String userId) {
@@ -76,34 +43,23 @@ public class GardenRepositoryManager extends RepositoryManager<Repository<Garden
             return Observable.just(-1);
         }
 
-        RestApiGardenRepository restApiGardenRepository = new RestApiGardenRepository(context, session);
-
         // delete garden from api
-        Observable<Integer> resultFromApi = restApiGardenRepository.remove(gardenId, userId);
+        Observable<Integer> resultFromApi = api.remove(gardenId, userId);
 
         //Create a list of Integer in order to avoid calling Realm from other Thread
-        List<Integer> list = new ArrayList<>();
-        resultFromApi.subscribeOn(Schedulers.io()).toBlocking().subscribe(success -> list.add(success));
+        Integer result = resultFromApi.subscribeOn(Schedulers.io()).blockingFirst();
 
-        // delete garden from DB
-        if (!list.isEmpty() && list.get(0) != -1) {
-            Observable<Integer> resultFromDB = mRepositories.get(0).remove(gardenId);
-            resultFromDB.toBlocking().subscribe(success -> list.add(success));
+        // delete plant from DB
+        if (result!= -1) {
+            Observable<Integer> resultFromDB = db.remove(gardenId);
+            result = resultFromDB.blockingFirst();
         }
 
         // delete irrigations from garden
         IrrigationRealmRepository irrigationRealmRepository = new IrrigationRealmRepository(context);
         irrigationRealmRepository.removeIrrigationsByGardenId(gardenId);
 
-        Observable<Integer> result;
-
-        if (list.contains(-1)) {
-            result = Observable.just(-1);
-        } else {
-            result = Observable.just(1);
-        }
-
-        return result;
+        return result == -1 ? Observable.just(-1) : Observable.just(gardenId);
     }
 
     public Observable existGardenByNameAndUserId(Garden garden) {
@@ -123,30 +79,5 @@ public class GardenRepositoryManager extends RepositoryManager<Repository<Garden
         });
 
         return list.isEmpty() ? Observable.just(Boolean.FALSE) : Observable.just(list.get(0));
-    }
-
-    /**
-     * Return an observable a list of resources.
-     *
-     * @param specification {@link Specification}
-     * @return Observable
-     */
-    public Observable query(Specification specification) {
-
-        Observable<List<Garden>> query = mRepositories.get(0).query(specification);
-
-        List<Garden> list = new ArrayList<>();
-        query.subscribe(gardens -> list.addAll(gardens));
-
-        if (!checkInternet()) {
-            return Observable.just(list);
-        }
-
-        Observable<List<Garden>> observable = Observable.just(list);
-
-        return observable.map(v -> !v.isEmpty()).firstOrDefault(false)
-                .flatMap(exists -> exists
-                        ? observable
-                        : mRepositories.get(1).query(null));
     }
 }

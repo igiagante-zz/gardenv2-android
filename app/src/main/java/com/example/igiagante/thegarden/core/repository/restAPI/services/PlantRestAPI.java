@@ -5,6 +5,7 @@ import com.example.igiagante.thegarden.core.repository.network.Message;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
@@ -13,7 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
-import rx.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 19/4/16.

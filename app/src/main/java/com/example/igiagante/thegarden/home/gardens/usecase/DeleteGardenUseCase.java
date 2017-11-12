@@ -10,12 +10,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 5/7/16.
  */
-public class DeleteGardenUseCase extends UseCase<Garden> {
+public class DeleteGardenUseCase extends UseCase<Garden, Garden> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository

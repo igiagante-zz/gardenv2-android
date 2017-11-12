@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Flavor;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.plants.presentation.dataHolders.FlavorHolder;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.FlavorGalleryView;
@@ -32,7 +32,7 @@ public class FlavorGalleryPresenter extends AbstractPresenter<FlavorGalleryView>
     }
 
     public void destroy() {
-        this.getFlavorsUserCase.unsubscribe();
+        this.getFlavorsUserCase.dispose();
         this.view = null;
     }
 
@@ -67,13 +67,13 @@ public class FlavorGalleryPresenter extends AbstractPresenter<FlavorGalleryView>
      * Get flavor list
      */
     public void getFlavors() {
-        this.getFlavorsUserCase.execute(null, new FlavorGallerySubscriber());
+        this.getFlavorsUserCase.execute(null, new FlavorGalleryObserver());
     }
 
-    private final class FlavorGallerySubscriber extends DefaultSubscriber<List<Flavor>> {
+    private final class FlavorGalleryObserver extends DefaultObserver<List<Flavor>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

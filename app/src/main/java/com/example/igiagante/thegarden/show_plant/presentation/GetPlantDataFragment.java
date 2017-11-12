@@ -38,8 +38,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 13/6/16.
@@ -48,13 +49,13 @@ public class GetPlantDataFragment extends BaseFragment implements ShowPlantView 
 
     public static final String ATTRIBUTES_KEY = "ATTRIBUTES";
 
-    @Bind(R.id.plant_data_plagues_recycle_view_id)
+    @BindView(R.id.plant_data_plagues_recycle_view_id)
     RecyclerView mPlaguesRecycleView;
 
-    @Bind(R.id.plant_data_flavors_recycle_view_id)
+    @BindView(R.id.plant_data_flavors_recycle_view_id)
     RecyclerView mFlavorsRecycleView;
 
-    @Bind(R.id.plant_data_viewpager_id)
+    @BindView(R.id.plant_data_viewpager_id)
     ViewPager mViewPagerPhotos;
 
     private CirclePageIndicator mIndicator;
@@ -71,12 +72,14 @@ public class GetPlantDataFragment extends BaseFragment implements ShowPlantView 
 
     private TabLayout tabLayout;
 
+    private Unbinder unbinder;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View fragmentView = inflater.inflate(R.layout.get_plant_data_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         /**
          * Get component in order to inject the presenter
@@ -122,7 +125,7 @@ public class GetPlantDataFragment extends BaseFragment implements ShowPlantView 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

@@ -3,9 +3,10 @@ package com.example.igiagante.thegarden.core.repository.realm.specification.nutr
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 12/7/16.
@@ -13,8 +14,8 @@ import rx.Observable;
 public class NutrientSpecification implements RealmSpecification<NutrientRealm> {
 
     @Override
-    public Observable<RealmResults<NutrientRealm>> toObservableRealmResults(Realm realm) {
-        return realm.where(NutrientRealm.class).findAll().asObservable();
+    public Flowable<RealmResults<NutrientRealm>> toFlowable(Realm realm) {
+        return realm.where(NutrientRealm.class).findAll().asFlowable();
     }
 
     @Override

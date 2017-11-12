@@ -6,7 +6,7 @@ import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.SavePlantView;
 
@@ -33,19 +33,19 @@ public class SavePlantPresenter extends AbstractPresenter<SavePlantView> {
     }
 
     public void destroy() {
-        this.savePlantUseCase.unsubscribe();
-        this.updateGardenUseCase.unsubscribe();
+        this.savePlantUseCase.dispose();
+        this.updateGardenUseCase.dispose();
         this.view = null;
     }
 
     public void savePlant(Plant plant) {
         this.showViewLoading();
-        this.savePlantUseCase.execute(plant, new SavePlantSubscriber());
+        this.savePlantUseCase.execute(plant, new SavePlantObserver());
     }
 
     public void updateGarden(Garden garden) {
         this.showViewLoading();
-        this.updateGardenUseCase.execute(garden, new UpdateGardenSubscriber());
+        this.updateGardenUseCase.execute(garden, new UpdateGardenObserver());
     }
 
     private void notifyIfPlantWasPersistedOrUpdated(Plant plant) {
@@ -64,10 +64,10 @@ public class SavePlantPresenter extends AbstractPresenter<SavePlantView> {
         getView().hideLoading();
     }
 
-    private final class SavePlantSubscriber extends DefaultSubscriber<Plant> {
+    private final class SavePlantObserver extends DefaultObserver<Plant> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             SavePlantPresenter.this.hideViewLoading();
         }
 
@@ -84,10 +84,10 @@ public class SavePlantPresenter extends AbstractPresenter<SavePlantView> {
         }
     }
 
-    private final class UpdateGardenSubscriber extends DefaultSubscriber<Garden> {
+    private final class UpdateGardenObserver extends DefaultObserver<Garden> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             SavePlantPresenter.this.hideViewLoading();
         }
 

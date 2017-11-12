@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.MainDataView;
 
@@ -25,11 +25,11 @@ public class MainDataPresenter extends AbstractPresenter<MainDataView> {
     }
 
     public void existPlant(String plantName) {
-        existPlantUseCase.execute(plantName, new MainDataPresenterSubscriber());
+        existPlantUseCase.execute(plantName, new MainDataPresenterObserver());
     }
 
     public void destroy() {
-        this.existPlantUseCase.unsubscribe();
+        this.existPlantUseCase.dispose();
         this.view = null;
     }
 
@@ -37,10 +37,10 @@ public class MainDataPresenter extends AbstractPresenter<MainDataView> {
         getView().informIfPlantExist(exist);
     }
 
-    private final class MainDataPresenterSubscriber extends DefaultSubscriber<Boolean> {
+    private final class MainDataPresenterObserver extends DefaultObserver<Boolean> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

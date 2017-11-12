@@ -10,7 +10,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 27/5/16.

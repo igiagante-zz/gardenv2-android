@@ -11,12 +11,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 2/8/16.
  */
-public class LoginUserUseCase extends UseCase<User> {
+public class LoginUserUseCase extends UseCase<User, User> {
 
     private final RestUserApi api;
 

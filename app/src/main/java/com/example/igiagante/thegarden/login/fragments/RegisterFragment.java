@@ -25,8 +25,9 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 4/8/16.
@@ -36,19 +37,21 @@ public class RegisterFragment extends BaseFragment implements RegisterView {
     @Inject
     RegisterPresenter registerPresenter;
 
-    @Bind(R.id.register_email_id)
+    @BindView(R.id.register_email_id)
     EditText mUserEmail;
 
-    @Bind(R.id.register_password_id)
+    @BindView(R.id.register_password_id)
     EditText mPassword;
 
-    @Bind(R.id.btn_signup)
+    @BindView(R.id.btn_signup)
     Button mButtonSignUp;
 
-    @Bind(R.id.link_login)
+    @BindView(R.id.link_login)
     TextView mButtonLogin;
 
     private ProgressDialog mProgressDialog;
+
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +63,7 @@ public class RegisterFragment extends BaseFragment implements RegisterView {
         this.getComponent(LoginComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.register_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         mButtonSignUp.setOnClickListener(v -> {
             if (checkInternet()) {
@@ -116,7 +119,7 @@ public class RegisterFragment extends BaseFragment implements RegisterView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
         mProgressDialog.dismiss();
     }
 

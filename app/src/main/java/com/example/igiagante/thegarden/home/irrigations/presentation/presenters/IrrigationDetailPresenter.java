@@ -7,7 +7,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.home.irrigations.presentation.holders.NutrientHolder;
 import com.example.igiagante.thegarden.home.irrigations.presentation.view.IrrigationDetailView;
@@ -40,22 +40,22 @@ public class IrrigationDetailPresenter extends AbstractPresenter<IrrigationDetai
     }
 
     public void destroy() {
-        this.saveIrrigationUseCase.unsubscribe();
-        this.getNutrientsUseCase.unsubscribe();
-        this.updateGardenWithIrrigationUseCase.unsubscribe();
+        this.saveIrrigationUseCase.dispose();
+        this.getNutrientsUseCase.dispose();
+        this.updateGardenWithIrrigationUseCase.dispose();
         this.view = null;
     }
 
     public void saveIrrigation(Irrigation irrigation) {
-        this.saveIrrigationUseCase.execute(irrigation, new SaveIrrigationSubscriber());
+        this.saveIrrigationUseCase.execute(irrigation, new SaveIrrigationObserver());
     }
 
     public void getNutrients() {
-        this.getNutrientsUseCase.execute(null, new NutrientsSubscriber());
+        this.getNutrientsUseCase.execute(null, new NutrientsObserver());
     }
 
     public void updateGarden(Garden garden) {
-        this.updateGardenWithIrrigationUseCase.execute(garden, new UpdateGardenSubscriber());
+        this.updateGardenWithIrrigationUseCase.execute(garden, new UpdateGardenObserver());
     }
 
     private void loadNutrients(List<NutrientHolder> nutrients) {
@@ -70,10 +70,10 @@ public class IrrigationDetailPresenter extends AbstractPresenter<IrrigationDetai
         getView().notifyIfGardenWasUpdated(garden);
     }
 
-    private final class SaveIrrigationSubscriber extends DefaultSubscriber<Irrigation> {
+    private final class SaveIrrigationObserver extends DefaultObserver<Irrigation> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override
@@ -88,10 +88,10 @@ public class IrrigationDetailPresenter extends AbstractPresenter<IrrigationDetai
         }
     }
 
-    private final class NutrientsSubscriber extends DefaultSubscriber<List<Nutrient>> {
+    private final class NutrientsObserver extends DefaultObserver<List<Nutrient>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override
@@ -105,10 +105,10 @@ public class IrrigationDetailPresenter extends AbstractPresenter<IrrigationDetai
         }
     }
 
-    private final class UpdateGardenSubscriber extends DefaultSubscriber<Garden> {
+    private final class UpdateGardenObserver extends DefaultObserver<Garden> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

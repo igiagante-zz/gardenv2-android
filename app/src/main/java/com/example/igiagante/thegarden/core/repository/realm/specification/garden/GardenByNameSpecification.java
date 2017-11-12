@@ -4,11 +4,13 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.GardenTable;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 5/7/16.
@@ -22,10 +24,10 @@ public class GardenByNameSpecification implements RealmSpecification<GardenRealm
     }
 
     @Override
-    public Observable<RealmResults<GardenRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(GardenRealm.class)
+    public Flowable<RealmResults<GardenRealm>> toFlowable(@NonNull Realm realm) {
+        return Flowable.just(realm.where(GardenRealm.class)
                 .equalTo(Table.NAME, name)
-                .findAll().asObservable();
+                .findAll());
     }
 
     @Override

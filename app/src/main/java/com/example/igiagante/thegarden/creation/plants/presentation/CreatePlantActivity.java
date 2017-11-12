@@ -34,8 +34,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 6/5/16.
@@ -90,16 +91,18 @@ public class CreatePlantActivity extends BaseActivity implements ViewPager.OnPag
      */
     private CreatePlantViewPager createPlantViewPager;
 
-    @Bind(R.id.edit_plant_button_back)
+    @BindView(R.id.edit_plant_button_back)
     Button mButtonBack;
 
-    @Bind(R.id.edit_plant_button_save)
+    @BindView(R.id.edit_plant_button_save)
     Button mButtonSave;
 
-    @Bind(R.id.progress_bar_plant)
+    @BindView(R.id.progress_bar_plant)
     ProgressBar mProgressBar;
 
     private ViewPagerAdapter mViewPagerAdapter;
+
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +111,7 @@ public class CreatePlantActivity extends BaseActivity implements ViewPager.OnPag
         setContentView(R.layout.create_plant_activity);
 
         this.initializeInjector();
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         tracker.setScreenName(TAG);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -321,7 +324,7 @@ public class CreatePlantActivity extends BaseActivity implements ViewPager.OnPag
     public void onDestroy() {
         super.onDestroy();
         this.mSavePlantPresenter.destroy();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

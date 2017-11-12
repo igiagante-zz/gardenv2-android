@@ -15,10 +15,11 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.SensorTe
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 22/8/16.
@@ -33,7 +34,7 @@ public class SensorTempRealmRepository implements Repository<SensorTemp> {
 
     public SensorTempRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -111,12 +112,16 @@ public class SensorTempRealmRepository implements Repository<SensorTemp> {
 
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<SensorTempRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<SensorTempRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<SensorTempRealm>> into Observable<List<SensorTemp>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(sensorTempRealm -> toSensorTemp.map(sensorTempRealm))
-                        .toList());
+        // convert Flowable<RealmResults<UserRealm>> into Observable<List<User>>
+        return realmResults
+                .flatMap(userRealms ->
+                        Flowable.fromIterable(userRealms)
+                                .map(sensorTempRealm -> toSensorTemp.map(sensorTempRealm)
+                                )
+                )
+                .toList()
+                .toObservable();
     }
 }

@@ -10,17 +10,13 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.repository.realm.UserRealmRepository;
-import com.example.igiagante.thegarden.core.repository.realm.specification.user.UserByIdSpecification;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiNutrientRepository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
-
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 5/8/16.
@@ -33,7 +29,7 @@ public class UserRepositoryManager extends BaseRepositoryManager {
 
     @Inject
     public UserRepositoryManager(Context context, Session session) {
-        super(context);
+        super(context, new UserRealmRepository(context), new RestApiNutrientRepository(context, session));
         realmRepository = new UserRealmRepository(context);
         api = new RestApiGardenRepository(context, session);
         restApiNutrientRepository = new RestApiNutrientRepository(context, session);
@@ -69,48 +65,31 @@ public class UserRepositoryManager extends BaseRepositoryManager {
      */
     public Observable query(@Nullable User user) {
 
-        //check if the user has gardens into the database
-        Observable<User> query = realmRepository.getById(user.getId());
-
-        List<User> list = new ArrayList<>();
-        query.subscribe(userFromDB -> list.add(userFromDB));
-
-        if (!list.isEmpty()) {
-            user = list.get(0);
-        }
-
         if (!checkInternet()) {
             return Observable.just(user);
         }
 
-        if(user.getGardens() != null && user.getGardens().isEmpty() && !TextUtils.isEmpty(user.getUserName())){
+        //check if the user has gardens into the database
+        Observable<User> query = realmRepository.getById(user.getId());
 
-            //if the user has an empty database, it should ask to the api for the gardens
-            Observable<List<Garden>> gardensByUser = api.getGardensByUser(user.getUserName());
+        return query.filter(userData ->
+                        userData.getGardens() != null
+                        && userData.getGardens().isEmpty()
+                        && !TextUtils.isEmpty(userData.getUserName()))
 
-            final User userCopy = user;
+                .flatMap(user1 -> api.getGardensByUser(user1.getUserName()),
+                        (user1, gardensByUser) -> {
 
-            gardensByUser.subscribeOn(Schedulers.io()).toBlocking().subscribe(result -> {
-                userCopy.setGardens((ArrayList<Garden>) result);
-            });
+                            user1.setGardens((ArrayList<Garden>) gardensByUser);
+                            return user1;
+                        })
 
-            //if the user has an empty database, it should ask to the api for the nutrients
-            Observable<List<Nutrient>> nutrientsByUser = restApiNutrientRepository.getNutrientsByUser(user.getUserName());
+                .flatMap(user2 -> restApiNutrientRepository.getNutrientsByUser(user2.getUserName()),
+                        (user2, nutrientsByUser) -> {
+                            user2.setNutrients((ArrayList<Nutrient>) nutrientsByUser);
+                            return user2;
+                        })
 
-            nutrientsByUser.subscribeOn(Schedulers.io()).toBlocking().subscribe(result -> {
-                userCopy.setNutrients((ArrayList<Nutrient>) result);
-            });
-
-            // update db user with gardens
-            realmRepository.update(userCopy);
-
-            // it needs to retrieve again the user, because all the images path should be update with the BASE_URL
-            User userUpdated = realmRepository.getUserById(userCopy.getId());
-
-            return Observable.just(userUpdated);
-
-        } else {
-            return Observable.just(user);
-        }
+                .flatMap(userUpdated -> realmRepository.update(userUpdated));
     }
 }

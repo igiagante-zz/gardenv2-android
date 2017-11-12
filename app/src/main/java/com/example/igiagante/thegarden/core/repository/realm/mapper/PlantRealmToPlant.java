@@ -41,7 +41,7 @@ public class PlantRealmToPlant implements Mapper<PlantRealm, Plant> {
         this.toAttribute = new AttributeRealmToAttribute();
         this.toPlague = new PlagueRealmToPlague();
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name("garden.realm")
                 .deleteRealmIfMigrationNeeded()
                 .build();

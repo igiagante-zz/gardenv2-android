@@ -28,8 +28,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Fragment
@@ -46,14 +47,16 @@ public class PlantListFragment extends GardenFragment implements PlantListView,
 
     PlantsAdapter plantsAdapter;
 
-    @Bind(R.id.recycle_view_id)
+    @BindView(R.id.recycle_view_id)
     RecyclerView recyclerViewPlants;
 
-    @Bind(R.id.progress_bar_plants)
+    @BindView(R.id.progress_bar_plants)
     ProgressBar progressBar;
 
-    @Bind(R.id.create_one_garden_first_plants)
+    @BindView(R.id.create_one_garden_first_plants)
     TextView createOneGarden;
+
+    private Unbinder unbinder;
 
     private ArrayList<Plant> mPlants = new ArrayList<>();
 
@@ -77,7 +80,7 @@ public class PlantListFragment extends GardenFragment implements PlantListView,
         this.getComponent(MainComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.plant_list_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         Bundle args = getArguments();
         if (args != null) {
@@ -127,7 +130,7 @@ public class PlantListFragment extends GardenFragment implements PlantListView,
     public void onDestroyView() {
         super.onDestroyView();
         recyclerViewPlants.setAdapter(null);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

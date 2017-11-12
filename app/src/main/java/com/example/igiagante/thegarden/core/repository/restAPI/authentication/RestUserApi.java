@@ -13,8 +13,8 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
+import io.reactivex.Observable;
 import retrofit2.Response;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 2/8/16.

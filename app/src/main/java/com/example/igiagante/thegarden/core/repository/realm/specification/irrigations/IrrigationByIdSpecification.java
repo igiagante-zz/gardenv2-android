@@ -3,12 +3,14 @@ package com.example.igiagante.thegarden.core.repository.realm.specification.irri
 import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -22,10 +24,9 @@ public class IrrigationByIdSpecification implements RealmSpecification {
     }
 
     @Override
-    public Observable<RealmResults<IrrigationRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(IrrigationRealm.class)
-                .equalTo(Table.ID, id)
-                .findAll().asObservable();
+    public Flowable<RealmResults<IrrigationRealm>> toFlowable(@NonNull Realm realm) {
+        return Flowable.just(realm.where(IrrigationRealm.class).equalTo(Table.ID, id)
+                .findAll());
     }
 
     @Override

@@ -17,10 +17,11 @@ import com.example.igiagante.thegarden.core.repository.realm.specification.irrig
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -35,7 +36,7 @@ public class DoseRealmRepository implements Repository<Dose> {
 
     public DoseRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -48,7 +49,7 @@ public class DoseRealmRepository implements Repository<Dose> {
 
     @Override
     public Observable<Dose> getById(String id) {
-        return query(new DoseByIdSpecification(id)).flatMap(Observable::from);
+        return query(new DoseByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -131,12 +132,15 @@ public class DoseRealmRepository implements Repository<Dose> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<DoseRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<DoseRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<DoseRealm>> into Observable<List<Dose>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(doseRealm -> toDose.map(doseRealm))
-                        .toList());
+        // convert Flowable<RealmResults<DoseRealm>> into Observable<List<Dose>>
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(doseRealm -> toDose.map(doseRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

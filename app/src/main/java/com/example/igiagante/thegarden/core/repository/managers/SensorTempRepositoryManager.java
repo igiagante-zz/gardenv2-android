@@ -12,36 +12,26 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 22/8/16.
  */
-public class SensorTempRepositoryManager extends BaseRepositoryManager {
-
-    private SensorTempRealmRepository realmRepository;
-    private RestApiSensorTempRepository api;
+public class SensorTempRepositoryManager extends
+        BaseRepositoryManager<SensorTemp, SensorTempRealmRepository, RestApiSensorTempRepository> {
 
     @Inject
     public SensorTempRepositoryManager(Context context) {
-        super(context);
-        realmRepository = new SensorTempRealmRepository(context);
-        api = new RestApiSensorTempRepository();
+        super(context, new SensorTempRealmRepository(context), new RestApiSensorTempRepository());
     }
 
     public Observable getSensorData() {
 
-        // if it does not have internet connection, lets use the DB
-        if(!checkInternet()) {
-            SensorTempSpecification sensorTempSpecification = new SensorTempSpecification();
-            Observable<List<SensorTemp>> query = realmRepository.query(sensorTempSpecification);
+        SensorTempSpecification sensorTempSpecification = new SensorTempSpecification();
+        Observable<List<SensorTemp>> query = db.query(sensorTempSpecification);
 
-            List<SensorTemp> list = new ArrayList<>();
-            query.subscribe(sensorTemps -> list.addAll(sensorTemps));
-
-            return Observable.just(list);
-        } else {
-            return api.query(null);
-        }
+        return !checkInternet() ? query :
+                Observable.concat(query, api.query(null)).first(new ArrayList<>()).toObservable();
     }
 }

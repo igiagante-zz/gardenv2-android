@@ -23,7 +23,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -39,10 +39,10 @@ public class ChartsFragment extends GardenFragment implements SensorTempView {
     @Inject
     ChartsPresenter chartsPresenter;
 
-    @Bind(R.id.progress_bar_charts)
+    @BindView(R.id.progress_bar_charts)
     ProgressBar progressBar;
 
-    @Bind(R.id.recycle_view_charts_id)
+    @BindView(R.id.recycle_view_charts_id)
     RecyclerView recyclerViewCharts;
 
     public static ChartsFragment newInstance(ArrayList<Attribute> data) {

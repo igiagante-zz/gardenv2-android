@@ -11,7 +11,7 @@ import android.widget.Toast;
 
 import com.example.igiagante.thegarden.core.di.HasComponent;
 
-import rx.Observable;
+import io.reactivex.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -55,7 +55,7 @@ public abstract class BaseFragment extends Fragment {
         subject.onNext(validationMessage);
     }
 
-    public Observable<ValidationMessage> getValidationMessageObservable() {
+    public PublishSubject<ValidationMessage> getValidationMessageObservable() {
         return subject;
     }
 
@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment {
         subjectView.onNext(enable);
     }
 
-    public Observable<Boolean> getEnableViewPagerObservable() {
+    public PublishSubject<Boolean> getEnableViewPagerObservable() {
         return subjectView;
     }
 

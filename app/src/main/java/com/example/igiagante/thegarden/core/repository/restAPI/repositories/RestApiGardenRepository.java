@@ -13,7 +13,7 @@ import com.example.igiagante.thegarden.core.repository.restAPI.services.GardenRe
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
@@ -58,9 +58,9 @@ public class RestApiGardenRepository extends BaseRestApiRepository<Garden> imple
         Observable<Garden> apiResult;
 
         if (update) {
-            apiResult = api.updateGarden(garden.getId(), garden).asObservable();
+            apiResult = api.updateGarden(garden.getId(), garden);
         } else {
-            apiResult = api.createGarden(garden).asObservable();
+            apiResult = api.createGarden(garden);
         }
 
         Garden result = execute(apiResult, GardenRealmRepository.class, update);
@@ -74,7 +74,7 @@ public class RestApiGardenRepository extends BaseRestApiRepository<Garden> imple
     }
 
     public Observable<Integer> remove(String gardenId, String userId) {
-        return api.deleteGarden(gardenId, userId).asObservable()
+        return api.deleteGarden(gardenId, userId)
                 .map(response -> response.isSuccessful() ? 1 : -1);
     }
 

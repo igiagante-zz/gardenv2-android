@@ -1,5 +1,6 @@
 package com.example.igiagante.thegarden.login.usecase;
 
+import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.UserRepositoryManager;
@@ -10,12 +11,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 10/8/16.
  */
-public class ExistsUserUseCase extends UseCase<String> {
+public class ExistsUserUseCase extends UseCase<User, String> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository

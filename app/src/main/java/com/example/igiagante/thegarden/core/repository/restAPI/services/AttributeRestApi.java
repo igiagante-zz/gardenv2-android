@@ -4,8 +4,8 @@ import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 
 import java.util.List;
 
+import io.reactivex.Observable;
 import retrofit2.http.GET;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 3/6/16.

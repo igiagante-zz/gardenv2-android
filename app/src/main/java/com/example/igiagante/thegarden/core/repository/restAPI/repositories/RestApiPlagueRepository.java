@@ -8,7 +8,8 @@ import com.example.igiagante.thegarden.core.repository.restAPI.services.PlagueRe
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 6/4/16.

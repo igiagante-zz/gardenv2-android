@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.home.plants.presentation.view.PlantListView;
 
@@ -31,8 +31,8 @@ public class PlantListPresenter extends AbstractPresenter<PlantListView> {
     }
 
     public void destroy() {
-        this.getPlantListUseCase.unsubscribe();
-        this.deletePlantUseCase.unsubscribe();
+        this.getPlantListUseCase.dispose();
+        this.deletePlantUseCase.dispose();
         this.view = null;
     }
 
@@ -42,7 +42,7 @@ public class PlantListPresenter extends AbstractPresenter<PlantListView> {
      * @param plantId Plant Id
      */
     public void deletePlant(String plantId) {
-        this.deletePlantUseCase.execute(plantId, new DeletePlantSubscriber());
+        this.deletePlantUseCase.execute(plantId, new DeletePlantObserver());
     }
 
     private void notifyPlantWasDeleted(String plantId) {
@@ -50,10 +50,10 @@ public class PlantListPresenter extends AbstractPresenter<PlantListView> {
     }
 
 
-    private final class DeletePlantSubscriber extends DefaultSubscriber<Object> {
+    private final class DeletePlantObserver extends DefaultObserver<Object> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

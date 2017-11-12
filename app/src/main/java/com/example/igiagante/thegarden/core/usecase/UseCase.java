@@ -1,7 +1,6 @@
 package com.example.igiagante.thegarden.core.usecase;
 
 import android.support.annotation.IntDef;
-import android.support.annotation.Nullable;
 
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
@@ -9,17 +8,16 @@ import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.Subscription;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.Subscriptions;
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Ignacio Giagante on 15/4/16.
  * Param Use case input
  */
-public abstract class UseCase<Param> {
+public abstract class UseCase<T, Param> {
 
     /**
      * Determine the order of repository
@@ -33,46 +31,48 @@ public abstract class UseCase<Param> {
 
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;
-
-    private Subscription subscription = Subscriptions.empty();
+    private final CompositeDisposable disposables;
 
     protected UseCase(ThreadExecutor threadExecutor,
                       PostExecutionThread postExecutionThread) {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
+        this.disposables = new CompositeDisposable();
     }
 
     protected List<Integer> getRepositoryOrder() {
         return repositoryOrder;
     }
 
-    protected void setRepositoryOrder() {}
-
     /**
      * Builds an {@link rx.Observable} which will be used when executing the current {@link UseCase}.
      */
-    protected abstract Observable buildUseCaseObservable(Param param);
+    protected abstract Observable<T> buildUseCaseObservable(Param param);
+
 
     /**
      * Executes the current use case.
-     * @param param Parameter input
-     * @param UseCaseSubscriber The guy who will be listen to the observable build
-     * with {@link #buildUseCaseObservable(Param)}.
+     *
+     * @param params Parameters (Optional) used to build/execute this use case.
+     * @param observer {@link DisposableObserver} which will be listening to the observable build
+     * by {@link #buildUseCaseObservable(Param)} ()} method.
      */
     @SuppressWarnings("unchecked")
-    public void execute(@Nullable Param param, Subscriber UseCaseSubscriber) {
-        this.subscription = this.buildUseCaseObservable(param)
+    public void execute(Param params, DisposableObserver<T> observer) {
+
+        final Observable<T> observable = this.buildUseCaseObservable(params)
                 .subscribeOn(Schedulers.from(threadExecutor))
-                .observeOn(postExecutionThread.getScheduler())
-                .subscribe(UseCaseSubscriber);
+                .observeOn(postExecutionThread.getScheduler());
+
+        disposables.add((observable.subscribeWith(observer)));
     }
 
     /**
-     * Unsubscribes from current {@link rx.Subscription}.
+     * Dispose from current {@link CompositeDisposable}.
      */
-    public void unsubscribe() {
-        if (!subscription.isUnsubscribed()) {
-            subscription.unsubscribe();
+    public void dispose() {
+        if (!disposables.isDisposed()) {
+            disposables.dispose();
         }
     }
 }

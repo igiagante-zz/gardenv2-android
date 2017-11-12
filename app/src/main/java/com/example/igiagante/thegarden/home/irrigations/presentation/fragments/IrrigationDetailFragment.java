@@ -36,8 +36,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 21/7/16.
@@ -54,46 +55,46 @@ public class IrrigationDetailFragment extends BaseFragment implements Irrigation
     @Inject
     IrrigationDetailPresenter irrigationDetailPresenter;
 
-    @Bind(R.id.irrigation_expandable_list_id)
+    @BindView(R.id.irrigation_expandable_list_id)
     ExpandableListView mExpandableListView;
 
-    @Bind(R.id.irrigation_date_id)
+    @BindView(R.id.irrigation_date_id)
     EditText mIrrigationDate;
 
     /**
      * How much dose should be irrigate in each plant
      */
-    @Bind(R.id.irrigation_quantity_id)
+    @BindView(R.id.irrigation_quantity_id)
     CountView quantity;
 
     /**
      * How much ph should be used in the dose
      */
-    @Bind(R.id.irrigation_ph_dose_id)
+    @BindView(R.id.irrigation_ph_dose_id)
     CountViewDecimal phDose;
 
     /**
      * How much water should be used in the dose
      */
-    @Bind(R.id.irrigation_water_id)
+    @BindView(R.id.irrigation_water_id)
     CountView water;
 
     /**
      * Level of ph after reading
      */
-    @Bind(R.id.irrigation_ph_id)
+    @BindView(R.id.irrigation_ph_id)
     CountViewDecimal ph;
 
     /**
      * Level of ec after reading
      */
-    @Bind(R.id.irrigation_ec_id)
+    @BindView(R.id.irrigation_ec_id)
     CountViewDecimal ec;
 
-    @Bind(R.id.irrigation_save_button)
+    @BindView(R.id.irrigation_save_button)
     Button mSaveButton;
 
-    @Bind(R.id.irrigation_cancel_button)
+    @BindView(R.id.irrigation_cancel_button)
     Button mCancelButton;
 
     private Garden garden;
@@ -101,6 +102,8 @@ public class IrrigationDetailFragment extends BaseFragment implements Irrigation
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("d MMM", Locale.getDefault());
 
     private List<NutrientHolder> mNutrients;
+
+    private Unbinder unbinder;
 
     public static IrrigationDetailFragment newInstance(Irrigation irrigation) {
         IrrigationDetailFragment myFragment = new IrrigationDetailFragment();
@@ -122,7 +125,7 @@ public class IrrigationDetailFragment extends BaseFragment implements Irrigation
         this.getComponent(IrrigationComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.irrigation_detail_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         expandableListAdapter = new ExpandableListAdapter(getContext());
         mExpandableListView.setAdapter(expandableListAdapter);
@@ -281,7 +284,7 @@ public class IrrigationDetailFragment extends BaseFragment implements Irrigation
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

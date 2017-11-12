@@ -7,7 +7,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
 import com.example.igiagante.thegarden.core.repository.network.Settings;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.nutrients.presentation.view.NutrientView;
 
@@ -38,23 +38,23 @@ public class NutrientPresenter extends AbstractPresenter<NutrientView> {
     }
 
     public void destroy() {
-        this.getNutrientsUseCase.unsubscribe();
-        this.saveNutrientUseCase.unsubscribe();
-        this.deleteNutrientUseCase.unsubscribe();
+        this.getNutrientsUseCase.dispose();
+        this.saveNutrientUseCase.dispose();
+        this.deleteNutrientUseCase.dispose();
         this.view = null;
     }
 
     public void loadNutrients(String userId) {
-        this.getNutrientsUseCase.execute(userId, new NutrientsSubscriber());
+        this.getNutrientsUseCase.execute(userId, new NutrientsObserver());
     }
 
     public void deleteNutrient(String nutrientId) {
-        this.deleteNutrientUseCase.execute(nutrientId, new DeleteNutrientSubscriber());
+        this.deleteNutrientUseCase.execute(nutrientId, new DeleteNutrientObserver());
     }
 
     public void saveNutrient(Nutrient nutrient) {
         removeDomainFromImages(nutrient);
-        this.saveNutrientUseCase.execute(nutrient, new SaveNutrientSubscriber());
+        this.saveNutrientUseCase.execute(nutrient, new SaveNutrientObserver());
     }
 
     private void showNutrients(List<Nutrient> nutrients) {
@@ -69,10 +69,10 @@ public class NutrientPresenter extends AbstractPresenter<NutrientView> {
         getView().notifyIfNutrientWasPersistedOrUpdated(nutrient);
     }
 
-    private final class NutrientsSubscriber extends DefaultSubscriber<List<Nutrient>> {
+    private final class NutrientsObserver extends DefaultObserver<List<Nutrient>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override
@@ -87,10 +87,10 @@ public class NutrientPresenter extends AbstractPresenter<NutrientView> {
         }
     }
 
-    private final class DeleteNutrientSubscriber extends DefaultSubscriber<Integer> {
+    private final class DeleteNutrientObserver extends DefaultObserver<Integer> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 
@@ -105,10 +105,10 @@ public class NutrientPresenter extends AbstractPresenter<NutrientView> {
         }
     }
 
-    private final class SaveNutrientSubscriber extends DefaultSubscriber<Nutrient> {
+    private final class SaveNutrientObserver extends DefaultObserver<Nutrient> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 

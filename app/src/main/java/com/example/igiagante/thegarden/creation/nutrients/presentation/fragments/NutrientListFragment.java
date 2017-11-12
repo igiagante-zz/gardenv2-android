@@ -26,8 +26,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 12/7/16.
@@ -44,14 +45,16 @@ public class NutrientListFragment extends BaseFragment implements NutrientView, 
 
     private NutrientsAdapter nutrientsAdapter;
 
-    @Bind(R.id.nutrients_recycle_view_id)
+    @BindView(R.id.nutrients_recycle_view_id)
     RecyclerView recyclerViewNutrients;
 
-    @Bind(R.id.nutrients_add_new_nutrient_id)
+    @BindView(R.id.nutrients_add_new_nutrient_id)
     FloatingActionButton buttonAddNutrient;
 
-    @Bind(R.id.nutrient_list_progress_bar)
+    @BindView(R.id.nutrient_list_progress_bar)
     ProgressBar mProgressBar;
+
+    private Unbinder unbinder;
 
     private OnAddNutrientListener mOnAddNutrientListener;
 
@@ -70,7 +73,7 @@ public class NutrientListFragment extends BaseFragment implements NutrientView, 
         this.getComponent(NutrientComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.nutrient_list_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         nutrientsAdapter = new NutrientsAdapter(getContext(), (NutrientsAdapter.OnNutrientSelected) getActivity(), this);
 
@@ -123,7 +126,7 @@ public class NutrientListFragment extends BaseFragment implements NutrientView, 
     public void onDestroyView() {
         super.onDestroyView();
         recyclerViewNutrients.setAdapter(null);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.login.view.LoginView;
 
@@ -45,28 +45,28 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
     }
 
     public void destroy() {
-        this.loginUserUseCase.unsubscribe();
-        this.refreshTokenUseCase.unsubscribe();
-        this.existsUserUseCase.unsubscribe();
-        this.saveUserUseCase.unsubscribe();
-        this.updateUserUseCase.unsubscribe();
+        this.loginUserUseCase.dispose();
+        this.refreshTokenUseCase.dispose();
+        this.existsUserUseCase.dispose();
+        this.saveUserUseCase.dispose();
+        this.updateUserUseCase.dispose();
         this.view = null;
     }
 
     public void loginUser(User user) {
-        this.loginUserUseCase.execute(user, new LoginUserSubscriber());
+        this.loginUserUseCase.execute(user, new LoginUserObserver());
     }
 
     public void refreshToken() {
-        this.refreshTokenUseCase.execute(null, new RrefreshTokenSubscriber());
+        this.refreshTokenUseCase.execute(null, new RrefreshTokenObserver());
     }
 
     public void existsUser(String userId) {
-        this.existsUserUseCase.execute(userId, new UserExistsSubscriber());
+        this.existsUserUseCase.execute(userId, new UserExistsObserver());
     }
 
     public void saveUser(User user) {
-        this.saveUserUseCase.execute(user, new SaveUserSubscriber());
+        this.saveUserUseCase.execute(user, new SaveUserObserver());
     }
 
     private void notifyUserLogin(String result) {
@@ -85,10 +85,10 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
         getView().notifyUserWasPersisted();
     }
 
-    private final class LoginUserSubscriber extends DefaultSubscriber<String> {
+    private final class LoginUserObserver extends DefaultObserver<String> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 
@@ -107,10 +107,10 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
         }
     }
 
-    private final class RrefreshTokenSubscriber extends DefaultSubscriber<String> {
+    private final class RrefreshTokenObserver extends DefaultObserver<String> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 
@@ -129,10 +129,10 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
         }
     }
 
-    private final class UserExistsSubscriber extends DefaultSubscriber<Boolean> {
+    private final class UserExistsObserver extends DefaultObserver<Boolean> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 
@@ -147,10 +147,10 @@ public class LoginPresenter extends AbstractPresenter<LoginView> {
         }
     }
 
-    private final class SaveUserSubscriber extends DefaultSubscriber<User> {
+    private final class SaveUserObserver extends DefaultObserver<User> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 

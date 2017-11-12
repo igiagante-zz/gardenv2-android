@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.login.view.RegisterView;
 
@@ -28,22 +28,22 @@ public class RegisterPresenter extends AbstractPresenter<RegisterView> {
     }
 
     public void destroy() {
-        this.registerUserUseCase.unsubscribe();
+        this.registerUserUseCase.dispose();
         this.view = null;
     }
 
     public void registerUser(User user) {
-        this.registerUserUseCase.execute(user, new RegisterUserSubscriber());
+        this.registerUserUseCase.execute(user, new RegisterUserObserver());
     }
 
     private void notifyUserRegistration(String result) {
         getView().notifyUserRegistration(result);
     }
 
-    private final class RegisterUserSubscriber extends DefaultSubscriber<String> {
+    private final class RegisterUserObserver extends DefaultObserver<String> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

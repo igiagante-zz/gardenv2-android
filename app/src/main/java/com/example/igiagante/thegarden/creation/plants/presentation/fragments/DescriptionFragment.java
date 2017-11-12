@@ -29,8 +29,9 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author igiagante on 10/5/16.
@@ -40,17 +41,19 @@ public class DescriptionFragment extends CreationBaseFragment implements PlagueV
     public static final String PLAGUES_KEY = "PLAGUES";
     public static final String PLANT_DESCRIPTION_KEY = "PLANT_DESCRIPTION";
 
-    @Bind(R.id.palgues_recycleview_id)
+    @BindView(R.id.palgues_recycleview_id)
     RecyclerView mPlaguesRecycleView;
 
-    @Bind(R.id.plant_description_id)
+    @BindView(R.id.plant_description_id)
     EditText descriptionTextArea;
 
-    @Bind(R.id.plant_save_button)
+    @BindView(R.id.plant_save_button)
     Button saveButton;
 
-    @Bind(R.id.plant_cancel_button)
+    @BindView(R.id.plant_cancel_button)
     Button cancelButton;
+
+    private Unbinder unbinder;
 
     @Inject
     PlaguePresenter mPlaguePresenter;
@@ -87,7 +90,7 @@ public class DescriptionFragment extends CreationBaseFragment implements PlagueV
         final View containerView = inflater.inflate(R.layout.description_fragment, container, false);
 
         this.getComponent(CreatePlantComponent.class).inject(this);
-        ButterKnife.bind(this, containerView);
+        unbinder = ButterKnife.bind(this, containerView);
 
         if (!TextUtils.isEmpty(mPlantDescription)) {
             descriptionTextArea.setText(mPlantDescription);
@@ -146,7 +149,7 @@ public class DescriptionFragment extends CreationBaseFragment implements PlagueV
     public void onDestroyView() {
         super.onDestroyView();
         mPlaguesRecycleView.setAdapter(null);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

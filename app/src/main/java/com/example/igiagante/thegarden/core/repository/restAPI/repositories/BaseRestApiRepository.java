@@ -12,11 +12,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import rx.Observable;
-import rx.schedulers.Schedulers;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
@@ -37,7 +37,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
 
     /**
      * Go to the api and then continue with the DB
-     *
+     *Ø
      * @param apiResult  after call api
      * @param repository DB
      * @param update     indicate if the transaction is about an `updating`
@@ -45,8 +45,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
     protected T execute(Observable<T> apiResult, Class repository, boolean update) {
 
         // get Data From api
-        List<T> listOne = new ArrayList<>();
-        apiResult.subscribeOn(Schedulers.io()).toBlocking().subscribe(result -> listOne.add(result));
+        List<T> listOne = (List<T>) apiResult.subscribeOn(Schedulers.io()).blockingIterable();
 
         // update database
         Repository dataBase = null;
@@ -76,8 +75,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
             dbResult = dataBase.add(listOne.get(0));
         }
 
-        List<T> list = new ArrayList<>();
-        dbResult.toBlocking().subscribe(model -> list.add(model));
+        List<T> list = (List<T>) dbResult.subscribeOn(Schedulers.io()).blockingIterable();
 
         return list.get(0);
     }

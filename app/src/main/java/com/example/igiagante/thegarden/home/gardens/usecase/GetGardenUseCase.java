@@ -13,12 +13,12 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 6/7/16.
  */
-public class GetGardenUseCase extends UseCase<String> {
+public class GetGardenUseCase extends UseCase<Garden, String> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -31,14 +31,10 @@ public class GetGardenUseCase extends UseCase<String> {
                             @NonNull PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.gardenRepositoryManager = gardenRepositoryManager;
-        // set repositories order
-        this.gardenRepositoryManager.setRepositoriesOrder(getRepositoryOrder());
     }
 
     @Override
     protected Observable buildUseCaseObservable(String gardenId) {
-        Observable<ArrayList<Garden>> query = gardenRepositoryManager.query(new GardenByIdSpecification(gardenId));
-
-        return query.flatMap(list -> Observable.just(list.get(0)));
+        return gardenRepositoryManager.query(new GardenByIdSpecification(gardenId));
     }
 }

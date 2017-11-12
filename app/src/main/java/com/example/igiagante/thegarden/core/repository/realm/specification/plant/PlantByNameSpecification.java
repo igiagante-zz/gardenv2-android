@@ -6,9 +6,10 @@ import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.PlantTable;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author giagante on 5/5/16.
@@ -22,10 +23,10 @@ public class PlantByNameSpecification implements RealmSpecification<PlantRealm> 
     }
 
     @Override
-    public Observable<RealmResults<PlantRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(PlantRealm.class)
+    public Flowable<RealmResults<PlantRealm>> toFlowable(@NonNull Realm realm) {
+        return Flowable.just(realm.where(PlantRealm.class)
                 .equalTo(PlantTable.NAME, name)
-                .findAll().asObservable();
+                .findAll());
     }
 
     @Override

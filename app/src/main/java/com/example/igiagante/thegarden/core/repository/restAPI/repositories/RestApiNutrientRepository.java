@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.MultipartBody;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
@@ -67,9 +67,9 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
         Observable<Nutrient> apiResult;
 
         if (update) {
-            apiResult = api.updateNutrient(nutrient.getId(), builder.build()).asObservable();
+            apiResult = api.updateNutrient(nutrient.getId(), builder.build());
         } else {
-            apiResult = api.createNutrient(builder.build()).asObservable();
+            apiResult = api.createNutrient(builder.build());
         }
 
         Nutrient result = execute(apiResult, NutrientRealmRepository.class, update);
@@ -79,7 +79,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
 
     @Override
     public Observable<Integer> remove(String nutrientId) {
-        return api.deleteNutrient(nutrientId).asObservable()
+        return api.deleteNutrient(nutrientId)
                 .map(response -> response.isSuccessful() ? 1 : -1);
     }
 

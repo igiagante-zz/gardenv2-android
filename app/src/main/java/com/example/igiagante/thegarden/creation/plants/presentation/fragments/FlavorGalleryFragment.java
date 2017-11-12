@@ -25,8 +25,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Fragment used to show the flavors gallery
@@ -40,8 +41,10 @@ public class FlavorGalleryFragment extends CreationBaseFragment implements Flavo
     @Inject
     FlavorGalleryPresenter mFlavorGalleryPresenter;
 
-    @Bind(R.id.recycler_view_flavors)
+    @BindView(R.id.recycler_view_flavors)
     RecyclerView mFlavorsRecycleView;
+
+    private Unbinder unbinder;
 
     private FlavorAdapter mAdapter;
 
@@ -66,7 +69,7 @@ public class FlavorGalleryFragment extends CreationBaseFragment implements Flavo
         final View containerView = inflater.inflate(R.layout.flavors_fragment, container, false);
 
         this.getComponent(CreatePlantComponent.class).inject(this);
-        ButterKnife.bind(this, containerView);
+        unbinder = ButterKnife.bind(this, containerView);
 
         mFlavorsRecycleView.setHasFixedSize(true);
 
@@ -107,7 +110,7 @@ public class FlavorGalleryFragment extends CreationBaseFragment implements Flavo
     public void onDestroyView() {
         super.onDestroyView();
         mFlavorsRecycleView.setAdapter(null);
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

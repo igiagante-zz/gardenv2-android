@@ -9,6 +9,9 @@ import android.os.Environment;
 
 import com.example.igiagante.thegarden.R;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -18,10 +21,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.Observable;
 import rx.subjects.PublishSubject;
 
 /**
@@ -48,7 +50,7 @@ public class EmailProducerService {
         subject.onNext(enable);
     }
 
-    public Observable<Boolean> getNotificationEmailObservable() {
+    public PublishSubject<Boolean> getNotificationEmailObservable() {
         return subject;
     }
 
@@ -109,29 +111,13 @@ public class EmailProducerService {
                         }
                     }
                     sub.onNext(filesPaths);
-                    sub.onCompleted();
+                    sub.onComplete();
                 }
         );
-
-        Subscriber<List<String>> mySubscriber = new Subscriber<List<String>>() {
-            @Override
-            public void onCompleted() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onNext(List<String> filesPaths) {
-                createShareIntent(filesPaths);
-            }
-        };
 
         downloadObservable
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(mySubscriber);
+                .subscribe(filesPaths -> createShareIntent(filesPaths));
     }
 }

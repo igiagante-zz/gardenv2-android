@@ -2,6 +2,7 @@ package com.example.igiagante.thegarden.home.plants.usecase;
 
 import android.support.annotation.NonNull;
 
+import com.example.igiagante.thegarden.core.domain.entity.Plant;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.PlantRepositoryManager;
@@ -10,12 +11,12 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 2/5/16.
  */
-public class GetPlantsUseCase extends UseCase<Void> {
+public class GetPlantsUseCase extends UseCase<Plant, Void> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -26,18 +27,11 @@ public class GetPlantsUseCase extends UseCase<Void> {
     public GetPlantsUseCase(@NonNull PlantRepositoryManager plantRepositoryManager, @NonNull ThreadExecutor threadExecutor, @NonNull PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.plantRepositoryManager = plantRepositoryManager;
-        // set repositories order
-        this.plantRepositoryManager.setRepositoriesOrder(getRepositoryOrder());
     }
 
     @Override
     protected Observable buildUseCaseObservable(Void aVoid) {
         PlantSpecification plantSpecification = new PlantSpecification();
         return plantRepositoryManager.query(plantSpecification);
-    }
-
-    @Override
-    protected void setRepositoryOrder() {
-        repositoryOrder.add(LOCAL_REPOSITORY, REMOTE_REPOSITORY);
     }
 }

@@ -37,7 +37,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -237,34 +237,34 @@ public class PlantsAdapter extends RecyclerView.Adapter<PlantsAdapter.PlantViewH
 
         private List<Image> mImages;
 
-        @Bind(R.id.main_image_plant)
+        @BindView(R.id.main_image_plant)
         SimpleDraweeView mPlantImage;
 
-        @Bind(R.id.plant_name)
+        @BindView(R.id.plant_name)
         TextView mPlantName;
 
-        @Bind(R.id.seed_date_id)
+        @BindView(R.id.seed_date_id)
         TextView mSeedDate;
 
-        @Bind(R.id.plant_genotype_id)
+        @BindView(R.id.plant_genotype_id)
         TextView mGenotype;
 
-        @Bind(R.id.harvest_id)
+        @BindView(R.id.harvest_id)
         TextView mHarvest;
 
-        @Bind(R.id.high_id)
+        @BindView(R.id.high_id)
         TextView mHeight;
 
-        @Bind(R.id.flower_time_id)
+        @BindView(R.id.flower_time_id)
         TextView mFloweringTime;
 
-        @Bind(R.id.edit_plant_button)
+        @BindView(R.id.edit_plant_button)
         Button mEditButton;
 
-        @Bind(R.id.plant_delete_button_id)
+        @BindView(R.id.plant_delete_button_id)
         Button mDeleteButton;
 
-        @Bind(R.id.share_plant_button)
+        @BindView(R.id.share_plant_button)
         Button mSharePlantButton;
 
         public PlantViewHolder(View itemView) {

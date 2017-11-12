@@ -13,12 +13,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 20/7/16.
  */
-public class ExistNutrientUseCase extends UseCase<String> {
+public class ExistNutrientUseCase extends UseCase<Nutrient, String> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -33,7 +33,7 @@ public class ExistNutrientUseCase extends UseCase<String> {
 
     @Override
     protected Observable buildUseCaseObservable(String plantName) {
-        Observable<Nutrient> nutrientObservable = nutrientRepositoryManager.getRepositories().get(0).getByName(plantName);
+        Observable<Nutrient> nutrientObservable = nutrientRepositoryManager.getDB().getByName(plantName);
 
         List<Boolean> list = new ArrayList<>();
         nutrientObservable.subscribe(nutrient -> {

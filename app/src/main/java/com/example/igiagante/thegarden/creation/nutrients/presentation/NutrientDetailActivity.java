@@ -22,7 +22,7 @@ import com.example.igiagante.thegarden.creation.plants.presentation.fragments.Ph
 
 import java.util.ArrayList;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -39,13 +39,13 @@ public class NutrientDetailActivity extends BaseActivity implements HasComponent
 
     private Nutrient mNutrient;
 
-    @Bind(R.id.nutrient_save_button)
+    @BindView(R.id.nutrient_save_button)
     Button mSaveButton;
 
-    @Bind(R.id.nutrient_cancel_button)
+    @BindView(R.id.nutrient_cancel_button)
     Button mCancelButton;
 
-    @Bind(R.id.nutrient_detail_progress_bar)
+    @BindView(R.id.nutrient_detail_progress_bar)
     ProgressBar mProgressBar;
 
     @Override

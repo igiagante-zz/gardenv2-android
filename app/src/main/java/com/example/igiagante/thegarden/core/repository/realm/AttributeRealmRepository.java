@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 6/5/16.
@@ -36,7 +38,7 @@ public class AttributeRealmRepository implements Repository<Attribute> {
 
     public AttributeRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -49,7 +51,7 @@ public class AttributeRealmRepository implements Repository<Attribute> {
 
     @Override
     public Observable<Attribute> getById(String id) {
-        return query(new AttributeByIdSpecification(id)).flatMap(Observable::from);
+        return query(new AttributeByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -131,17 +133,15 @@ public class AttributeRealmRepository implements Repository<Attribute> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<AttributeRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<AttributeRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<PlagueRealm>> into Observable<List<Plague>>
-        List<Attribute> list = new ArrayList<>();
-
-        realmResults.subscribe(attributeRealms -> {
-            for (AttributeRealm attributeRealm : attributeRealms) {
-                list.add(toAttribute.map(attributeRealm));
-            }
-        });
-
-        return Observable.just(list);
+        // convert Flowable<RealmResults<AttributeRealm>> into Observable<List<Attribute>>
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(attributeRealm -> toAttribute.map(attributeRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 6/5/16.
@@ -36,7 +38,7 @@ public class PlagueRealmRepository implements Repository<Plague> {
 
     public PlagueRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -50,7 +52,7 @@ public class PlagueRealmRepository implements Repository<Plague> {
 
     @Override
     public Observable<Plague> getById(String id) {
-        return query(new PlagueByIdSpecification(id)).flatMap(Observable::from);
+        return query(new PlagueByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -122,17 +124,15 @@ public class PlagueRealmRepository implements Repository<Plague> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<PlagueRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<PlagueRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<PlagueRealm>> into Observable<List<Plague>>
-        List<Plague> list = new ArrayList<>();
-
-        realmResults.subscribe(plagueRealms -> {
-            for (PlagueRealm plagueRealm : plagueRealms) {
-                list.add(toPlague.map(plagueRealm));
-            }
-        });
-
-        return Observable.just(list);
+        // convert Flowable<RealmResults<PlagueRealm>> into Observable<List<Plague>>
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(plagueRealm -> toPlague.map(plagueRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

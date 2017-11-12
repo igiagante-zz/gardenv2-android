@@ -29,8 +29,9 @@ import java.util.Arrays;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Fragment used for the main data plant.
@@ -45,20 +46,22 @@ public class MainDataFragment extends CreationBaseFragment implements LabelledSp
     @Inject
     MainDataPresenter mainDataPresenter;
 
-    @Bind(R.id.name_of_plant_id)
+    @BindView(R.id.name_of_plant_id)
     TextView mNameOfPlant;
 
-    @Bind(R.id.genotype_id)
+    @BindView(R.id.genotype_id)
     TextView mGenotype;
 
-    @Bind(R.id.ph_soil_id)
+    @BindView(R.id.ph_soil_id)
     CountViewDecimal mPhSoil;
 
-    @Bind(R.id.ec_soil_id)
+    @BindView(R.id.ec_soil_id)
     CountViewDecimal mEcSoil;
 
-    @Bind(R.id.size_id)
+    @BindView(R.id.size_id)
     CountView mSize;
+
+    private Unbinder unbinder;
 
     private LabelledSpinner spinner;
 
@@ -77,7 +80,7 @@ public class MainDataFragment extends CreationBaseFragment implements LabelledSp
 
         final View fragmentView = inflater.inflate(R.layout.create_plant_fragment, container, false);
 
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         spinner = (LabelledSpinner) fragmentView.findViewById(R.id.spinner_flowering_time_id);
         spinner.setItemsArray(R.array.flowering_time_array);
@@ -113,7 +116,7 @@ public class MainDataFragment extends CreationBaseFragment implements LabelledSp
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

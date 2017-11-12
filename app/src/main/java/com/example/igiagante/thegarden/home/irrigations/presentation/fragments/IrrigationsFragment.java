@@ -32,8 +32,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author igiagante on 5/5/16.
@@ -51,20 +52,23 @@ public class IrrigationsFragment extends GardenFragment implements IrrigationVie
 
     private IrrigationsAdapter irrigationsAdapter;
 
-    @Bind(R.id.irrigation_list_progress_bar)
+    @BindView(R.id.irrigation_list_progress_bar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.irrigations_recycle_view_id)
+    @BindView(R.id.irrigations_recycle_view_id)
     RecyclerView recyclerViewIrrigations;
 
-    @Bind(R.id.create_one_garden_first_irrigations)
+    @BindView(R.id.create_one_garden_first_irrigations)
     TextView createOneGarden;
 
     private ArrayList<Irrigation> mIrrigations = new ArrayList<>();
 
     private String irrigationId;
 
+    private Unbinder unbinder;
+
     public static IrrigationsFragment newInstance(Garden garden) {
+
         IrrigationsFragment myFragment = new IrrigationsFragment();
 
         Bundle args = new Bundle();
@@ -82,13 +86,14 @@ public class IrrigationsFragment extends GardenFragment implements IrrigationVie
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         /**
          * Get component in order to inject the presenter
          */
         this.getComponent(MainComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.irrigations_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         irrigationsAdapter = new IrrigationsAdapter(getContext(), this, this);
         this.recyclerViewIrrigations.setLayoutManager(new LinearLayoutManager(context()));
@@ -223,7 +228,7 @@ public class IrrigationsFragment extends GardenFragment implements IrrigationVie
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

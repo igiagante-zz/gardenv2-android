@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.PhotoGalleryView;
 
@@ -31,7 +31,7 @@ public class PhotoGalleryPresenter extends AbstractPresenter<PhotoGalleryView> {
     }
 
     public void destroy() {
-        this.getImagesUserCase.unsubscribe();
+        this.getImagesUserCase.dispose();
         view = null;
     }
 
@@ -41,17 +41,17 @@ public class PhotoGalleryPresenter extends AbstractPresenter<PhotoGalleryView> {
      * @param imagesPathFiles files paths from images
      */
     public void getImagesList(Collection<String> imagesPathFiles) {
-        this.getImagesUserCase.execute(imagesPathFiles, new PhotoGallerySubscriber());
+        this.getImagesUserCase.execute(imagesPathFiles, new PhotoGalleryObserver());
     }
 
     private void addImagesToBuilderInView(Collection<Image> images) {
         getView().loadImages(images);
     }
 
-    private final class PhotoGallerySubscriber extends DefaultSubscriber<List<Image>> {
+    private final class PhotoGalleryObserver extends DefaultObserver<List<Image>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

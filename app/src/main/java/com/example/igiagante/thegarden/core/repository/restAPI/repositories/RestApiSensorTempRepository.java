@@ -8,7 +8,7 @@ import com.example.igiagante.thegarden.core.repository.restAPI.services.SensorTe
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 19/8/16.

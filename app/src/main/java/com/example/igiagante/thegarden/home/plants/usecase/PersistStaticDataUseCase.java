@@ -29,8 +29,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.schedulers.Schedulers;
+
 
 /**
  * @author Ignacio Giagante, on 15/6/16.
@@ -38,7 +39,7 @@ import rx.schedulers.Schedulers;
  *         This usecase is used to retrieve data that almost never change. Attributes, Flavors and Plagues
  */
 @Singleton
-public class PersistStaticDataUseCase extends UseCase<Void> {
+public class PersistStaticDataUseCase extends UseCase<Void, Void> {
 
     private static final String TAG = PersistStaticDataUseCase.class.getSimpleName();
 

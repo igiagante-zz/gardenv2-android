@@ -17,7 +17,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -163,19 +163,19 @@ public class NutrientsAdapter extends RecyclerView.Adapter<NutrientsAdapter.Nutr
 
         int position;
 
-        @Bind(R.id.nutrient_image)
+        @BindView(R.id.nutrient_image)
         SimpleDraweeView mNutrientImage;
 
-        @Bind(R.id.nutrient_name)
+        @BindView(R.id.nutrient_name)
         TextView mNutrientName;
 
-        @Bind(R.id.nutrient_npk)
+        @BindView(R.id.nutrient_npk)
         TextView npk;
 
-        @Bind(R.id.nutrient_ph)
+        @BindView(R.id.nutrient_ph)
         TextView ph;
 
-        @Bind(R.id.nutrient_delete_button_id)
+        @BindView(R.id.nutrient_delete_button_id)
         Button mDeleteButton;
 
         public NutrientViewHolder(View v) {

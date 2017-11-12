@@ -4,9 +4,10 @@ import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.PlantTable;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 16/8/16.
@@ -20,10 +21,10 @@ public class PlantsByGardenId implements RealmSpecification<PlantRealm> {
     }
 
     @Override
-    public Observable<RealmResults<PlantRealm>> toObservableRealmResults(Realm realm) {
-        return realm.where(PlantRealm.class)
+    public Flowable<RealmResults<PlantRealm>> toFlowable(Realm realm) {
+        return Flowable.just(realm.where(PlantRealm.class)
                 .equalTo(PlantTable.GARDEN_ID, gardenId)
-                .findAll().asObservable();
+                .findAll());
     }
 
     @Override

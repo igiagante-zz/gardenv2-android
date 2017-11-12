@@ -2,24 +2,23 @@ package com.example.igiagante.thegarden.core.repository.managers;
 
 import android.content.Context;
 
-import com.example.igiagante.thegarden.core.domain.entity.Attribute;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.realm.AttributeRealmRepository;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 3/6/16.
  */
-public class AttributeRepositoryManager extends RepositoryManager<Repository<Attribute>> {
+public class AttributeRepositoryManager {
+
+    private AttributeRealmRepository attributeRealmRepository;
 
     @Inject
     public AttributeRepositoryManager(Context context) {
-        super(context);
-        mRepositories.add(new AttributeRealmRepository(context));
+        attributeRealmRepository = new AttributeRealmRepository(context);
     }
 
     /**
@@ -28,6 +27,6 @@ public class AttributeRepositoryManager extends RepositoryManager<Repository<Att
      * @return Observable
      */
     public Observable query(Specification specification) {
-        return  mRepositories.get(0).query(specification);
+        return  attributeRealmRepository.query(specification);
     }
 }

@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.home.charts.usecase.SensorTempUseCase;
 import com.example.igiagante.thegarden.home.charts.view.SensorTempView;
@@ -28,13 +28,13 @@ public class ChartsPresenter extends AbstractPresenter<SensorTempView> {
     }
 
     public void destroy() {
-        this.sensorTempUseCase.unsubscribe();
+        this.sensorTempUseCase.dispose();
         this.view = null;
     }
 
     public void getSensorData() {
         this.showViewLoading();
-        this.sensorTempUseCase.execute(null, new SensorTempSubscriber());
+        this.sensorTempUseCase.execute(null, new SensorTempObserver());
     }
 
     private void showViewLoading() {
@@ -49,10 +49,10 @@ public class ChartsPresenter extends AbstractPresenter<SensorTempView> {
         getView().loadSensorTempData(data);
     }
 
-    private final class SensorTempSubscriber extends DefaultSubscriber<List<SensorTemp>> {
+    private final class SensorTempObserver extends DefaultObserver<List<SensorTemp>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             ChartsPresenter.this.hideViewLoading();
         }
 

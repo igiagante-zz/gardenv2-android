@@ -23,7 +23,7 @@ import com.example.igiagante.thegarden.creation.plants.presentation.CreatePlantA
 import com.example.igiagante.thegarden.creation.plants.presentation.adapters.GalleryAdapter;
 import com.example.igiagante.thegarden.creation.plants.presentation.presenters.PhotoGalleryPresenter;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.PhotoGalleryView;
-import com.fuck_boilerplate.rx_paparazzo.RxPaparazzo;
+import com.miguelbcr.ui.rx_paparazzo.RxPaparazzo;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -33,8 +33,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 10/5/16.
@@ -48,7 +49,7 @@ public class PhotoGalleryFragment extends CreationBaseFragment implements PhotoG
 
     public static final String IMAGES_KEY = "IMAGES";
 
-    @Bind(R.id.recycler_view_plant_photo_gallery)
+    @BindView(R.id.recycler_view_plant_photo_gallery)
     RecyclerView mGallery;
 
     @Inject
@@ -171,7 +172,6 @@ public class PhotoGalleryFragment extends CreationBaseFragment implements PhotoG
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
     }
 
     @Override

@@ -7,7 +7,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.home.gardens.presentation.view.GardenView;
 import com.example.igiagante.thegarden.home.gardens.usecase.GetGardenTempAndHumd;
@@ -61,41 +61,41 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
     }
 
     public void destroy() {
-        this.getGardenTempAndHumd.unsubscribe();
-        this.getGardensUseCase.unsubscribe();
-        this.getGetGardensByUserUseCase.unsubscribe();
-        this.getGardenUseCase.unsubscribe();
-        this.saveGardenUseCase.unsubscribe();
-        this.deleteGardenUseCase.unsubscribe();
-        this.updateUserUseCase.unsubscribe();
+        this.getGardenTempAndHumd.dispose();
+        this.getGardensUseCase.dispose();
+        this.getGetGardensByUserUseCase.dispose();
+        this.getGardenUseCase.dispose();
+        this.saveGardenUseCase.dispose();
+        this.deleteGardenUseCase.dispose();
+        this.updateUserUseCase.dispose();
         this.view = null;
     }
 
     public void getGardensByUser(User user) {
         this.showViewLoading();
-        this.getGetGardensByUserUseCase.execute(user, new GetGardensByUserSubscriber());
+        this.getGetGardensByUserUseCase.execute(user, new GetGardensByUserObserver());
     }
 
     public void saveGarden(Garden garden) {
-        this.saveGardenUseCase.execute(garden, new SaveGardenSubscriber());
+        this.saveGardenUseCase.execute(garden, new SaveGardenObserver());
     }
 
     public void deleteGarden(Garden garden) {
-        this.deleteGardenUseCase.execute(garden, new DeleteGardenSubscriber());
+        this.deleteGardenUseCase.execute(garden, new DeleteGardenObserver());
     }
 
     public void getGarden(String gardenId) {
         this.showViewLoading();
-        this.getGardenUseCase.execute(gardenId, new GetGardenSubscriber());
+        this.getGardenUseCase.execute(gardenId, new GetGardenObserver());
     }
 
     public void existsGarden(Garden garden) {
-        this.existGardenUseCase.execute(garden, new ExistsGardenSubscriber());
+        this.existGardenUseCase.execute(garden, new ExistsGardenObserver());
     }
 
     public void updateUser(User user) {
         this.showViewLoading();
-        this.updateUserUseCase.execute(user, new UpdateUserSubscriber());
+        this.updateUserUseCase.execute(user, new UpdateUserObserver());
     }
 
     public void getActualTempAndHumidity() {
@@ -164,10 +164,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         getView().hideLoading();
     }
 
-    private final class GetGardenTempAndHumidity extends DefaultSubscriber<SensorTemp> {
+    private final class GetGardenTempAndHumidity extends DefaultObserver<SensorTemp> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -183,10 +183,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         }
     }
 
-    private final class GetGardensByUserSubscriber extends DefaultSubscriber<User> {
+    private final class GetGardensByUserObserver extends DefaultObserver<User> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -222,10 +222,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         return gardenHolders;
     }
 
-    private final class ExistsGardenSubscriber extends DefaultSubscriber<Boolean> {
+    private final class ExistsGardenObserver extends DefaultObserver<Boolean> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -242,10 +242,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         }
     }
 
-    private final class SaveGardenSubscriber extends DefaultSubscriber<Garden> {
+    private final class SaveGardenObserver extends DefaultObserver<Garden> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -262,10 +262,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         }
     }
 
-    private final class DeleteGardenSubscriber extends DefaultSubscriber<Integer> {
+    private final class DeleteGardenObserver extends DefaultObserver<Integer> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -281,10 +281,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         }
     }
 
-    private final class GetGardenSubscriber extends DefaultSubscriber<Garden> {
+    private final class GetGardenObserver extends DefaultObserver<Garden> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 
@@ -301,10 +301,10 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         }
     }
 
-    private final class UpdateUserSubscriber extends DefaultSubscriber<User> {
+    private final class UpdateUserObserver extends DefaultObserver<User> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             GardenPresenter.this.hideViewLoading();
         }
 

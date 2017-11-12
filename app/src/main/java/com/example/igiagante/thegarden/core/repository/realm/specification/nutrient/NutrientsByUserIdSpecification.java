@@ -2,11 +2,14 @@ package com.example.igiagante.thegarden.core.repository.realm.specification.nutr
 
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.NutrientTable;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 28/8/16.
@@ -20,10 +23,9 @@ public class NutrientsByUserIdSpecification implements RealmSpecification<Nutrie
     }
 
     @Override
-    public Observable<RealmResults<NutrientRealm>> toObservableRealmResults(Realm realm) {
-        return realm.where(NutrientRealm.class)
-                .equalTo(NutrientTable.USER_ID, userId)
-                .findAll().asObservable();
+    public Flowable<RealmResults<NutrientRealm>> toFlowable(Realm realm) {
+        return Flowable.just(realm.where(NutrientRealm.class).equalTo(NutrientTable.USER_ID, userId)
+                .findAll());
     }
 
     @Override

@@ -5,9 +5,10 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 13/6/16.
@@ -15,8 +16,8 @@ import rx.Observable;
 public class AttributeSpecification  implements RealmSpecification<AttributeRealm> {
 
     @Override
-    public Observable<RealmResults<AttributeRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(AttributeRealm.class).findAll().asObservable();
+    public Flowable<RealmResults<AttributeRealm>> toFlowable(@NonNull Realm realm) {
+        return realm.where(AttributeRealm.class).findAll().asFlowable();
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -164,25 +164,25 @@ public class IrrigationsAdapter extends RecyclerView.Adapter<IrrigationsAdapter.
 
         int position;
 
-        @Bind(R.id.dose_water_id)
+        @BindView(R.id.dose_water_id)
         TextView water;
 
-        @Bind(R.id.dose_ph_id)
+        @BindView(R.id.dose_ph_id)
         TextView ph;
 
-        @Bind(R.id.dose_ec_id)
+        @BindView(R.id.dose_ec_id)
         TextView ec;
 
-        @Bind(R.id.card_view_irrigation_date_id)
+        @BindView(R.id.card_view_irrigation_date_id)
         TextView date;
 
-        @Bind(R.id.card_view_irrigation_quantity_id)
+        @BindView(R.id.card_view_irrigation_quantity_id)
         TextView quantity;
 
-        @Bind(R.id.dose_list_of_nutrients)
+        @BindView(R.id.dose_list_of_nutrients)
         TextView nutrients;
 
-        @Bind(R.id.irrigation_delete_button_id)
+        @BindView(R.id.irrigation_delete_button_id)
         Button mDeleteButton;
 
         public IrrigationViewHolder(View v) {

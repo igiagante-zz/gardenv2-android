@@ -18,10 +18,11 @@ import com.example.igiagante.thegarden.core.repository.realm.specification.irrig
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 19/7/16.
@@ -36,7 +37,7 @@ public class IrrigationRealmRepository implements Repository<Irrigation> {
 
     public IrrigationRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -49,7 +50,7 @@ public class IrrigationRealmRepository implements Repository<Irrigation> {
 
     @Override
     public Observable<Irrigation> getById(String id) {
-        return query(new IrrigationByIdSpecification(id)).flatMap(Observable::from);
+        return query(new IrrigationByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -144,12 +145,15 @@ public class IrrigationRealmRepository implements Repository<Irrigation> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<IrrigationRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<IrrigationRealm>> realmResults = realmSpecification.toFlowable(realm);
 
         // convert Observable<RealmResults<IrrigationRealm>> into Observable<List<Irrigation>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(irrigationRealm -> toIrrigation.map(irrigationRealm))
-                        .toList());
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(irrigationRealm -> toIrrigation.map(irrigationRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

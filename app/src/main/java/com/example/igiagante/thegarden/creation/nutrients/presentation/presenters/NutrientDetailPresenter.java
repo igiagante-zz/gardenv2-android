@@ -3,7 +3,7 @@ package com.example.igiagante.thegarden.creation.nutrients.presentation.presente
 import android.util.Log;
 
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.nutrients.presentation.view.NutrientDetailView;
 
@@ -24,12 +24,12 @@ public class NutrientDetailPresenter extends AbstractPresenter<NutrientDetailVie
 
 
     public void existNutrient(String nutrientName) {
-        this.existNutrientUseCase.execute(nutrientName, new ExistNutrientSubscriber());
+        this.existNutrientUseCase.execute(nutrientName, new ExistNutrientObserver());
     }
 
 
     public void destroy() {
-        this.existNutrientUseCase.unsubscribe();
+        this.existNutrientUseCase.dispose();
         this.view = null;
     }
 
@@ -37,10 +37,10 @@ public class NutrientDetailPresenter extends AbstractPresenter<NutrientDetailVie
         getView().notifyIfNutrientExist(exist);
     }
 
-    private final class ExistNutrientSubscriber extends DefaultSubscriber<Boolean> {
+    private final class ExistNutrientObserver extends DefaultObserver<Boolean> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

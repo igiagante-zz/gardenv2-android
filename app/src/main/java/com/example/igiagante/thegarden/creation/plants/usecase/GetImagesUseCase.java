@@ -17,13 +17,13 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 19/5/16.
  */
 @PerActivity
-public class GetImagesUseCase extends UseCase<Collection<String>> {
+public class GetImagesUseCase extends UseCase<Image, Collection<String>> {
 
     private Context mContext;
 

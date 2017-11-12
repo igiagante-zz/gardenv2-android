@@ -23,8 +23,9 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 12/7/16.
@@ -33,23 +34,25 @@ public class NutrientDetailFragment extends BaseFragment implements NutrientDeta
 
     private static final String NUTRIENT_DETAIL_KEY = "NUTRIENT_DETAIL";
 
-    @Bind(R.id.name_of_nutrient_id)
+    @BindView(R.id.name_of_nutrient_id)
     EditText nameOfNutrient;
 
-    @Bind(R.id.nutrient_ph_id)
+    @BindView(R.id.nutrient_ph_id)
     CountViewDecimal ph;
 
-    @Bind(R.id.nitrogen_id)
+    @BindView(R.id.nitrogen_id)
     EditText mNitrogen;
 
-    @Bind(R.id.phosphorus_id)
+    @BindView(R.id.phosphorus_id)
     EditText mPhosphorus;
 
-    @Bind(R.id.potassium_id)
+    @BindView(R.id.potassium_id)
     EditText mPotassium;
 
-    @Bind(R.id.nutrient_description_id)
+    @BindView(R.id.nutrient_description_id)
     EditText description;
+
+    private Unbinder unbinder;
 
     private Nutrient mNutrient;
 
@@ -82,7 +85,7 @@ public class NutrientDetailFragment extends BaseFragment implements NutrientDeta
         this.getComponent(NutrientComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.nutrient_detail_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         if (savedInstanceState != null) {
             mNutrient = savedInstanceState.getParcelable(NUTRIENT_DETAIL_KEY);
@@ -136,7 +139,7 @@ public class NutrientDetailFragment extends BaseFragment implements NutrientDeta
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

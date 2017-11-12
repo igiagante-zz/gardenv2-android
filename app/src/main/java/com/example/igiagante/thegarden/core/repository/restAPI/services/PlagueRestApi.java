@@ -5,7 +5,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import java.util.List;
 
 import retrofit2.http.GET;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 6/4/16.

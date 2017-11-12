@@ -5,8 +5,8 @@ import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Scheduler;
-import rx.android.schedulers.AndroidSchedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.Scheduler;
 
 /**
  * MainThread (UI Thread) implementation based on a {@link rx.Scheduler}

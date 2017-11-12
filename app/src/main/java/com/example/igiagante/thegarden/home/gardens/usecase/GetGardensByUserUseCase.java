@@ -1,5 +1,6 @@
 package com.example.igiagante.thegarden.home.gardens.usecase;
 
+import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
@@ -8,12 +9,13 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * @author Ignacio Giagante, on 5/8/16.
  */
-public class GetGardensByUserUseCase extends UseCase<User> {
+public class GetGardensByUserUseCase extends UseCase<Garden, User> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository

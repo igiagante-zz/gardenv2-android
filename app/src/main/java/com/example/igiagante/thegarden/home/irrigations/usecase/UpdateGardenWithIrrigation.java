@@ -10,14 +10,14 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * It needs to update the entity garden in Realm Database
  *
  * @author Ignacio Giagante, on 9/9/16.
  */
-public class UpdateGardenWithIrrigation extends UseCase<Garden> {
+public class UpdateGardenWithIrrigation extends UseCase<Garden, Garden> {
 
     private Context mContext;
 

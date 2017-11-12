@@ -19,10 +19,11 @@ import com.example.igiagante.thegarden.core.repository.realm.specification.garde
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Flowable;
+import io.reactivex.Observable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
@@ -37,7 +38,7 @@ public class GardenRealmRepository implements Repository<Garden> {
 
     public GardenRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -50,16 +51,16 @@ public class GardenRealmRepository implements Repository<Garden> {
 
     @Override
     public Observable<Garden> getById(String id) {
-        return query(new GardenByIdSpecification(id)).flatMap(Observable::from);
+        return query(new GardenByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
     public Observable<Garden> getByName(String name) {
-        return query(new GardenByNameSpecification(name)).flatMap(Observable::from);
+        return query(new GardenByNameSpecification(name)).flatMap(Observable::fromIterable);
     }
 
     public Observable<Garden> getByNameAndUserId(@NonNull String name, @NonNull String userId) {
-        return query(new GardenByNameAndUserIdSpecification(name, userId)).flatMap(Observable::from);
+        return query(new GardenByNameAndUserIdSpecification(name, userId)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -151,12 +152,15 @@ public class GardenRealmRepository implements Repository<Garden> {
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<GardenRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<GardenRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<GardenRealm>> into Observable<List<Garden>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(gardenRealm -> toGarden.map(gardenRealm))
-                        .toList());
+        // convert Flowable<RealmResults<GardenRealm>> into Observable<List<Garden>>
+        return realmResults
+                .flatMap(plants ->
+                        Flowable.fromIterable(plants)
+                                .map(gardenRealm -> toGarden.map(gardenRealm))
+                )
+                .toList()
+                .toObservable();
     }
 }

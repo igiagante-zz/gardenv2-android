@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.home.irrigations.presentation.view.IrrigationView;
 
@@ -34,18 +34,18 @@ public class IrrigationPresenter extends AbstractPresenter<IrrigationView> {
     }
 
     public void destroy() {
-        this.getIrrigationsUseCase.unsubscribe();
-        this.deleteIrrigationUseCase.unsubscribe();
-        this.updateGardenWithIrrigationUseCase.unsubscribe();
+        this.getIrrigationsUseCase.dispose();
+        this.deleteIrrigationUseCase.dispose();
+        this.updateGardenWithIrrigationUseCase.dispose();
         this.view = null;
     }
 
     public void deleteIrrigation(String irrigationId) {
-        this.deleteIrrigationUseCase.execute(irrigationId, new DeleteIrrigationSubscriber());
+        this.deleteIrrigationUseCase.execute(irrigationId, new DeleteIrrigationObserver());
     }
 
     public void updateGarden(Garden garden) {
-        this.updateGardenWithIrrigationUseCase.execute(garden, new UpdateGardenSubscriber());
+        this.updateGardenWithIrrigationUseCase.execute(garden, new UpdateGardenObserver());
     }
 
     private void notifyIfIrrigationWasDeleted(Integer result) {
@@ -56,10 +56,10 @@ public class IrrigationPresenter extends AbstractPresenter<IrrigationView> {
         getView().notifyIfGardenWasUpdated(garden);
     }
 
-    private final class DeleteIrrigationSubscriber extends DefaultSubscriber<Integer> {
+    private final class DeleteIrrigationObserver extends DefaultObserver<Integer> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 
@@ -74,10 +74,10 @@ public class IrrigationPresenter extends AbstractPresenter<IrrigationView> {
         }
     }
 
-    private final class UpdateGardenSubscriber extends DefaultSubscriber<Garden> {
+    private final class UpdateGardenObserver extends DefaultObserver<Garden> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override

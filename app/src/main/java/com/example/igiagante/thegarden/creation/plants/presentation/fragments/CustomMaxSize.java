@@ -1,6 +1,6 @@
 package com.example.igiagante.thegarden.creation.plants.presentation.fragments;
 
-import com.fuck_boilerplate.rx_paparazzo.entities.size.Size;
+import com.miguelbcr.ui.rx_paparazzo.entities.size.Size;
 
 /**
  * @author Ignacio Giagante, on 5/9/16.

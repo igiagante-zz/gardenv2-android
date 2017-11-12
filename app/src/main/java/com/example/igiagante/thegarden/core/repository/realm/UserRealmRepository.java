@@ -19,10 +19,11 @@ import com.example.igiagante.thegarden.core.repository.realm.specification.user.
 
 import java.util.List;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 5/8/16.
@@ -37,7 +38,7 @@ public class UserRealmRepository implements Repository<User> {
 
     public UserRealmRepository(@NonNull Context context) {
 
-        this.realmConfiguration = new RealmConfiguration.Builder(context)
+        this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
                 .build();
@@ -50,12 +51,12 @@ public class UserRealmRepository implements Repository<User> {
 
     @Override
     public Observable<User> getById(String id) {
-        return query(new UserByIdSpecification(id)).flatMap(Observable::from);
+        return query(new UserByIdSpecification(id)).flatMap(Observable::fromIterable);
     }
 
     @Override
     public Observable<User> getByName(String name) {
-        return query(new PlantByNameSpecification(name)).flatMap(Observable::from);
+        return query(new PlantByNameSpecification(name)).flatMap(Observable::fromIterable);
     }
 
     @Override
@@ -115,16 +116,21 @@ public class UserRealmRepository implements Repository<User> {
 
     @Override
     public Observable<List<User>> query(Specification specification) {
+
         final RealmSpecification realmSpecification = (RealmSpecification) specification;
 
         final Realm realm = Realm.getInstance(realmConfiguration);
-        final Observable<RealmResults<UserRealm>> realmResults = realmSpecification.toObservableRealmResults(realm);
+        final Flowable<RealmResults<UserRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Observable<RealmResults<UserRealm>> into Observable<List<User>>
-        return realmResults.flatMap(list ->
-                Observable.from(list)
-                        .map(userRealm -> toUser.map(userRealm))
-                        .toList());
+        // convert Flowable<RealmResults<UserRealm>> into Observable<List<User>>
+        return realmResults
+                .flatMap(userRealms ->
+                        Flowable.fromIterable(userRealms)
+                        .map(userRealm -> toUser.map(userRealm)
+                        )
+                )
+                .toList()
+                .toObservable();
     }
 
     public User getUserById(String userId) {

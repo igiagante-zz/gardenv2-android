@@ -6,16 +6,17 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.GardenRepositoryManager;
+import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenByNameSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class SaveGardenUseCase extends UseCase<Garden> {
+public class SaveGardenUseCase extends UseCase<Garden, Garden> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -30,11 +31,11 @@ public class SaveGardenUseCase extends UseCase<Garden> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Garden garden) {
-        if (TextUtils.isEmpty(garden.getId())) {
-            return gardenRepositoryManager.add(garden);
-        } else {
-            return gardenRepositoryManager.update(garden);
-        }
+    protected Observable<Garden> buildUseCaseObservable(Garden garden) {
+
+        GardenByNameSpecification specification = new GardenByNameSpecification(garden.getName());
+
+        return TextUtils.isEmpty(garden.getId()) ? gardenRepositoryManager.add(garden, specification)
+                : gardenRepositoryManager.update(garden);
     }
 }

@@ -31,8 +31,9 @@ import java.lang.ref.WeakReference;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * @author Ignacio Giagante, on 2/8/16.
@@ -51,19 +52,21 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Inject
     SharedPreferences sharedPreferences;
 
-    @Bind(R.id.login_email_id)
+    @BindView(R.id.login_email_id)
     EditText mUserEmail;
 
-    @Bind(R.id.login_password_id)
+    @BindView(R.id.login_password_id)
     EditText mPassword;
 
-    @Bind(R.id.btn_login_id)
+    @BindView(R.id.btn_login_id)
     Button mButtonLogin;
 
-    @Bind(R.id.signup_id)
+    @BindView(R.id.signup_id)
     TextView mButtonSignUp;
 
     private InterstitialAd mInterstitialAd;
+
+    private Unbinder unbinder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +78,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         this.getComponent(LoginComponent.class).inject(this);
 
         final View fragmentView = inflater.inflate(R.layout.login_fragment, container, false);
-        ButterKnife.bind(this, fragmentView);
+        unbinder = ButterKnife.bind(this, fragmentView);
 
         setupAdMob();
 
@@ -180,7 +183,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        unbinder.unbind();
     }
 
     @Override

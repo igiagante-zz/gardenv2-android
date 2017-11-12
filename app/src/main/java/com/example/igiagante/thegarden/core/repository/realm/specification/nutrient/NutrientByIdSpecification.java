@@ -6,9 +6,10 @@ import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -22,10 +23,11 @@ public class NutrientByIdSpecification  implements RealmSpecification {
     }
 
     @Override
-    public Observable<RealmResults<NutrientRealm>> toObservableRealmResults(@NonNull Realm realm) {
-        return realm.where(NutrientRealm.class)
+    public Flowable<RealmResults<NutrientRealm>> toFlowable(@NonNull Realm realm) {
+
+        return Flowable.just(realm.where(NutrientRealm.class)
                 .equalTo(Table.ID, id)
-                .findAll().asObservable();
+                .findAll());
     }
 
     @Override

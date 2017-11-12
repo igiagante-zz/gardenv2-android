@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 import okhttp3.MultipartBody;
-import rx.Observable;
+import io.reactivex.Observable;
 
 /**
  * @author Ignacio Giagante, on 19/7/16.
@@ -65,9 +65,9 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
         Observable<Irrigation> apiResult;
 
         if (update) {
-            apiResult = api.updateIrrigation(irrigation.getId(), builder.build()).asObservable();
+            apiResult = api.updateIrrigation(irrigation.getId(), builder.build());
         } else {
-            apiResult = api.createIrrigation(builder.build()).asObservable();
+            apiResult = api.createIrrigation(builder.build());
         }
 
         Irrigation result = execute(apiResult, IrrigationRealmRepository.class, update);
@@ -77,7 +77,7 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
 
     @Override
     public Observable<Integer> remove(String irrigationId) {
-        return api.deleteIrrigation(irrigationId).asObservable()
+        return api.deleteIrrigation(irrigationId)
                 .map(response -> response.isSuccessful() ? 1 : -1);
     }
 

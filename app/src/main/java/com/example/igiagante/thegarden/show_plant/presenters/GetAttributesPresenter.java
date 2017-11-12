@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.show_plant.view.ShowPlantView;
 
@@ -30,22 +30,22 @@ public class GetAttributesPresenter extends AbstractPresenter<ShowPlantView> {
     }
 
     public void destroy() {
-        this.getAttributesUseCase.unsubscribe();
+        this.getAttributesUseCase.dispose();
         this.view = null;
     }
 
     public void getAttributes() {
-        this.getAttributesUseCase.execute(null, new GetAttributesSubscriber());
+        this.getAttributesUseCase.execute(null, new GetAttributesObserver());
     }
 
     private void showAttributes(List<Attribute> attributes) {
         getView().loadAttributes(attributes);
     }
 
-    private final class GetAttributesSubscriber extends DefaultSubscriber<List<Attribute>> {
+    private final class GetAttributesObserver extends DefaultObserver<List<Attribute>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
             //PlantListPresenter.this.hideViewLoading();
         }
 

@@ -5,7 +5,7 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
-import com.example.igiagante.thegarden.core.usecase.DefaultSubscriber;
+import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.creation.plants.presentation.dataHolders.PlagueHolder;
 import com.example.igiagante.thegarden.creation.plants.presentation.views.PlagueView;
@@ -30,7 +30,7 @@ public class PlaguePresenter extends AbstractPresenter<PlagueView> {
     }
 
     public void destroy() {
-        this.getPlaguesUserCase.unsubscribe();
+        this.getPlaguesUserCase.dispose();
         this.view = null;
     }
 
@@ -66,13 +66,13 @@ public class PlaguePresenter extends AbstractPresenter<PlagueView> {
      * Get plague list
      */
     public void getPlagues() {
-        this.getPlaguesUserCase.execute(null, new AttributesSubscriber());
+        this.getPlaguesUserCase.execute(null, new AttributesObserver());
     }
 
-    private final class AttributesSubscriber extends DefaultSubscriber<List<Plague>> {
+    private final class AttributesObserver extends DefaultObserver<List<Plague>> {
 
         @Override
-        public void onCompleted() {
+        public void onComplete() {
         }
 
         @Override
