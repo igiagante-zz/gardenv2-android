@@ -95,12 +95,12 @@ public class PersistStaticDataUseCase extends UseCase<Void, Void> {
 
             apiAttributeRepository.query(attributeSpecification)
                     .subscribeOn(Schedulers.io())
-                    .toBlocking()
+                    .blockingFirst()
                     .subscribe(list -> attributesFromApi.addAll(list),
                             error -> Log.d(TAG, error.toString()));
 
             Observable<Integer> rows = attributeRealmRepository.add(attributesFromApi);
-            rows.toBlocking().subscribe(row -> Log.i(TAG, "  ROWS " + row + " attributes were inserted into Realm DB"));
+            rows.blockingFirst().subscribe(row -> Log.i(TAG, "  ROWS " + row + " attributes were inserted into Realm DB"));
         }
 
         // ask if flavors are already persisted (Sqlite)
@@ -112,7 +112,7 @@ public class PersistStaticDataUseCase extends UseCase<Void, Void> {
             apiFlavorRepository.query(new Specification() {
             })
                     .subscribeOn(Schedulers.io())
-                    .toBlocking()
+                    .blockingFirst()
                     .subscribe(list -> {
                                 int rows = flavorDao.add(list);
                                 Log.i(TAG, "   ROWS:  " + rows + "   flavors were inserted into Realm DB");
@@ -135,12 +135,12 @@ public class PersistStaticDataUseCase extends UseCase<Void, Void> {
 
             apiPlagueRepository.query(plagueSpecification)
                     .subscribeOn(Schedulers.io())
-                    .toBlocking()
+                    .blockingFirst()
                     .subscribe(list -> plaguesFromApi.addAll(list),
                             error -> Log.d(TAG, error.toString()));
 
             Observable<Integer> rows = plagueRealmRepository.add(plaguesFromApi);
-            rows.toBlocking().subscribe(row -> Log.i(TAG, "   ROWS:  " + row + "   plagues were inserted into Realm DB"));
+            rows.blockingFirst().subscribe(row -> Log.i(TAG, "   ROWS:  " + row + "   plagues were inserted into Realm DB"));
         }
 
         // check temp and humidity data
@@ -155,11 +155,11 @@ public class PersistStaticDataUseCase extends UseCase<Void, Void> {
 
             // get Data From api
             ArrayList<SensorTemp> sensorTemps = new ArrayList<>();
-            apiResult.subscribeOn(Schedulers.io()).toBlocking().subscribe(data -> sensorTemps.addAll(data));
+            apiResult.subscribeOn(Schedulers.io()).blockingFirst().subscribe(data -> sensorTemps.addAll(data));
 
             SensorTempRealmRepository repository = new SensorTempRealmRepository(context);
             Observable<Integer> rows = repository.add(sensorTemps);
-            rows.toBlocking().subscribe(row -> Log.i(TAG, "   ROWS:  " + row + "  temps were inserted into Realm DB"));
+            rows.blockingFirst().subscribe(row -> Log.i(TAG, "   ROWS:  " + row + "  temps were inserted into Realm DB"));
         }
 
         return Observable.just("OK");

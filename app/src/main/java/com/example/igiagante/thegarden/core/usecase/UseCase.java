@@ -1,12 +1,7 @@
 package com.example.igiagante.thegarden.core.usecase;
 
-import android.support.annotation.IntDef;
-
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
@@ -19,16 +14,6 @@ import io.reactivex.schedulers.Schedulers;
  */
 public abstract class UseCase<T, Param> {
 
-    /**
-     * Determine the order of repository
-     */
-    @IntDef({LOCAL_REPOSITORY, REMOTE_REPOSITORY})
-    public @interface RepositoryOrder {}
-    public static final int LOCAL_REPOSITORY = 0;
-    public static final int REMOTE_REPOSITORY = 1;
-
-    protected List<Integer> repositoryOrder = new ArrayList<>();
-
     private final ThreadExecutor threadExecutor;
     private final PostExecutionThread postExecutionThread;
     private final CompositeDisposable disposables;
@@ -38,10 +23,6 @@ public abstract class UseCase<T, Param> {
         this.threadExecutor = threadExecutor;
         this.postExecutionThread = postExecutionThread;
         this.disposables = new CompositeDisposable();
-    }
-
-    protected List<Integer> getRepositoryOrder() {
-        return repositoryOrder;
     }
 
     /**
