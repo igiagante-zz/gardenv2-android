@@ -36,6 +36,7 @@ public class DoseRealmRepository implements Repository<Dose> {
 
     public DoseRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -136,8 +137,9 @@ public class DoseRealmRepository implements Repository<Dose> {
 
         // convert Flowable<RealmResults<DoseRealm>> into Observable<List<Dose>>
         return realmResults
-                .flatMap(plants ->
-                        Flowable.fromIterable(plants)
+                .filter(doses -> doses.isLoaded())
+                .switchMap(doses ->
+                        Flowable.fromIterable(doses)
                                 .map(doseRealm -> toDose.map(doseRealm))
                 )
                 .toList()

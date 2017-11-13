@@ -27,7 +27,7 @@ public class GardenByNameSpecification implements RealmSpecification<GardenRealm
     public Flowable<RealmResults<GardenRealm>> toFlowable(@NonNull Realm realm) {
         return Flowable.just(realm.where(GardenRealm.class)
                 .equalTo(Table.NAME, name)
-                .findAll());
+                .findAllAsync());
     }
 
     @Override

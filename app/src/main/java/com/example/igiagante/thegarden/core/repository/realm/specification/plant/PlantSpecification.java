@@ -17,11 +17,11 @@ public class PlantSpecification implements RealmSpecification<PlantRealm> {
 
     @Override
     public Flowable<RealmResults<PlantRealm>> toFlowable(@NonNull Realm realm) {
-        return realm.where(PlantRealm.class).findAll().asFlowable();
+        return realm.where(PlantRealm.class).findAllAsync().asFlowable();
     }
 
     @Override
     public RealmResults<PlantRealm> toRealmResults(@NonNull Realm realm) {
-        return realm.where(PlantRealm.class).findAll();
+        return realm.where(PlantRealm.class).findAllAsync();
     }
 }

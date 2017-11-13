@@ -70,9 +70,7 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
             apiResult = api.createIrrigation(builder.build());
         }
 
-        Irrigation result = execute(apiResult, IrrigationRealmRepository.class, update);
-
-        return Observable.just(result);
+        return execute(apiResult, IrrigationRealmRepository.class, update);
     }
 
     @Override

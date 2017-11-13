@@ -54,6 +54,8 @@ public class RestUserApi {
                 realmRepository.add(session.getUser());
             } else {
                 try {
+                    // TODO - java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $
+                    // if the error has not the structure of the MessageError, Gson cannot parse it.
                     String error = response.errorBody().string();
                     MessageError messageErrorKey = new Gson().fromJson(error, MessageError.class);
                     httpStatusValue = httpStatus.getMessage(messageErrorKey.getMessage());

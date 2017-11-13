@@ -17,11 +17,11 @@ public class AttributeSpecification  implements RealmSpecification<AttributeReal
 
     @Override
     public Flowable<RealmResults<AttributeRealm>> toFlowable(@NonNull Realm realm) {
-        return realm.where(AttributeRealm.class).findAll().asFlowable();
+        return realm.where(AttributeRealm.class).findAllAsync().asFlowable();
     }
 
     @Override
     public RealmResults<AttributeRealm> toRealmResults(@NonNull Realm realm) {
-        return realm.where(AttributeRealm.class).findAll();
+        return realm.where(AttributeRealm.class).findAllAsync();
     }
 }

@@ -79,9 +79,12 @@ public class BaseRepositoryManager<T, DB extends Repository<T>, API extends Repo
         Observable<List<T>> query = db.query(specification);
         Observable<List<T>> apiResult = api.query(null);
 
-        return !checkInternet() ? query :
-                Observable.concat(query, apiResult).first(new ArrayList<>()).toObservable();
+        Observable<List<T>> obsCombined = query.switchIfEmpty(apiResult).flatMap(list -> {
+            db.add(list);
+            return Observable.just(list);
+        });
 
+        return !checkInternet() ? query : obsCombined;
     }
 
     protected boolean checkInternet() {

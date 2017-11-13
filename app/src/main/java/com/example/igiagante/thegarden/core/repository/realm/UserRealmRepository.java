@@ -38,6 +38,7 @@ public class UserRealmRepository implements Repository<User> {
 
     public UserRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -124,7 +125,8 @@ public class UserRealmRepository implements Repository<User> {
 
         // convert Flowable<RealmResults<UserRealm>> into Observable<List<User>>
         return realmResults
-                .flatMap(userRealms ->
+                .filter(users -> users.isLoaded())
+                .switchMap(userRealms ->
                         Flowable.fromIterable(userRealms)
                         .map(userRealm -> toUser.map(userRealm)
                         )

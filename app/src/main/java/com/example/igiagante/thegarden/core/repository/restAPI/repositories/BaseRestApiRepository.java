@@ -42,12 +42,9 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
      * @param repository DB
      * @param update     indicate if the transaction is about an `updating`
      */
-    protected T execute(Observable<T> apiResult, Class repository, boolean update) {
+    @SuppressWarnings("unchecked")
+    protected Observable<T> execute(Observable<T> apiResult, Class repository, boolean update) {
 
-        // get Data From api
-        List<T> listOne = (List<T>) apiResult.subscribeOn(Schedulers.io()).blockingIterable();
-
-        // update database
         Repository dataBase = null;
 
         try {
@@ -67,17 +64,9 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
             ei.printStackTrace();
         }
 
-        Observable<T> dbResult;
+        final Repository db = dataBase;
 
-        if (update) {
-            dbResult = dataBase.update(listOne.get(0));
-        } else {
-            dbResult = dataBase.add(listOne.get(0));
-        }
-
-        List<T> list = (List<T>) dbResult.subscribeOn(Schedulers.io()).blockingIterable();
-
-        return list.get(0);
+        return apiResult.flatMap(element -> update ? db.update(element) : db.add(element));
     }
 
     /**

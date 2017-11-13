@@ -16,6 +16,8 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRea
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.PlantTable;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -36,10 +38,12 @@ public class PlantToPlantRealm implements Mapper<Plant, PlantRealm> {
 
     @Override
     public PlantRealm map(@NonNull Plant plant) {
-        // create plant realm object and set id
-        PlantRealm plantRealm = realm.createObject(PlantRealm.class);
-        plantRealm.setId(plant.getId());
 
+        // create plant realm object and set id
+        PlantRealm plantRealm = realm.where(PlantRealm.class).equalTo(Table.ID, plant.getId()).findFirst();
+        if(plantRealm == null) {
+            plantRealm = realm.createObject(PlantRealm.class, plant.getId());
+        }
         // copy values which should be updated
         copy(plant, plantRealm);
 
@@ -78,8 +82,7 @@ public class PlantToPlantRealm implements Mapper<Plant, PlantRealm> {
                 ImageRealm imageRealm = realm.where(ImageRealm.class).equalTo(PlantTable.Image.ID, image.getId()).findFirst();
                 if (imageRealm == null) {
                     // create image realm object and set id
-                    imageRealm = realm.createObject(ImageRealm.class);
-                    imageRealm.setId(image.getId());
+                    imageRealm = realm.createObject(ImageRealm.class, image.getId());
                 }
                 imagesRealm.add(toImageRealm.copy(image, imageRealm));
             }
@@ -93,8 +96,7 @@ public class PlantToPlantRealm implements Mapper<Plant, PlantRealm> {
                 FlavorRealm flavorRealm = realm.where(FlavorRealm.class).equalTo(Table.ID, flavor.getId()).findFirst();
                 if (flavorRealm == null) {
                     // create flavor realm object and set id
-                    flavorRealm = realm.createObject(FlavorRealm.class);
-                    flavorRealm.setId(flavor.getId());
+                    flavorRealm = realm.createObject(FlavorRealm.class, flavor.getId());
                 }
                 // copy values which should be updated
                 flavorsRealm.add(toFlavorRealm.copy(flavor, flavorRealm));
@@ -110,8 +112,7 @@ public class PlantToPlantRealm implements Mapper<Plant, PlantRealm> {
                         .equalTo(PlantTable.AttributePerPlant.ATTRIBUTE_ID, attribute.getId()).findFirst();
                 if (attributePerPlantRealm == null) {
                     // create attributePerPlant realm object and set id
-                    attributePerPlantRealm = realm.createObject(AttributePerPlantRealm.class);
-                    attributePerPlantRealm.setAttributeId(attribute.getId());
+                    attributePerPlantRealm = realm.createObject(AttributePerPlantRealm.class, attribute.getId());
                 }
 
                 attributePerPlantRealm.setPercentage(attribute.getPercentage());

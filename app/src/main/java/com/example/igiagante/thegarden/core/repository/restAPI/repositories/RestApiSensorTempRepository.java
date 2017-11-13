@@ -16,6 +16,7 @@ import io.reactivex.Observable;
 public class RestApiSensorTempRepository implements Repository<SensorTemp> {
 
     private final SensorTempApi api;
+
     public RestApiSensorTempRepository() {
         this.api = ServiceFactory.createRetrofitService(SensorTempApi.class);
     }

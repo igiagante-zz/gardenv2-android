@@ -38,6 +38,7 @@ public class PlagueRealmRepository implements Repository<Plague> {
 
     public PlagueRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -128,7 +129,8 @@ public class PlagueRealmRepository implements Repository<Plague> {
 
         // convert Flowable<RealmResults<PlagueRealm>> into Observable<List<Plague>>
         return realmResults
-                .flatMap(plants ->
+                .filter(plagues -> plagues.isLoaded())
+                .switchMap(plants ->
                         Flowable.fromIterable(plants)
                                 .map(plagueRealm -> toPlague.map(plagueRealm))
                 )

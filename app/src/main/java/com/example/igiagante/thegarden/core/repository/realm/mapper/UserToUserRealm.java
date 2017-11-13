@@ -10,6 +10,7 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserReal
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -31,9 +32,12 @@ public class UserToUserRealm implements Mapper<User, UserRealm> {
 
     @Override
     public UserRealm map(User user) {
+
         // create user realm object and set id
-        UserRealm userRealm = realm.createObject(UserRealm.class);
-        userRealm.setId(user.getId());
+        UserRealm userRealm = realm.where(UserRealm.class).equalTo(Table.ID, user.getId()).findFirst();
+        if(userRealm == null) {
+            userRealm = realm.createObject(UserRealm.class, user.getId());
+        }
         return copy(user, userRealm);
     }
 
@@ -51,8 +55,7 @@ public class UserToUserRealm implements Mapper<User, UserRealm> {
                 GardenRealm gardenRealm = realm.where(GardenRealm.class).equalTo(Table.ID, garden.getId()).findFirst();
                 if (gardenRealm == null) {
                     // create garden realm object and set id
-                    gardenRealm = realm.createObject(GardenRealm.class);
-                    gardenRealm.setId(garden.getId());
+                    gardenRealm = realm.createObject(GardenRealm.class, garden.getId());
                 }
                 gardenRealms.add(toGardenRealm.copy(garden, gardenRealm));
             }
@@ -69,7 +72,7 @@ public class UserToUserRealm implements Mapper<User, UserRealm> {
                 NutrientRealm nutrientRealm = realm.where(NutrientRealm.class).equalTo(Table.ID, nutrient.getId()).findFirst();
                 if (nutrientRealm == null) {
                     // create nutrient realm object and set id
-                    nutrientRealm = realm.createObject(NutrientRealm.class);
+                    nutrientRealm = realm.createObject(NutrientRealm.class, nutrient.getId());
                     nutrientRealm.setId(nutrient.getId());
                 }
                 nutrientRealms.add(toNutrientRealm.copy(nutrient, nutrientRealm));

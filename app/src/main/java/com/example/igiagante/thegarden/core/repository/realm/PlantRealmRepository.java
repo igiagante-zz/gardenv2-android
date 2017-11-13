@@ -40,6 +40,7 @@ public class PlantRealmRepository implements Repository<Plant> {
 
     public PlantRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -188,7 +189,8 @@ public class PlantRealmRepository implements Repository<Plant> {
 
         // convert Flowable<RealmResults<PlantRealm>> into Observable<List<Plant>>
         return realmResults
-                .flatMap(plants ->
+                .filter(plants -> plants.isLoaded())
+                .switchMap(plants ->
                         Flowable.fromIterable(plants)
                                 .map(plantRealm -> toPlant.map(plantRealm))
                 )

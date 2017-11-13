@@ -34,6 +34,7 @@ public class SensorTempRealmRepository implements Repository<SensorTemp> {
 
     public SensorTempRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -114,10 +115,11 @@ public class SensorTempRealmRepository implements Repository<SensorTemp> {
         final Realm realm = Realm.getInstance(realmConfiguration);
         final Flowable<RealmResults<SensorTempRealm>> realmResults = realmSpecification.toFlowable(realm);
 
-        // convert Flowable<RealmResults<UserRealm>> into Observable<List<User>>
+        // convert Flowable<RealmResults<SensorTempRealm>> into Observable<List<SensorTemp>>
         return realmResults
-                .flatMap(userRealms ->
-                        Flowable.fromIterable(userRealms)
+                .filter(sensorData -> sensorData.isLoaded())
+                .switchMap(sensorData ->
+                        Flowable.fromIterable(sensorData)
                                 .map(sensorTempRealm -> toSensorTemp.map(sensorTempRealm)
                                 )
                 )

@@ -72,9 +72,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
             apiResult = api.createNutrient(builder.build());
         }
 
-        Nutrient result = execute(apiResult, NutrientRealmRepository.class, update);
-
-        return Observable.just(result);
+        return execute(apiResult, NutrientRealmRepository.class, update);
     }
 
     @Override

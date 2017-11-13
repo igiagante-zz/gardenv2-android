@@ -25,7 +25,7 @@ public class NutrientsByUserIdSpecification implements RealmSpecification<Nutrie
     @Override
     public Flowable<RealmResults<NutrientRealm>> toFlowable(Realm realm) {
         return Flowable.just(realm.where(NutrientRealm.class).equalTo(NutrientTable.USER_ID, userId)
-                .findAll());
+                .findAllAsync());
     }
 
     @Override

@@ -107,7 +107,7 @@ public class WidgetProvider extends AppWidgetProvider {
 
             IrrigationRealmToIrrigation toIrrigation = new IrrigationRealmToIrrigation();
 
-            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder(UpdateWidgetService.this)
+            RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
                     .name(Repository.DATABASE_NAME_DEV)
                     .deleteRealmIfMigrationNeeded()
                     .build();

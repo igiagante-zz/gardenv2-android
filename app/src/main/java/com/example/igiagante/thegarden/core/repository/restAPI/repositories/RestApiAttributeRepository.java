@@ -59,7 +59,6 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
 
     @Override
     public Observable<List<Attribute>> query(Specification specification) {
-        Observable<List<Attribute>> attributes = api.getAttributes();
-        return attributes;
+        return api.getAttributes();
     }
 }

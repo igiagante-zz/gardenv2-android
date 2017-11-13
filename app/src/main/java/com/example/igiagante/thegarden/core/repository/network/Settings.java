@@ -6,7 +6,7 @@ package com.example.igiagante.thegarden.core.repository.network;
 public class Settings {
 
     //Emulator
-    public static final String API_ENDPOINT = "http://10.0.2.2:8080";
+    public static final String API_ENDPOINT = "http://10.0.2.2:8080/api/";
     public static final String DOMAIN = API_ENDPOINT + "/api";
 
     //Real Device

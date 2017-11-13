@@ -80,15 +80,16 @@ public class LoginFragment extends BaseFragment implements LoginView {
         final View fragmentView = inflater.inflate(R.layout.login_fragment, container, false);
         unbinder = ButterKnife.bind(this, fragmentView);
 
-        setupAdMob();
 
         // Restore Token from preferences
         String token = sharedPreferences.getString(TOKEN_PREFS_NAME, "");
         String username = sharedPreferences.getString(USERNAME_PREFS_NAME, "");
 
         mButtonLogin.setOnClickListener(v -> {
-            if (mInterstitialAd.isLoaded()) {
-                mInterstitialAd.show();
+            if (!checkInternet()) {
+                showToastMessage(getString(R.string.there_is_not_internet_connection));
+            } else {
+                loginUser();
             }
         });
 
@@ -112,30 +113,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mUserEmail.requestFocus();
 
         return fragmentView;
-    }
-
-    private void setupAdMob() {
-
-        mInterstitialAd = new InterstitialAd(getActivity());
-        mInterstitialAd.setAdUnitId(getString(R.string.interstitial_ad_unit_id));
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdClosed() {
-                requestNewInterstitial();
-                loginUser();
-            }
-        });
-
-        requestNewInterstitial();
-    }
-
-    private void requestNewInterstitial() {
-        AdRequest adRequest = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-                .build();
-
-        mInterstitialAd.loadAd(adRequest);
     }
 
     private void loginUser() {

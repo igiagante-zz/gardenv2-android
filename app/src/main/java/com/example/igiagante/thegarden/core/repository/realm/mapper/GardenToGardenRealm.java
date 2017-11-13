@@ -9,6 +9,8 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.Irrigati
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -29,8 +31,14 @@ public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
 
     @Override
     public GardenRealm map(Garden garden) {
-        GardenRealm gardenRealm = realm.createObject(GardenRealm.class);
-        gardenRealm.setId(garden.getId());
+
+        GardenRealm gardenRealm = realm.where(GardenRealm.class)
+                .equalTo(Table.ID, garden.getId()).findFirst();
+
+        if(gardenRealm == null) {
+            gardenRealm = realm.createObject(GardenRealm.class, garden.getId());
+        }
+
         return copy(garden, gardenRealm);
     }
 
@@ -51,8 +59,7 @@ public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
                 PlantRealm plantRealm = realm.where(PlantRealm.class).equalTo(Table.ID, plant.getId()).findFirst();
                 if (plantRealm == null) {
                     // create plant realm object and set id
-                    plantRealm = realm.createObject(PlantRealm.class);
-                    plantRealm.setId(plant.getId());
+                    plantRealm = realm.createObject(PlantRealm.class, plant.getId());
                 }
                 plantRealms.add(toPlantRealm.copy(plant, plantRealm));
             }
@@ -69,8 +76,7 @@ public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
                 IrrigationRealm irrigationRealm = realm.where(IrrigationRealm.class).equalTo(Table.ID, irrigation.getId()).findFirst();
                 if (irrigationRealm == null) {
                     // create irrigation realm object and set id
-                    irrigationRealm = realm.createObject(IrrigationRealm.class);
-                    irrigationRealm.setId(irrigation.getId());
+                    irrigationRealm = realm.createObject(IrrigationRealm.class, irrigation.getId());
                 }
                 irrigationRealms.add(toIrrigationRealm.copy(irrigation, irrigationRealm));
             }

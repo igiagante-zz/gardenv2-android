@@ -17,11 +17,11 @@ public class PlagueSpecification implements RealmSpecification<PlagueRealm> {
 
     @Override
     public Flowable<RealmResults<PlagueRealm>> toFlowable(@NonNull Realm realm) {
-        return realm.where(PlagueRealm.class).findAll().asFlowable();
+        return realm.where(PlagueRealm.class).findAllAsync().asFlowable();
     }
 
     @Override
     public RealmResults<PlagueRealm> toRealmResults(@NonNull Realm realm) {
-        return realm.where(PlagueRealm.class).findAll();
+        return realm.where(PlagueRealm.class).findAllAsync();
     }
 }

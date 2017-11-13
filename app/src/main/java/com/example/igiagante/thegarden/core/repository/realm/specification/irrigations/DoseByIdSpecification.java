@@ -25,7 +25,7 @@ public class DoseByIdSpecification implements RealmSpecification {
     @Override
     public Flowable<RealmResults<DoseRealm>> toFlowable(@NonNull Realm realm) {
         return Flowable.just(realm.where(DoseRealm.class).equalTo(Table.ID, id)
-                .findAll());
+                .findAllAsync());
     }
 
     @Override

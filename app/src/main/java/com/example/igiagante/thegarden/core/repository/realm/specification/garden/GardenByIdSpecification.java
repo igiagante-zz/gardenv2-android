@@ -26,7 +26,7 @@ public class GardenByIdSpecification implements RealmSpecification {
     @Override
     public Flowable<RealmResults<GardenRealm>> toFlowable(@NonNull Realm realm) {
         return Flowable.just(realm.where(GardenRealm.class).equalTo(Table.ID, id)
-                .findAll());
+                .findAllAsync());
     }
 
     @Override

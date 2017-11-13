@@ -38,6 +38,7 @@ public class AttributeRealmRepository implements Repository<Attribute> {
 
     public AttributeRealmRepository(@NonNull Context context) {
 
+        Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
                 .name(Repository.DATABASE_NAME_DEV)
                 .deleteRealmIfMigrationNeeded()
@@ -137,7 +138,8 @@ public class AttributeRealmRepository implements Repository<Attribute> {
 
         // convert Flowable<RealmResults<AttributeRealm>> into Observable<List<Attribute>>
         return realmResults
-                .flatMap(plants ->
+                .filter(plants -> plants.isLoaded())
+                .switchMap(plants ->
                         Flowable.fromIterable(plants)
                                 .map(attributeRealm -> toAttribute.map(attributeRealm))
                 )

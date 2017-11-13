@@ -24,7 +24,7 @@ public class AttributeByIdSpecification implements RealmSpecification {
     public Flowable<RealmResults<AttributeRealm>> toFlowable(Realm realm) {
         return Flowable.just(realm.where(AttributeRealm.class)
                 .equalTo(Table.ID, id)
-                .findAll());
+                .findAllAsync());
     }
 
     @Override

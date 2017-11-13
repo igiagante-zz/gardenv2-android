@@ -3,6 +3,9 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientPerDoseRealm;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
+
+import java.util.UUID;
 
 import io.realm.Realm;
 
@@ -19,8 +22,14 @@ public class NutrientToNutrientPerDoseRealm implements Mapper<Nutrient, Nutrient
 
     @Override
     public NutrientPerDoseRealm map(Nutrient nutrient) {
-        NutrientPerDoseRealm nutrientPerDoseRealm = realm.createObject(NutrientPerDoseRealm.class);
-        nutrientPerDoseRealm.setId(nutrient.getId());
+
+        NutrientPerDoseRealm nutrientPerDoseRealm = realm.where(NutrientPerDoseRealm.class)
+                .equalTo(Table.ID, nutrient.getId()).findFirst();
+
+        if(nutrientPerDoseRealm == null) {
+            nutrientPerDoseRealm = realm.createObject(NutrientPerDoseRealm.class, nutrient.getId());
+        }
+
         return copy(nutrient, nutrientPerDoseRealm);
     }
 

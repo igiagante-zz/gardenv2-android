@@ -6,6 +6,8 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseReal
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 
 /**
@@ -23,8 +25,14 @@ public class IrrigationToIrrigationRealm implements Mapper<Irrigation, Irrigatio
 
     @Override
     public IrrigationRealm map(Irrigation irrigation) {
-        IrrigationRealm irrigationRealm = realm.createObject(IrrigationRealm.class);
-        irrigationRealm.setId(irrigation.getId());
+
+        IrrigationRealm irrigationRealm = realm.where(IrrigationRealm.class)
+                .equalTo(Table.ID, irrigation.getId()).findFirst();
+
+        if(irrigationRealm == null) {
+            irrigationRealm = realm.createObject(IrrigationRealm.class, irrigation.getId());
+        }
+
         return copy(irrigation, irrigationRealm);
     }
 

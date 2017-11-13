@@ -3,6 +3,9 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlagueRealm;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
+
+import java.util.UUID;
 
 import io.realm.Realm;
 
@@ -19,8 +22,13 @@ public class PlagueToPlagueRealm implements Mapper<Plague, PlagueRealm> {
 
     @Override
     public PlagueRealm map(Plague plague) {
-        PlagueRealm plagueRealm = realm.createObject(PlagueRealm.class);
-        plagueRealm.setId(plague.getId());
+
+        PlagueRealm plagueRealm = realm.where(PlagueRealm.class).equalTo(Table.ID, plague.getId()).findFirst();
+
+        if(plagueRealm == null) {
+            plagueRealm = realm.createObject(PlagueRealm.class, plague.getId());
+        }
+
         copy(plague, plagueRealm);
 
         return plagueRealm;

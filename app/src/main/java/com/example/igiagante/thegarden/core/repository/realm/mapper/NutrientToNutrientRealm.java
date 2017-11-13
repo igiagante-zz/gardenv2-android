@@ -7,6 +7,8 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRea
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
+import java.util.UUID;
+
 import io.realm.Realm;
 import io.realm.RealmList;
 
@@ -26,8 +28,12 @@ public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> 
     @Override
     public NutrientRealm map(Nutrient nutrient) {
 
-        NutrientRealm nutrientRealm = realm.createObject(NutrientRealm.class);
-        nutrientRealm.setId(nutrient.getId());
+        NutrientRealm nutrientRealm = realm.where(NutrientRealm.class).equalTo(Table.ID, nutrient.getId()).findFirst();
+
+        if(nutrientRealm == null) {
+            nutrientRealm = realm.createObject(NutrientRealm.class, nutrient.getId());
+        }
+
         return copy(nutrient, nutrientRealm);
     }
 
@@ -49,8 +55,7 @@ public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> 
                 ImageRealm imageRealm = realm.where(ImageRealm.class).equalTo(Table.ID, image.getId()).findFirst();
                 if (imageRealm == null) {
                     // create image realm object and set id
-                    imageRealm = realm.createObject(ImageRealm.class);
-                    imageRealm.setId(image.getId());
+                    imageRealm = realm.createObject(ImageRealm.class, image.getId());
                 }
                 imagesRealm.add(toImageRealm.copy(image, imageRealm));
             }
