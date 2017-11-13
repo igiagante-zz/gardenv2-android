@@ -125,7 +125,6 @@ public class UserRealmRepository implements Repository<User> {
 
         // convert Flowable<RealmResults<UserRealm>> into Observable<List<User>>
         return realmResults
-                .filter(users -> users.isLoaded())
                 .switchMap(userRealms ->
                         Flowable.fromIterable(userRealms)
                         .map(userRealm -> toUser.map(userRealm)

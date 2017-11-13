@@ -40,12 +40,15 @@ public class BaseRepositoryManager<T, DB extends Repository<T>, API extends Repo
     public Observable<T> add(@NonNull T entity, Specification specification) {
 
         // there should be only one entity with this name
-        Observable<T> query = db.query(specification)
-                .flatMap(list -> Observable.just(list.get(0)));
+        //Observable<T> query = db.query(specification)
+          //      .flatMap(list -> Observable.just(list.get(0)));
+
+        List<T> ts = db.query(specification).blockingFirst();
+        Observable<T> dbResults = ts.isEmpty() ? Observable.empty() : Observable.just(ts.get(0));
 
         Observable<T> apiResults = api.add(entity);
 
-        return !checkInternet() ? query : Observable.concat(query, apiResults).first(entity).toObservable();
+        return !checkInternet() ? dbResults : Observable.concat(dbResults, apiResults).first(entity).toObservable();
     }
 
     public Observable<Integer> delete(@NonNull String id) {
