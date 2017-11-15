@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -28,29 +29,30 @@ import io.realm.RealmResults;
 /**
  * @author Ignacio Giagante, on 6/5/16.
  */
-public class PlagueRealmRepository implements Repository<Plague> {
+public class PlagueRealmRepository extends RealmRepository<Plague, PlagueRealm> {
 
-    private final Mapper<PlagueRealm, Plague> toPlague;
-    private final Mapper<Plague, PlagueRealm> toPlagueRealm;
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    Mapper<Plague, PlagueRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
+
+    @Override
+    MapperTest<PlagueRealm, Plague> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public PlagueRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toPlague = new PlagueRealmToPlague();
-        this.toPlagueRealm = new PlagueToPlagueRealm(realm);
+        super(context);
     }
 
+    @Override
+    void removeAll() {
 
+    }
+
+/*
     @Override
     public Observable<Plague> getById(String id) {
         return query(new PlagueByIdSpecification(id)).flatMap(Observable::fromIterable);
@@ -136,5 +138,5 @@ public class PlagueRealmRepository implements Repository<Plague> {
                 )
                 .toList()
                 .toObservable();
-    }
+    }*/
 }

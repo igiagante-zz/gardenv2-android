@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -27,28 +28,30 @@ import io.realm.RealmResults;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class NutrientRealmRepository implements Repository<Nutrient> {
+public class NutrientRealmRepository extends RealmRepository<Nutrient, NutrientRealm> {
 
-    private final Mapper<NutrientRealm, Nutrient> toNutrient;
-    private final Mapper<Nutrient, NutrientRealm> toNutrientRealm;
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    Mapper<Nutrient, NutrientRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
+
+    @Override
+    MapperTest<NutrientRealm, Nutrient> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public NutrientRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toNutrient = new NutrientRealmToNutrient();
-        this.toNutrientRealm = new NutrientToNutrientRealm(realm);
+        super(context);
     }
 
+    @Override
+    void removeAll() {
+
+    }
+
+    /*
     @Override
     public Observable<Nutrient> getById(String id) {
         return query(new NutrientByIdSpecification(id)).flatMap(Observable::fromIterable);
@@ -146,5 +149,5 @@ public class NutrientRealmRepository implements Repository<Nutrient> {
                 )
                 .toList()
                 .toObservable();
-    }
+    } */
 }

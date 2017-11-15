@@ -10,6 +10,8 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.repository.realm.UserRealmRepository;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserRealm;
+import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestUserApi;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiNutrientRepository;
 
@@ -21,7 +23,8 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 5/8/16.
  */
-public class UserRepositoryManager extends BaseRepositoryManager {
+public class UserRepositoryManager
+        extends BaseRepositoryManager<User, UserRealm, UserRealmRepository, RestUserApi>  {
 
     private UserRealmRepository realmRepository;
     private RestApiGardenRepository api;
@@ -29,7 +32,7 @@ public class UserRepositoryManager extends BaseRepositoryManager {
 
     @Inject
     public UserRepositoryManager(Context context, Session session) {
-        super(context, new UserRealmRepository(context), new RestApiNutrientRepository(context, session));
+        super(context, new UserRealmRepository(context), new RestUserApi(context, session));
         realmRepository = new UserRealmRepository(context);
         api = new RestApiGardenRepository(context, session);
         restApiNutrientRepository = new RestApiNutrientRepository(context, session);

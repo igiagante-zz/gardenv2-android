@@ -12,7 +12,10 @@ import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.realm.Realm;
+import io.realm.RealmResults;
 
 
 /**
@@ -34,6 +37,11 @@ public class GetFlavorsUseCase extends UseCase<Flavor, Void> {
 
     @Override
     protected Observable buildUseCaseObservable(Void aVoid) {
-        return flavorRepositoryManager.query(new Specification() {});
+        return flavorRepositoryManager.query(new Specification() {
+            @Override
+            public Flowable<RealmResults> toFlowable(Realm realm) {
+                return null;
+            }
+        });
     }
 }

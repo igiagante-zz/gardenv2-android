@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -28,28 +29,28 @@ import io.realm.RealmResults;
 /**
  * @author Ignacio Giagante, on 6/5/16.
  */
-public class AttributeRealmRepository implements Repository<Attribute> {
+public class AttributeRealmRepository extends RealmRepository<Attribute, AttributeRealm> {
 
-    private final Mapper<AttributeRealm, Attribute> toAttribute;
-    private final Mapper<Attribute, AttributeRealm> toAttributeRealm;
+    @Override
+    Mapper<Attribute, AttributeRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    MapperTest<AttributeRealm, Attribute> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public AttributeRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toAttribute = new AttributeRealmToAttribute();
-        this.toAttributeRealm = new AttributeToAttributeRealm(realm);
+        super(context);
     }
 
+    @Override
+    void removeAll() {
+
+    }
+/*
     @Override
     public Observable<Attribute> getById(String id) {
         return query(new AttributeByIdSpecification(id)).flatMap(Observable::fromIterable);
@@ -145,5 +146,5 @@ public class AttributeRealmRepository implements Repository<Attribute> {
                 )
                 .toList()
                 .toObservable();
-    }
+    } */
 }

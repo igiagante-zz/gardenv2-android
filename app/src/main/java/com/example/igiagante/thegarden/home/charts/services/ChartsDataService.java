@@ -34,9 +34,9 @@ public class ChartsDataService extends IntentService {
         }
     }
 
-    private void cleanDataBase() {
+    public void cleanDataBase() {
         SensorTempRealmRepository repository = new SensorTempRealmRepository(this);
-        repository.removeAll();
+        //repository.removeAll();
 
         Intent intent = new Intent();
         intent.setAction(NOTIFICATION_CLEAN_DATABASE);

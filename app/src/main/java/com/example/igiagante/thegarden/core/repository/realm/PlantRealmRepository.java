@@ -5,52 +5,44 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
 import com.example.igiagante.thegarden.core.repository.Mapper;
-import com.example.igiagante.thegarden.core.repository.RealmSpecification;
-import com.example.igiagante.thegarden.core.repository.Repository;
-import com.example.igiagante.thegarden.core.repository.Specification;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.PlantRealmToPlant;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.PlantToPlantRealm;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlantRealm;
-import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.PlantTable;
-import com.example.igiagante.thegarden.core.repository.realm.specification.plant.PlantByIdSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.plant.PlantByNameSpecification;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
 
 
 /**
  * @author Ignacio Giagante, on 5/5/16.
  */
-public class PlantRealmRepository implements Repository<Plant> {
+public class PlantRealmRepository extends RealmRepository<Plant, PlantRealm> {
 
-    private final Mapper<PlantRealm, Plant> toPlant;
-    private final Mapper<Plant, PlantRealm> toPlantRealm;
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    Mapper<Plant, PlantRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
+
+    @Override
+    MapperTest<PlantRealm, Plant> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public PlantRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toPlant = new PlantRealmToPlant(context);
-        this.toPlantRealm = new PlantToPlantRealm(realm);
+       super(context);
     }
+
+    @Override
+    void removeAll() {
+
+    }
+
+    /*
 
     @Override
     public Observable<Plant> getById(@NonNull String id) {
@@ -117,7 +109,8 @@ public class PlantRealmRepository implements Repository<Plant> {
         }
 
         return Observable.just(plant);
-    }
+    } */
+
 
     /**
      * Filter those images which should be deleted from Realm
@@ -125,6 +118,7 @@ public class PlantRealmRepository implements Repository<Plant> {
      * @param resourcesIds list of resources ids images
      * @return List of ImageRealm Objects
      */
+    /*
     private List<ImageRealm> getImagesToBeDeleted(List<String> resourcesIds) {
 
         RealmResults<ImageRealm> all = realm.where(ImageRealm.class).findAll();
@@ -150,7 +144,9 @@ public class PlantRealmRepository implements Repository<Plant> {
         }
 
         return imagesToBeDeleted;
-    }
+    } */
+
+    /*
 
     @Override
     public Observable<Integer> remove(@NonNull String plantId) {
@@ -196,5 +192,5 @@ public class PlantRealmRepository implements Repository<Plant> {
                 )
                 .toList()
                 .toObservable();
-    }
+    } */
 }

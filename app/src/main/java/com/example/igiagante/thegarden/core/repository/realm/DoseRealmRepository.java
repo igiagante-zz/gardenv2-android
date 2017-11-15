@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Dose;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -26,28 +27,30 @@ import io.realm.RealmResults;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class DoseRealmRepository implements Repository<Dose> {
+public class DoseRealmRepository extends RealmRepository<Dose, DoseRealm> {
 
-    private final Mapper<DoseRealm, Dose> toDose;
-    private final Mapper<Dose, DoseRealm> toDoseRealm;
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    Mapper<Dose, DoseRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
+
+    @Override
+    MapperTest<DoseRealm, Dose> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public DoseRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toDose = new DoseRealmToDose();
-        this.toDoseRealm = new DoseToDoseRealm(realm);
+        super(context);
     }
 
+    @Override
+    void removeAll() {
+
+    }
+
+    /*
     @Override
     public Observable<Dose> getById(String id) {
         return query(new DoseByIdSpecification(id)).flatMap(Observable::fromIterable);
@@ -144,5 +147,5 @@ public class DoseRealmRepository implements Repository<Dose> {
                 )
                 .toList()
                 .toObservable();
-    }
+    } */
 }

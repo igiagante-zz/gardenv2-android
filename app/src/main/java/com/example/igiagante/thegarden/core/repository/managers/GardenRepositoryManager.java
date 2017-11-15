@@ -5,11 +5,9 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
-import com.example.igiagante.thegarden.core.repository.Repository;
-import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.realm.GardenRealmRepository;
 import com.example.igiagante.thegarden.core.repository.realm.IrrigationRealmRepository;
-import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenByNameSpecification;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 
 import java.util.ArrayList;
@@ -20,12 +18,11 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
 
-
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
 public class GardenRepositoryManager
-        extends BaseRepositoryManager<Garden, GardenRealmRepository, RestApiGardenRepository> {
+        extends BaseRepositoryManager<Garden, GardenRealm, GardenRealmRepository, RestApiGardenRepository> {
 
     private Context context;
     private Session session;

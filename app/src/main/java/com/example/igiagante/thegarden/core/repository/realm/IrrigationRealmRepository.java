@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -27,28 +28,42 @@ import io.realm.RealmResults;
 /**
  * @author Ignacio Giagante, on 19/7/16.
  */
-public class IrrigationRealmRepository implements Repository<Irrigation> {
+public class IrrigationRealmRepository extends RealmRepository<Irrigation, IrrigationRealm> {
 
-    private final Mapper<IrrigationRealm, Irrigation> toIrrigation;
-    private final Mapper<Irrigation, IrrigationRealm> toIrrigationRealm;
 
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+    @Override
+    Mapper<Irrigation, IrrigationRealm> initModelToRealmMapper(Realm realm) {
+        return null;
+    }
+
+    @Override
+    MapperTest<IrrigationRealm, Irrigation> initRealmToModelMapper(Context context) {
+        return null;
+    }
 
     public IrrigationRealmRepository(@NonNull Context context) {
 
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toIrrigation = new IrrigationRealmToIrrigation();
-        this.toIrrigationRealm = new IrrigationToIrrigationRealm(realm);
+        super(context);
     }
 
+    @Override
+    void removeAll() {
+
+    }
+
+    public void removeIrrigationsByGardenId(String gardenId) {
+
+        realm = Realm.getInstance(realmConfiguration);
+
+        realm.executeTransaction(realmParam -> {
+            RealmResults<IrrigationRealm> result = realm.where(IrrigationRealm.class)
+                    .equalTo(IrrigationTable.GARDEN_ID, gardenId).findAll();
+            result.deleteAllFromRealm();
+        });
+        realm.close();
+    }
+
+    /*
     @Override
     public Observable<Irrigation> getById(String id) {
         return query(new IrrigationByIdSpecification(id)).flatMap(Observable::fromIterable);
@@ -157,5 +172,5 @@ public class IrrigationRealmRepository implements Repository<Irrigation> {
                 )
                 .toList()
                 .toObservable();
-    }
+    } */
 }

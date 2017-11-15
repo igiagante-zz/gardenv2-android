@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.User;
+import com.example.igiagante.thegarden.core.repository.Repository;
+import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.network.HttpStatus;
 import com.example.igiagante.thegarden.core.repository.network.ServiceFactory;
 import com.example.igiagante.thegarden.core.repository.realm.UserRealmRepository;
@@ -12,6 +14,8 @@ import com.example.igiagante.thegarden.core.repository.restAPI.services.UserRest
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -19,7 +23,7 @@ import retrofit2.Response;
 /**
  * @author Ignacio Giagante, on 2/8/16.
  */
-public class RestUserApi {
+public class RestUserApi implements Repository<User> {
 
     private static final String TAG = RestUserApi.class.getSimpleName();
 
@@ -109,6 +113,82 @@ public class RestUserApi {
             }
             return Observable.just(httpStatusValue);
         });
+    }
+
+    /**
+     * Return a resource using the id
+     *
+     * @param id Object id
+     * @return Observable<T>
+     */
+    public Observable<User> getById(String id) {
+        return Observable.just(new User());
+    }
+
+    /**
+     * Return a resource using the name
+     *
+     * @param name Name of the resource
+     * @return Observable<T>
+     */
+    public Observable<User> getByName(String name) {
+        return Observable.just(new User());
+    }
+
+    /**
+     * Return an Object's id which was added
+     *
+     * @param user Object to be inserted into the repository
+     * @return Observable<T> The Observable contains an object
+     */
+
+    public Observable<User> add(User user) {
+        return Observable.just(new User());
+    }
+
+    /**
+     * Return the number of objects which were added.
+     *
+     * @param items Objects to be inserted into the repository
+     * @return Observable<Integer> The Observable contains the number of objects added
+     */
+    public Observable<Integer> add(Iterable<User> items) {
+        return Observable.just(1);
+    }
+
+    /**
+     * Return an observable with the object updated.
+     *
+     * @param user Object to be updated into the repository
+     * @return Observable<Integer> The Observable contains the number of objects added.
+     */
+    public Observable<User> update(User user) {
+        return Observable.just(new User());
+    }
+
+    /**
+     * Return an observable with the integer, which indicates if the resource was deleted or not.
+     *
+     * @param id Id from Object to be deleted into the repository
+     * @return Observable<Integer>
+     */
+    public Observable<Integer> remove(String id){
+        return Observable.just(1);
+    }
+
+
+    public void removeAll() {
+
+    }
+
+    /**
+     * Return an observable a list of resources.
+     *
+     * @param specification {@link Specification}
+     * @return Observable<List<T>>
+     */
+    public Observable<List<User>> query(Specification specification) {
+        return Observable.just(new ArrayList<User>());
     }
 
     public class InnerResponse {

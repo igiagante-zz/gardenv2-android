@@ -6,6 +6,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserRealm;
@@ -18,7 +19,7 @@ import io.realm.RealmList;
 /**
  * @author Ignacio Giagante, on 5/8/16.
  */
-public class UserRealmToUser implements Mapper<UserRealm, User> {
+public class UserRealmToUser implements MapperTest<UserRealm, User> {
 
     private final GardenRealmToGarden toGarden;
     private final NutrientRealmToNutrient toNutrient;

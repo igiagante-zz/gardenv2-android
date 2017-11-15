@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -28,27 +29,28 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 5/8/16.
  */
-public class UserRealmRepository implements Repository<User> {
-
-    private final Mapper<UserRealm, User> toUser;
-    private final Mapper<User, UserRealm> toUserRealm;
-
-    private Realm realm;
-    private final RealmConfiguration realmConfiguration;
+public class UserRealmRepository extends RealmRepository<User, UserRealm> {
 
     public UserRealmRepository(@NonNull Context context) {
-
-        Realm.init(context);
-        this.realmConfiguration = new RealmConfiguration.Builder()
-                .name(Repository.DATABASE_NAME_DEV)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-
-        this.realm = Realm.getInstance(realmConfiguration);
-
-        this.toUser = new UserRealmToUser(context);
-        this.toUserRealm = new UserToUserRealm(realm);
+        super(context);
     }
+
+    @Override
+    void removeAll() {
+
+    }
+
+    // Mapper<GardenRealm, Garden>
+    Mapper<User, UserRealm> initModelToRealmMapper(Realm realm) {
+        return new UserToUserRealm(realm);
+    }
+
+    // Mapper<Garden, GardenRealm>
+    MapperTest<UserRealm, User> initRealmToModelMapper(Context context) {
+        return new UserRealmToUser(context);
+    }
+
+    /*
 
     @Override
     public Observable<User> getById(String id) {
@@ -137,5 +139,5 @@ public class UserRealmRepository implements Repository<User> {
     public User getUserById(String userId) {
         final Realm realm = Realm.getInstance(realmConfiguration);
         return toUser.map(realm.where(UserRealm.class).equalTo(UserTable.ID, userId).findFirst());
-    }
+    } */
 }

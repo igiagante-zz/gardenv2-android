@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.repository.realm.SensorTempRealmRepository;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.SensorTempRealm;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiSensorTempRepository;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
  * @author Ignacio Giagante, on 22/8/16.
  */
 public class SensorTempRepositoryManager extends
-        BaseRepositoryManager<SensorTemp, SensorTempRealmRepository, RestApiSensorTempRepository> {
+        BaseRepositoryManager<SensorTemp, SensorTempRealm, SensorTempRealmRepository, RestApiSensorTempRepository> {
 
     @Inject
     public SensorTempRepositoryManager(Context context) {

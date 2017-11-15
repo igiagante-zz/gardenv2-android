@@ -5,6 +5,7 @@ import android.content.Context;
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.repository.realm.IrrigationRealmRepository;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiIrrigationRepository;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import javax.inject.Inject;
  * @author Ignacio Giagante, on 20/7/16.
  */
 public class IrrigationRepositoryManager extends
-        BaseRepositoryManager<Irrigation, IrrigationRealmRepository, RestApiIrrigationRepository> {
+        BaseRepositoryManager<Irrigation, IrrigationRealm, IrrigationRealmRepository, RestApiIrrigationRepository> {
 
     @Inject
     public IrrigationRepositoryManager(Context context, Session session) {
