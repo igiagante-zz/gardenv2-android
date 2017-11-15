@@ -4,8 +4,10 @@ package com.example.igiagante.thegarden.core.repository.realm;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.JobExecutor;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.Repository;
@@ -15,6 +17,7 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.T
 import java.util.Collection;
 import java.util.List;
 
+import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.reactivex.schedulers.Schedulers;
@@ -35,9 +38,13 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
     protected final RealmConfiguration realmConfiguration;
 
     private MapperTest<RealmEntity, Entity> realmToModel;
-    private Mapper<Entity, RealmEntity> modelToRealm;
+    private MapToRealm<Entity, RealmEntity> modelToRealm;
 
-    abstract Mapper<Entity, RealmEntity> initModelToRealmMapper(Realm realm);
+    protected Class realmClass;
+
+    abstract void setRealmClass();
+
+    abstract MapToRealm<Entity, RealmEntity> initModelToRealmMapper(Realm realm);
 
     abstract MapperTest<RealmEntity, Entity> initRealmToModelMapper(Context context);
 
@@ -47,8 +54,8 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
         executor = new JobExecutor();
 
-        modelToRealm = initModelToRealmMapper(realm);
-        realmToModel = initRealmToModelMapper(context);
+        // throw exception in case child class has not implemented setRealmClass()
+        setRealmClass();
 
         Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
@@ -57,18 +64,18 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
                 .build();
 
         this.realm = Realm.getInstance(realmConfiguration);
+
+        modelToRealm = initModelToRealmMapper(this.realm);
+        realmToModel = initRealmToModelMapper(context);
     }
 
-    @SuppressWarnings("unchecked")
-    private Class<RealmEntity> getGenericTypeClass() {
-        try {
-            String className = ((RealmEntity) getClass().getGenericSuperclass()).getClass().getName();
-            Class<?> clazz = Class.forName(className);
-            return (Class<RealmEntity>) clazz;
-        } catch (Exception e) {
-            throw new IllegalStateException("Class is not parametrized with generic type!!! Please use extends <> ");
+    /*
+    private void checkIfClassAttributeIsInitialized() {
+
+        if(this.clazz == null) {
+            throw new Exception("class property was not initialized");
         }
-    }
+    }*/
 
     /**
      * Return a resource using the id
@@ -82,16 +89,25 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Entity> call() {
 
+                Realm realm = Realm.getInstance(realmConfiguration);
+
                 realm.beginTransaction();
 
-                RealmEntity realmEntity = realm.where(getGenericTypeClass())
+                RealmEntity realmEntity = (RealmEntity) realm.where(realmClass)
                         .equalTo(Table.ID, id)
                         .findFirst();
 
                 realm.commitTransaction();
 
-                return Observable.just(realmToModel.map(realmEntity))
-                        .subscribeOn(Schedulers.from(executor));
+                Entity entity = null;
+
+                if(realmEntity != null) {
+                    entity = realmToModel.map(realmEntity);
+                    return  Observable.just(entity)
+                            .subscribeOn(Schedulers.from(executor));
+                } else {
+                    return  Completable.complete().toObservable();
+                }
             }
         });
     }
@@ -108,16 +124,24 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Entity> call() {
 
+                Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                RealmEntity realmEntity = realm.where(getGenericTypeClass())
+                RealmEntity realmEntity = (RealmEntity) realm.where(realmClass)
                         .equalTo(Table.NAME, name)
                         .findFirst();
 
                 realm.commitTransaction();
 
-                return Observable.just(realmToModel.map(realmEntity))
-                        .subscribeOn(Schedulers.from(executor));
+                Entity entity = null;
+
+                if(realmEntity != null) {
+                    entity = realmToModel.map(realmEntity);
+                    return  Observable.just(entity)
+                            .subscribeOn(Schedulers.from(executor));
+                } else {
+                    return  Completable.complete().toObservable();
+                }
             }
         });
     }
@@ -135,10 +159,12 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Entity> call() {
 
+                Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                Observable<RealmEntity> result = (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item))
-                        .asFlowable().toObservable();
+                Observable<RealmEntity> result = (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item, realm))
+                        .asFlowable().toObservable()
+                        .subscribeOn(Schedulers.from(executor));
 
                 realm.commitTransaction();
 
@@ -161,10 +187,13 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Entity> call() {
 
+                Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                Observable<RealmEntity> result = (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item))
-                        .asFlowable().toObservable();
+                Observable<RealmEntity> result =
+                        (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item, realm))
+                        .asFlowable().toObservable()
+                                .subscribeOn(Schedulers.from(executor));
 
                 realm.commitTransaction();
 
@@ -186,9 +215,10 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Integer> call() {
 
+                Realm realm = Realm.getInstance(realmConfiguration);
                 realm.executeTransaction(realmParam -> {
                     for (Entity item : items) {
-                        realmParam.copyToRealmOrUpdate(modelToRealm.map(item));
+                        realmParam.copyToRealmOrUpdate(modelToRealm.map(item, realm));
                     }
                 });
 
@@ -217,7 +247,11 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
             @Override
             public Observable<Integer> call() {
 
-                RealmEntity realmEntity = realm.where(getGenericTypeClass()).equalTo(Table.ID, id).findFirst();
+                Realm realm = Realm.getInstance(realmConfiguration);
+
+                RealmEntity realmEntity = (RealmEntity) realm.where(realmClass)
+                        .equalTo(Table.ID, id)
+                        .findFirst();
 
                 realm.executeTransaction(realmParam -> {
                     if (realmEntity != null) {
@@ -261,5 +295,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
         });
     }
 
-    abstract void removeAll();
+    public void removeAll() {
+
+    }
 }

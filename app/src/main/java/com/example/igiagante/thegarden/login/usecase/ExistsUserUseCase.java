@@ -31,17 +31,6 @@ public class ExistsUserUseCase extends UseCase<User, String> {
 
     @Override
     protected Observable buildUseCaseObservable(String userId) {
-        Observable<Boolean> userExistsInDataBase = this.userRepositoryManager.checkIfUserExistsInDataBase(userId);
-
-        List<Boolean> list = new ArrayList<>();
-        userExistsInDataBase.subscribe(user -> {
-            if (user != null) {
-                list.add(Boolean.TRUE);
-            } else {
-                list.add(Boolean.FALSE);
-            }
-        });
-
-        return list.isEmpty() ? Observable.just(Boolean.FALSE) : Observable.just(list.get(0));
+        return this.userRepositoryManager.checkIfUserExistsInDataBase(userId);
     }
 }

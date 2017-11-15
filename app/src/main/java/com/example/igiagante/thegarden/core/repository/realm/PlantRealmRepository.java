@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRealm;
@@ -23,7 +24,7 @@ public class PlantRealmRepository extends RealmRepository<Plant, PlantRealm> {
 
 
     @Override
-    Mapper<Plant, PlantRealm> initModelToRealmMapper(Realm realm) {
+    MapToRealm<Plant, PlantRealm> initModelToRealmMapper(Realm realm) {
         return null;
     }
 
@@ -38,8 +39,8 @@ public class PlantRealmRepository extends RealmRepository<Plant, PlantRealm> {
     }
 
     @Override
-    void removeAll() {
-
+    void setRealmClass() {
+        this.realmClass = PlantRealm.class;
     }
 
     /*

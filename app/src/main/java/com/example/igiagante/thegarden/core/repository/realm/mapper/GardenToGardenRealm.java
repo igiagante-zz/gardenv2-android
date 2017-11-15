@@ -3,6 +3,7 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
@@ -17,7 +18,7 @@ import io.realm.RealmList;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
+public class GardenToGardenRealm implements MapToRealm<Garden, GardenRealm> {
 
     private final Realm realm;
     private final PlantToPlantRealm toPlantRealm;
@@ -30,7 +31,7 @@ public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
     }
 
     @Override
-    public GardenRealm map(Garden garden) {
+    public GardenRealm map(Garden garden, Realm realm) {
 
         GardenRealm gardenRealm = realm.where(GardenRealm.class)
                 .equalTo(Table.ID, garden.getId()).findFirst();
@@ -39,11 +40,11 @@ public class GardenToGardenRealm implements Mapper<Garden, GardenRealm> {
             gardenRealm = realm.createObject(GardenRealm.class, garden.getId());
         }
 
-        return copy(garden, gardenRealm);
+        return copy(garden, gardenRealm, realm);
     }
 
     @Override
-    public GardenRealm copy(Garden garden, GardenRealm gardenRealm) {
+    public GardenRealm copy(Garden garden, GardenRealm gardenRealm, Realm realm) {
 
         gardenRealm.setUserId(garden.getUserId());
         gardenRealm.setName(garden.getName());

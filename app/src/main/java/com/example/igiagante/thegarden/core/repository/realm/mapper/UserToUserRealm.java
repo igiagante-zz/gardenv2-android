@@ -3,14 +3,13 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.domain.entity.User;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -18,7 +17,7 @@ import io.realm.RealmList;
 /**
  * @author Ignacio Giagante, on 5/8/16.
  */
-public class UserToUserRealm implements Mapper<User, UserRealm> {
+public class UserToUserRealm implements MapToRealm<User, UserRealm> {
 
     private final Realm realm;
     private final GardenToGardenRealm toGardenRealm;
@@ -31,18 +30,18 @@ public class UserToUserRealm implements Mapper<User, UserRealm> {
     }
 
     @Override
-    public UserRealm map(User user) {
+    public UserRealm map(User user, Realm realm) {
 
         // create user realm object and set id
         UserRealm userRealm = realm.where(UserRealm.class).equalTo(Table.ID, user.getId()).findFirst();
         if(userRealm == null) {
             userRealm = realm.createObject(UserRealm.class, user.getId());
         }
-        return copy(user, userRealm);
+        return copy(user, userRealm, realm);
     }
 
     @Override
-    public UserRealm copy(User user, UserRealm userRealm) {
+    public UserRealm copy(User user, UserRealm userRealm, Realm realm) {
 
         userRealm.setUsername(user.getUserName());
 
@@ -57,7 +56,7 @@ public class UserToUserRealm implements Mapper<User, UserRealm> {
                     // create garden realm object and set id
                     gardenRealm = realm.createObject(GardenRealm.class, garden.getId());
                 }
-                gardenRealms.add(toGardenRealm.copy(garden, gardenRealm));
+                gardenRealms.add(toGardenRealm.copy(garden, gardenRealm, realm));
             }
         }
 

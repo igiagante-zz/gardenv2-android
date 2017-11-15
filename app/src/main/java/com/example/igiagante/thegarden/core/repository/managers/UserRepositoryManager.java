@@ -39,12 +39,10 @@ public class UserRepositoryManager
     }
 
     public Observable<Boolean> checkIfUserExistsInDataBase(@Nullable String userId) {
-        return realmRepository.getById(userId).flatMap(user -> {
-            if (user != null) {
-                return Observable.just(true);
-            }
-            return Observable.just(false);
-        });
+        return realmRepository.getById(userId)
+                .isEmpty()
+                .map(object -> object.equals(true) ? false : true)
+                .toObservable();
     }
 
     public Observable<User> saveUser(@NonNull User user) {

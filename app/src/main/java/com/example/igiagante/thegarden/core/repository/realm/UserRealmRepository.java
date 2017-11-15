@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.igiagante.thegarden.core.domain.entity.User;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.RealmSpecification;
@@ -35,19 +36,19 @@ public class UserRealmRepository extends RealmRepository<User, UserRealm> {
         super(context);
     }
 
-    @Override
-    void removeAll() {
-
-    }
-
     // Mapper<GardenRealm, Garden>
-    Mapper<User, UserRealm> initModelToRealmMapper(Realm realm) {
+    MapToRealm<User, UserRealm> initModelToRealmMapper(Realm realm) {
         return new UserToUserRealm(realm);
     }
 
     // Mapper<Garden, GardenRealm>
     MapperTest<UserRealm, User> initRealmToModelMapper(Context context) {
         return new UserRealmToUser(context);
+    }
+
+    @Override
+    void setRealmClass() {
+        this.realmClass = UserRealm.class;
     }
 
     /*
