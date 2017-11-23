@@ -2,8 +2,11 @@ package com.example.igiagante.thegarden.core.repository.realm;
 
 
 import android.content.Context;
+import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.example.igiagante.thegarden.core.AndroidApplication;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.JobExecutor;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
@@ -12,7 +15,9 @@ import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.repository.MapperTest;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
+import com.fernandocejas.frodo.annotation.RxLogObservable;
 
 import java.util.Collection;
 import java.util.List;
@@ -20,6 +25,7 @@ import java.util.List;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -83,6 +89,8 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @param id Object id
      * @return Observable<T>
      */
+    @SuppressWarnings("unchecked")
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable getById(String id) {
 
         return Observable.defer(new Func0<Observable<Entity>>() {
@@ -99,12 +107,8 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
                 realm.commitTransaction();
 
-                Entity entity = null;
-
                 if(realmEntity != null) {
-                    entity = realmToModel.map(realmEntity);
-                    return  Observable.just(entity)
-                            .subscribeOn(Schedulers.from(executor));
+                    return  Observable.just(realmToModel.map(realmEntity));
                 } else {
                     return  Completable.complete().toObservable();
                 }
@@ -118,6 +122,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @param name Name of the resource
      * @return Observable<T>
      */
+    @SuppressWarnings("unchecked")
     public Observable getByName(String name){
 
         return Observable.defer(new Func0<Observable<Entity>>() {
@@ -137,13 +142,12 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
                 if(realmEntity != null) {
                     entity = realmToModel.map(realmEntity);
-                    return  Observable.just(entity)
-                            .subscribeOn(Schedulers.from(executor));
+                    return  Observable.just(entity);
                 } else {
                     return  Completable.complete().toObservable();
                 }
             }
-        });
+        }).subscribeOn(Schedulers.from(executor));
     }
 
     /**
@@ -153,6 +157,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @return Observable<Entity> The Observable contains an object
      */
     @SuppressWarnings("unchecked")
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable<Entity> add(final Entity item) {
 
         return Observable.defer(new Func0<Observable<Entity>>() {
@@ -162,14 +167,15 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
                 Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                Observable<RealmEntity> result = (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item, realm))
-                        .asFlowable().toObservable()
-                        .subscribeOn(Schedulers.from(executor));
+                Log.d("RealmRepositoryBefore: ", Thread.currentThread().getName());
+
+                RealmEntity result = realm.copyToRealmOrUpdate(modelToRealm.map(item, realm));
+
+                Log.d("RealmRepositoryMiddle: ", Thread.currentThread().getName());
 
                 realm.commitTransaction();
 
-                return result.switchMap(realmEntity -> Observable.just(realmToModel.map(realmEntity)))
-                        .subscribeOn(Schedulers.from(executor));
+                return Observable.just(realmToModel.map(result));
             }
         });
     }
@@ -181,6 +187,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @return Observable<Entity> The Observable contains an object
      */
     @SuppressWarnings("unchecked")
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable<Entity> update(final Entity item) {
 
         return Observable.defer(new Func0<Observable<Entity>>() {
@@ -190,15 +197,15 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
                 Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                Observable<RealmEntity> result =
-                        (Observable<RealmEntity>) realm.copyToRealmOrUpdate(modelToRealm.map(item, realm))
-                        .asFlowable().toObservable()
-                                .subscribeOn(Schedulers.from(executor));
+                Log.d("RealmRepositoryBefore: ", Thread.currentThread().getName());
+
+                RealmEntity result = realm.copyToRealmOrUpdate(modelToRealm.map(item, realm));
+
+                Log.d("RealmRepositoryMiddle: ", Thread.currentThread().getName());
 
                 realm.commitTransaction();
 
-                return result.switchMap(realmEntity -> Observable.just(realmToModel.map(realmEntity)))
-                        .subscribeOn(Schedulers.from(executor));
+                return Observable.just(realmToModel.map(result));
             }
         });
     }
@@ -230,9 +237,9 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
                     size = ((Collection<?>) items).size();
                 }
 
-                return Observable.just(size).subscribeOn(Schedulers.from(executor));
+                return Observable.just(size);
             }
-        });
+        }).subscribeOn(Schedulers.from(executor));
     }
 
     /**
@@ -241,6 +248,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @param id Id from Object to be deleted into the repository
      * @return Observable<Integer>
      */
+    @SuppressWarnings("unchecked")
     public Observable<Integer> remove(String id){
 
         return Observable.defer(new Func0<Observable<Integer>>() {
@@ -261,11 +269,10 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
                 realm.close();
 
-                // if plantRealm.isValid() is false, it is because the realm object was deleted
-                return Observable.just(realmEntity.isValid() ? -1 : 1)
-                        .subscribeOn(Schedulers.from(executor));
+                // if realmEntity.isValid() is false, it is because the realm object was deleted
+                return Observable.just(realmEntity.isValid() ? -1 : 1);
             }
-        });
+        }).subscribeOn(Schedulers.from(executor));
     }
 
     /**
@@ -279,19 +286,18 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
         return Observable.defer(() -> {
 
-        final Realm realm = Realm.getInstance(realmConfiguration);
-        final Flowable<RealmResults<RealmEntity>> realmResults = specification.toFlowable(realm);
+            Realm realm = Realm.getInstance(realmConfiguration);
 
-        // convert Flowable<RealmResults<RealmEntity>> into Observable<List<Entity>>
-        return realmResults
-                .filter(realms -> realms.isLoaded())
-                .switchMap(realms ->
-                        Flowable.fromIterable(realms)
-                                .map(realmEntity -> realmToModel.map(realmEntity))
-                )
-                .toList()
-                .toObservable()
-                .subscribeOn(Schedulers.from(executor));
+            final Flowable<RealmResults<RealmEntity>> realmResults = specification.toFlowable(realm);
+
+            // convert Flowable<RealmResults<RealmEntity>> into Observable<List<Entity>>
+            return realmResults
+                    .switchMap(realms ->
+                            Flowable.fromIterable(realms)
+                                    .map(realmEntity -> realmToModel.map(realmEntity))
+                    )
+                    .toList()
+                    .toObservable();
         });
     }
 

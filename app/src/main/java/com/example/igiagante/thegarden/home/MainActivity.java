@@ -204,8 +204,8 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
         setupToolbar();
 
-        mainViewPager = (ViewPager) findViewById(R.id.main_viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        mainViewPager = findViewById(R.id.main_viewpager);
+        tabLayout = findViewById(R.id.tabs);
 
         tracker.setScreenName(TAG);
         tracker.send(new HitBuilders.ScreenViewBuilder().build());
@@ -300,12 +300,12 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
         drawerLayout.addDrawerListener(mDrawerToggle);
 
         mNavigationGardenAdapter = new NavigationGardenAdapter(this, this, this, mSession);
-        recyclerViewGardens = (RecyclerView) findViewById(R.id.recycler_view_gardens);
+        recyclerViewGardens = findViewById(R.id.recycler_view_gardens);
         this.recyclerViewGardens.setLayoutManager(new LinearLayoutManager(this));
         this.recyclerViewGardens.setAdapter(mNavigationGardenAdapter);
 
         //nutrients
-        Button nutrientsOption = (Button) findViewById(R.id.nutrients_id);
+        Button nutrientsOption = findViewById(R.id.nutrients_id);
         nutrientsOption.setOnClickListener(v -> {
             this.drawerLayout.closeDrawers();
             startActivity(new Intent(this, NutrientActivity.class));
@@ -414,6 +414,9 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     @Override
     public void loadGarden(@NonNull GardenHolder gardenHolder) {
+
+        setupViewPager();
+
         gardenHolder.setSelected(true);
         this.drawerLayout.closeDrawers();
         this.mAdapter.setGardenHolder(gardenHolder);

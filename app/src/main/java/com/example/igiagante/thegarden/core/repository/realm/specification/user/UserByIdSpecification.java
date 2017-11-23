@@ -23,7 +23,7 @@ public class UserByIdSpecification implements RealmSpecification<UserRealm> {
     @Override
     public Flowable<RealmResults<UserRealm>> toFlowable(Realm realm) {
         return Flowable.just(realm.where(UserRealm.class).equalTo(Table.ID, id)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

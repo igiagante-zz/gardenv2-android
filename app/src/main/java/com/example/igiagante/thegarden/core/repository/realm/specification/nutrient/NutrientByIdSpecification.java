@@ -27,7 +27,7 @@ public class NutrientByIdSpecification  implements RealmSpecification {
 
         return Flowable.just(realm.where(NutrientRealm.class)
                 .equalTo(Table.ID, id)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

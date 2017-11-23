@@ -1,6 +1,7 @@
 package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
@@ -38,6 +39,8 @@ public class UserRealmToUser implements MapperTest<UserRealm, User> {
 
     @Override
     public User copy(UserRealm userRealm, User user) {
+
+        Log.d("UserRealmToUserTHREAD: ", Thread.currentThread().getName());
 
         user.setUserName(userRealm.getUsername());
 

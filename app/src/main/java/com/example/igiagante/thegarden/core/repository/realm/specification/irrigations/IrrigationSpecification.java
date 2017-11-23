@@ -17,11 +17,11 @@ public class IrrigationSpecification  implements RealmSpecification<IrrigationRe
 
     @Override
     public Flowable<RealmResults<IrrigationRealm>> toFlowable(@NonNull Realm realm) {
-        return realm.where(IrrigationRealm.class).findAllAsync().asFlowable();
+        return realm.where(IrrigationRealm.class).findAll().asFlowable();
     }
 
     @Override
     public RealmResults<IrrigationRealm> toRealmResults(@NonNull Realm realm) {
-        return realm.where(IrrigationRealm.class).findAllAsync();
+        return realm.where(IrrigationRealm.class).findAll();
     }
 }

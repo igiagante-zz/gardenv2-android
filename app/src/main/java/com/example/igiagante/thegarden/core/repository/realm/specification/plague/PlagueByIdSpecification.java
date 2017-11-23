@@ -24,7 +24,7 @@ public class PlagueByIdSpecification implements RealmSpecification {
     @Override
     public Flowable<RealmResults<PlagueRealm>> toFlowable(Realm realm) {
         return Flowable.just(realm.where(PlagueRealm.class).equalTo(Table.ID, id)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

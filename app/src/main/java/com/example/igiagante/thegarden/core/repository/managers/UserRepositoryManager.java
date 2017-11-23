@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
@@ -14,6 +15,7 @@ import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserReal
 import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestUserApi;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiNutrientRepository;
+import com.fernandocejas.frodo.annotation.RxLogObservable;
 
 import java.util.ArrayList;
 
@@ -38,20 +40,27 @@ public class UserRepositoryManager
         restApiNutrientRepository = new RestApiNutrientRepository(context, session);
     }
 
+    @SuppressWarnings("unchecked")
     public Observable<Boolean> checkIfUserExistsInDataBase(@Nullable String userId) {
         return realmRepository.getById(userId)
                 .isEmpty()
-                .map(object -> object.equals(true) ? false : true)
+                .map(object -> !object.equals(true))
                 .toObservable();
     }
 
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable<User> saveUser(@NonNull User user) {
+
         if (!checkInternet()) {
             return Observable.just(user);
         }
+
+        Log.d("UserRepositoryManager: ", Thread.currentThread().getName());
+
         return realmRepository.add(user);
     }
 
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable<User> updateUser(@NonNull User user) {
         if (!checkInternet()) {
             return Observable.just(user);
@@ -64,6 +73,8 @@ public class UserRepositoryManager
      *
      * @return Observable
      */
+    @SuppressWarnings("unchecked")
+    @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
     public Observable query(@Nullable User user) {
 
         if (!checkInternet()) {
@@ -91,6 +102,9 @@ public class UserRepositoryManager
                             return user2;
                         })
 
-                .flatMap(userUpdated -> realmRepository.update(userUpdated));
+                .flatMap(userUpdated -> {
+                    Log.d("UserRepositoryManager: ", Thread.currentThread().getName());
+                    return realmRepository.update(userUpdated);
+                });
     }
 }

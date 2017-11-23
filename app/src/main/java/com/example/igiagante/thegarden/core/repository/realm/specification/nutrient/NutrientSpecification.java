@@ -15,11 +15,11 @@ public class NutrientSpecification implements RealmSpecification<NutrientRealm> 
 
     @Override
     public Flowable<RealmResults<NutrientRealm>> toFlowable(Realm realm) {
-        return realm.where(NutrientRealm.class).findAllAsync().asFlowable();
+        return realm.where(NutrientRealm.class).findAll().asFlowable();
     }
 
     @Override
     public RealmResults<NutrientRealm> toRealmResults(Realm realm) {
-        return realm.where(NutrientRealm.class).findAllAsync();
+        return realm.where(NutrientRealm.class).findAll();
     }
 }

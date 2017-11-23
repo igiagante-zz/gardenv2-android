@@ -1,6 +1,7 @@
 package com.example.igiagante.thegarden.home.gardens.usecase;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
@@ -8,6 +9,8 @@ import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.GardenRepositoryManager;
 import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -34,6 +37,8 @@ public class GetGardensUseCase extends UseCase<Garden, String> {
     @Override
     protected Observable buildUseCaseObservable(String username) {
         GardenSpecification gardenSpecification = new GardenSpecification();
-        return gardenRepositoryManager.query(gardenSpecification);
+        Log.d("GetGardensUseCase: ", Thread.currentThread().getName());
+        Observable<List<Garden>> obs = gardenRepositoryManager.query(gardenSpecification);
+        return obs;
     }
 }

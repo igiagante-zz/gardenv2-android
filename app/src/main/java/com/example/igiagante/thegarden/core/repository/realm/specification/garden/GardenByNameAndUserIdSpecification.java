@@ -28,7 +28,7 @@ public class GardenByNameAndUserIdSpecification implements RealmSpecification<Ga
         return Flowable.just(realm.where(GardenRealm.class)
                 .equalTo(GardenTable.NAME, gardenName)
                 .equalTo(GardenTable.USER_ID, userId)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

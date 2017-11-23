@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.repository.Repository;
+import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -45,11 +46,11 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
     @SuppressWarnings("unchecked")
     protected Observable<T> execute(Observable<T> apiResult, Class repository, boolean update) {
 
-        Repository dataBase = null;
+        RealmRepository dataBase = null;
 
         try {
             Constructor<?> cons = repository.getConstructor(Context.class);
-            dataBase = (Repository) cons.newInstance(mContext);
+            dataBase = (RealmRepository) cons.newInstance(mContext);
         } catch (NoSuchMethodException e) {
             Log.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -64,7 +65,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
             ei.printStackTrace();
         }
 
-        final Repository db = dataBase;
+        final RealmRepository db = dataBase;
 
         return apiResult.flatMap(element -> update ? db.update(element) : db.add(element));
     }

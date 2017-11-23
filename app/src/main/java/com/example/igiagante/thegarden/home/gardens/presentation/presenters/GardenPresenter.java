@@ -193,6 +193,7 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         @Override
         public void onError(Throwable e) {
             GardenPresenter.this.hideViewLoading();
+            Log.d("GardenPresenter: ", Thread.currentThread().getName());
             Log.e(TAG, e.getMessage());
             e.printStackTrace();
         }
@@ -291,6 +292,7 @@ public class GardenPresenter extends AbstractPresenter<GardenView> {
         @Override
         public void onError(Throwable e) {
             GardenPresenter.this.hideViewLoading();
+            Log.d("GardenPresenter: ", Thread.currentThread().getName());
             Log.e(TAG, e.getMessage());
             e.printStackTrace();
         }

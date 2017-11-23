@@ -64,8 +64,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @BindView(R.id.signup_id)
     TextView mButtonSignUp;
 
-    private InterstitialAd mInterstitialAd;
-
     private Unbinder unbinder;
 
     @Override

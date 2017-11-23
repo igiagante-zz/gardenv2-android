@@ -5,12 +5,18 @@ import android.util.Log;
 import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.presentation.mvp.AbstractPresenter;
+import com.example.igiagante.thegarden.core.repository.managers.UserRepositoryManager;
 import com.example.igiagante.thegarden.core.usecase.DefaultObserver;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 import com.example.igiagante.thegarden.login.view.LoginView;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Ignacio Giagante, on 2/8/16.

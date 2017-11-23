@@ -26,7 +26,7 @@ public class PlantByNameSpecification implements RealmSpecification<PlantRealm> 
     public Flowable<RealmResults<PlantRealm>> toFlowable(@NonNull Realm realm) {
         return Flowable.just(realm.where(PlantRealm.class)
                 .equalTo(PlantTable.NAME, name)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

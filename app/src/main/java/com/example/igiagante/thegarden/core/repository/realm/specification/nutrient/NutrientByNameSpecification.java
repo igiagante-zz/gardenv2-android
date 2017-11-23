@@ -25,7 +25,7 @@ public class NutrientByNameSpecification implements RealmSpecification<NutrientR
     public Flowable<RealmResults<NutrientRealm>> toFlowable(Realm realm) {
         return Flowable.just(realm.where(NutrientRealm.class)
                 .equalTo(Table.NAME, name)
-                .findAllAsync());
+                .findAll());
     }
 
     @Override

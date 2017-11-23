@@ -1,5 +1,7 @@
 package com.example.igiagante.thegarden.login.usecase;
 
+import android.util.Log;
+
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
@@ -28,6 +30,7 @@ public class SaveUserUseCase extends UseCase<User, User> {
 
     @Override
     protected Observable buildUseCaseObservable(User user) {
+        Log.d("SaveUserUseCase: ", Thread.currentThread().getName());
         return this.userRepositoryManager.saveUser(user);
     }
 }
