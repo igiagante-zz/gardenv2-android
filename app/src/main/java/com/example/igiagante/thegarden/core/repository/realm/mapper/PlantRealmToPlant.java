@@ -8,7 +8,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Flavor;
 import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributePerPlantRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.FlavorRealm;
@@ -25,7 +25,7 @@ import io.realm.RealmConfiguration;
 /**
  * @author Ignacio Giagante, on 26/4/16.
  */
-public class PlantRealmToPlant implements Mapper<PlantRealm, Plant> {
+public class PlantRealmToPlant implements MapToModel<PlantRealm, Plant> {
 
     private final ImageRealmToImage toImage;
     private final FlavorRealmToFlavor toFlavor;

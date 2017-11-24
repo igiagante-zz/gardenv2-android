@@ -63,7 +63,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
         // persist the garden into database
         PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
-        Observable<Plant> dbResult = dataBase.add(listOne.get(0));
+        Observable<Plant> dbResult = dataBase.save(listOne.get(0));
 
         List<Plant> list = new ArrayList<>();
         dbResult.subscribe(list::add);
@@ -99,7 +99,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
         // update the plant into database
         PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
-        Observable<Plant> dbResult = dataBase.update(plantFromApi);
+        Observable<Plant> dbResult = dataBase.save(plantFromApi);
 
         return Observable.just(dbResult.blockingFirst());
     }

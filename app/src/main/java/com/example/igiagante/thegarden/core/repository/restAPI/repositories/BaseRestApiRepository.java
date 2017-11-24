@@ -1,20 +1,19 @@
 package com.example.igiagante.thegarden.core.repository.restAPI.repositories;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -22,7 +21,7 @@ import okhttp3.RequestBody;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class BaseRestApiRepository<T> extends BaseRestApi {
+public class BaseRestApiRepository<Entity>  {
 
     private static final String TAG = BaseRestApiRepository.class.getSimpleName();
 
@@ -31,9 +30,20 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
     protected Session session;
 
     public BaseRestApiRepository(Context context, Session session) {
-        super(context);
         this.mContext = context;
         this.session = session;
+    }
+
+    public boolean checkInternet() {
+
+        boolean isConnected;
+
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) this.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        isConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
+
+        return isConnected;
     }
 
     /**
@@ -44,7 +54,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
      * @param update     indicate if the transaction is about an `updating`
      */
     @SuppressWarnings("unchecked")
-    protected Observable<T> execute(Observable<T> apiResult, Class repository, boolean update) {
+    protected Observable<Entity> execute(Observable<Entity> apiResult, Class repository, boolean update) {
 
         RealmRepository dataBase = null;
 
@@ -67,7 +77,7 @@ public class BaseRestApiRepository<T> extends BaseRestApi {
 
         final RealmRepository db = dataBase;
 
-        return apiResult.flatMap(element -> update ? db.update(element) : db.add(element));
+        return apiResult.flatMap(element -> update ? db.save(element) : db.save(element));
     }
 
     /**

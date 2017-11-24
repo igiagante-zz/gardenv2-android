@@ -2,7 +2,7 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Dose;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientPerDoseRealm;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class DoseRealmToDose implements Mapper<DoseRealm, Dose> {
+public class DoseRealmToDose implements MapToModel<DoseRealm, Dose> {
 
     private final NutrientPerDoseRealmToNutrient toNutrient;
 

@@ -1,13 +1,13 @@
 package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Attribute;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 
 /**
  * @author Ignacio Giagante, on 6/5/16.
  */
-public class AttributeRealmToAttribute implements Mapper<AttributeRealm, Attribute> {
+public class AttributeRealmToAttribute implements MapToModel<AttributeRealm, Attribute> {
 
     @Override
     public Attribute map(AttributeRealm attributeRealm) {

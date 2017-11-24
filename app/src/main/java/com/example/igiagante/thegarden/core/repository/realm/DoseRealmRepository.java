@@ -5,25 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Dose;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
-import com.example.igiagante.thegarden.core.repository.Mapper;
-import com.example.igiagante.thegarden.core.repository.MapperTest;
-import com.example.igiagante.thegarden.core.repository.RealmSpecification;
-import com.example.igiagante.thegarden.core.repository.Repository;
-import com.example.igiagante.thegarden.core.repository.Specification;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.DoseRealmToDose;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.DoseToDoseRealm;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseRealm;
-import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
-import com.example.igiagante.thegarden.core.repository.realm.specification.irrigations.DoseByIdSpecification;
 
-import java.util.Collection;
-import java.util.List;
-
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -37,7 +22,7 @@ public class DoseRealmRepository extends RealmRepository<Dose, DoseRealm> {
     }
 
     @Override
-    MapperTest<DoseRealm, Dose> initRealmToModelMapper(Context context) {
+    MapToModel<DoseRealm, Dose> initRealmToModelMapper(Context context) {
         return null;
     }
 
@@ -51,102 +36,4 @@ public class DoseRealmRepository extends RealmRepository<Dose, DoseRealm> {
         this.realmClass = DoseRealm.class;
     }
 
-    /*
-    @Override
-    public Observable<Dose> getById(String id) {
-        return query(new DoseByIdSpecification(id)).flatMap(Observable::fromIterable);
-    }
-
-    @Override
-    public Observable<Dose> getByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Observable<Dose> add(Dose dose) {
-        realm = Realm.getInstance(realmConfiguration);
-        realm.executeTransaction(realmParam ->
-                realmParam.copyToRealmOrUpdate(toDoseRealm.map(dose)));
-        realm.close();
-
-        return Observable.just(dose);
-    }
-
-    @Override
-    public Observable<Integer> add(Iterable<Dose> doses) {
-        int size = 0;
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            for (Dose dose : doses) {
-                realmParam.copyToRealmOrUpdate(toDoseRealm.map(dose));
-            }
-        });
-
-        realm.close();
-
-        if (doses instanceof Collection<?>) {
-            size = ((Collection<?>) doses).size();
-        }
-
-        return Observable.just(size);
-    }
-
-    @Override
-    public Observable<Dose> update(Dose dose) {
-        realm = Realm.getInstance(realmConfiguration);
-
-        DoseRealm doseRealm = realm.where(DoseRealm.class).equalTo(Table.ID, dose.getId()).findFirst();
-
-        realm.executeTransaction(realmParam -> {
-            toDoseRealm.copy(dose, doseRealm);
-        });
-
-        realm.close();
-
-        return Observable.just(dose);
-    }
-
-    @Override
-    public Observable<Integer> remove(String doseId) {
-        realm = Realm.getInstance(realmConfiguration);
-
-        DoseRealm doseRealm = realm.where(DoseRealm.class).equalTo(Table.ID, doseId).findFirst();
-
-        realm.executeTransaction(realmParam -> doseRealm.deleteFromRealm());
-
-        realm.close();
-
-        // if doseRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(doseRealm.isValid() ? -1 : 1);
-    }
-
-    @Override
-    public void removeAll() {
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            RealmResults<DoseRealm> result = realm.where(DoseRealm.class).findAll();
-            result.deleteAllFromRealm();
-        });
-        realm.close();
-    }
-
-    @Override
-    public Observable<List<Dose>> query(Specification specification) {
-        final RealmSpecification realmSpecification = (RealmSpecification) specification;
-
-        final Realm realm = Realm.getInstance(realmConfiguration);
-        final Flowable<RealmResults<DoseRealm>> realmResults = realmSpecification.toFlowable(realm);
-
-        // convert Flowable<RealmResults<DoseRealm>> into Observable<List<Dose>>
-        return realmResults
-                .filter(doses -> doses.isLoaded())
-                .switchMap(doses ->
-                        Flowable.fromIterable(doses)
-                                .map(doseRealm -> toDose.map(doseRealm))
-                )
-                .toList()
-                .toObservable();
-    } */
 }

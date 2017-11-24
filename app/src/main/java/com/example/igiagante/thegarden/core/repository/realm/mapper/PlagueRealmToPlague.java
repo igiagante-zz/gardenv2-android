@@ -1,14 +1,14 @@
 package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.network.Settings;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlagueRealm;
 
 /**
  * @author Ignacio Giagante, on 6/5/16.
  */
-public class PlagueRealmToPlague implements Mapper<PlagueRealm, Plague> {
+public class PlagueRealmToPlague implements MapToModel<PlagueRealm, Plague> {
 
     @Override
     public Plague map(PlagueRealm plagueRealm) {

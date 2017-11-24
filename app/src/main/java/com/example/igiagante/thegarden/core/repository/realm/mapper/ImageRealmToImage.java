@@ -2,15 +2,15 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import android.support.annotation.NonNull;
 
-import com.example.igiagante.thegarden.core.repository.Mapper;
 import com.example.igiagante.thegarden.core.domain.entity.Image;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.network.Settings;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRealm;
 
 /**
  * @author Ignacio Giagante, on 28/4/16.
  */
-public class ImageRealmToImage implements Mapper<ImageRealm, Image> {
+public class ImageRealmToImage implements MapToModel<ImageRealm, Image> {
 
     @Override
     public Image map(@NonNull ImageRealm imageRealm) {

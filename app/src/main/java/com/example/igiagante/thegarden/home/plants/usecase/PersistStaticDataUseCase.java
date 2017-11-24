@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
+import io.reactivex.functions.Function3;
 
 
 /**
@@ -41,13 +42,9 @@ public class PersistStaticDataUseCase extends UseCase<String, Void> {
     private final PlagueRepositoryManager plagueRepositoryManager;
     private final SensorTempRepositoryManager sensorTempRepositoryManager;
 
-
-    private Context context;
-
     @Inject
     public PersistStaticDataUseCase(Context context, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
-        this.context = context;
 
         this.attributeRepositoryManager = new AttributeRepositoryManager(context);
         this.plagueRepositoryManager = new PlagueRepositoryManager(context);
@@ -61,23 +58,25 @@ public class PersistStaticDataUseCase extends UseCase<String, Void> {
         AttributeSpecification attributeSpecification = new AttributeSpecification();
         Observable<List<Attribute>> attributes = attributeRepositoryManager.query(attributeSpecification);
 
-        attributes.doOnNext(list -> Log.i(TAG, "  ROWS " + list.size() +
-                " attributes were inserted into Realm DB"));
-
-        // ask if plagues are already persisted
         PlagueSpecification plagueSpecification = new PlagueSpecification();
         Observable<List<Plague>> plagues = plagueRepositoryManager.query(plagueSpecification);
-
-        plagues.doOnNext(list -> Log.i(TAG, "  ROWS " + list.size() +
-                " plagues were inserted into Realm DB"));
 
         // check temp and humidity data
         SensorTempSpecification sensorTempSpecification = new SensorTempSpecification();
         Observable<List<SensorTemp>> sensorTemps = sensorTempRepositoryManager.query(sensorTempSpecification);
 
-        sensorTemps.doOnNext(list -> Log.i(TAG, "  ROWS " + list.size() +
-                " plagues were inserted into Realm DB"));
+        return Observable.zip(attributes.count().toObservable(), plagues.count().toObservable(),
+                sensorTemps.count().toObservable(),
+                new Function3<Long, Long, Long, Long>() {
+            @Override
+            public Long apply(Long t1, Long t2, Long t3) throws Exception {
 
-        return Observable.just("OK");
+                Log.d(TAG, "  ROWS " + t1 + " attributes were inserted into Realm DB");
+                Log.d(TAG, "  ROWS " + t2 + " plagues were inserted into Realm DB");
+                Log.d(TAG, "  ROWS " + t3 + " sensorTemps were inserted into Realm DB");
+
+                return t1 + t2 + t3;
+            }
+        }).map(rows -> "ok: " + rows);
     }
 }

@@ -10,9 +10,6 @@ import com.example.igiagante.thegarden.core.repository.realm.IrrigationRealmRepo
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -59,22 +56,16 @@ public class GardenRepositoryManager
         return result == -1 ? Observable.just(-1) : Observable.just(gardenId);
     }
 
-    public Observable existGardenByNameAndUserId(Garden garden) {
+    public Observable<Boolean> existGardenByNameAndUserId(Garden garden) {
 
         GardenRealmRepository gardenRealmRepository = new GardenRealmRepository(context);
 
         Observable<Garden> gardenObservable = gardenRealmRepository
                 .getByNameAndUserId(garden.getName(), garden.getUserId());
 
-        List<Boolean> list = new ArrayList<>();
-        gardenObservable.subscribe(nutrient -> {
-            if (nutrient != null) {
-                list.add(Boolean.TRUE);
-            } else {
-                list.add(Boolean.FALSE);
-            }
-        });
-
-        return list.isEmpty() ? Observable.just(Boolean.FALSE) : Observable.just(list.get(0));
+        return gardenObservable
+                .isEmpty()
+                .map(object -> !object.equals(true))
+                .toObservable();
     }
 }

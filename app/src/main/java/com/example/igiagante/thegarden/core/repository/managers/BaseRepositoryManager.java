@@ -42,16 +42,18 @@ public class BaseRepositoryManager<Entity, RealmEntity extends RealmObject,
 
     public Observable<Entity> add(@NonNull Entity entity, Specification specification) {
 
-        // there should be only one entity with this name
-        //Observable<Entity> query = db.query(specification)
-          //      .flatMap(list -> Observable.just(list.get(0)));
+        List<Entity> entities = db.query(specification).blockingFirst();
 
-        List<Entity> ts = db.query(specification).blockingFirst();
-        Observable<Entity> dbResults = ts.isEmpty() ? Observable.empty() : Observable.just(ts.get(0));
+        Observable<Entity> dbResults = entities.isEmpty() ? Observable.empty()
+                : Observable.just(entities.get(0));
 
         Observable<Entity> apiResults = api.add(entity);
 
         return !checkInternet() ? dbResults : Observable.concat(dbResults, apiResults).first(entity).toObservable();
+    }
+
+    public Observable<Entity> update(@NonNull Entity entity) {
+        return !checkInternet() ? Observable.just(entity) : api.update(entity);
     }
 
     public Observable<Integer> delete(@NonNull String id) {
@@ -73,11 +75,6 @@ public class BaseRepositoryManager<Entity, RealmEntity extends RealmObject,
         }
 
         return result == -1 ? Observable.just(-1) : Observable.just(Integer.parseInt(id));
-    }
-
-
-    public Observable<Entity> update(@NonNull Entity entity) {
-        return !checkInternet() ? Observable.just(entity) : api.update(entity);
     }
 
     public Observable<List<Entity>> query(Specification specification) {

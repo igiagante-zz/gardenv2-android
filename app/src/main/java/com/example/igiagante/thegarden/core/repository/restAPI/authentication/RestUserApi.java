@@ -55,7 +55,7 @@ public class RestUserApi implements Repository<User> {
                 httpStatusValue = httpStatus.getHttpStatusValue(response.code());
 
                 realmRepository = new UserRealmRepository(context);
-                realmRepository.add(session.getUser());
+                realmRepository.save(session.getUser());
             } else {
                 try {
                     // TODO - java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $

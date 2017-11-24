@@ -1,6 +1,5 @@
 package com.example.igiagante.thegarden.core.repository;
 
-import io.reactivex.Flowable;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -9,5 +8,5 @@ import io.realm.RealmResults;
  */
 public interface Specification<T> {
 
-    Flowable<RealmResults<T>> toFlowable(Realm realm);
+    RealmResults<T> toRealmResults(Realm realm);
 }

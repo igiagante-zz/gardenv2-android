@@ -2,7 +2,7 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class NutrientRealmToNutrient implements Mapper<NutrientRealm, Nutrient> {
+public class NutrientRealmToNutrient implements MapToModel<NutrientRealm, Nutrient> {
 
     private final ImageRealmToImage toImage;
 

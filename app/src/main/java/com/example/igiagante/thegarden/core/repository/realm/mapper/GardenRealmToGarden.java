@@ -7,7 +7,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Dose;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
-import com.example.igiagante.thegarden.core.repository.MapperTest;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class GardenRealmToGarden implements MapperTest<GardenRealm, Garden> {
+public class GardenRealmToGarden implements MapToModel<GardenRealm, Garden> {
 
     private final PlantRealmToPlant toPlant;
     private final IrrigationRealmToIrrigation toIrrigation;

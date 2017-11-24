@@ -2,7 +2,7 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Dose;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientPerDoseRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
@@ -15,7 +15,7 @@ import io.realm.RealmList;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class DoseToDoseRealm implements Mapper<Dose, DoseRealm> {
+public class DoseToDoseRealm implements MapToRealm<Dose, DoseRealm> {
 
     private final Realm realm;
     private final NutrientToNutrientPerDoseRealm toNutrientRealm;
@@ -26,7 +26,7 @@ public class DoseToDoseRealm implements Mapper<Dose, DoseRealm> {
     }
 
     @Override
-    public DoseRealm map(Dose dose) {
+    public DoseRealm map(Dose dose, Realm realm) {
 
         DoseRealm doseRealm = realm.where(DoseRealm.class)
                 .equalTo(Table.ID, dose.getId()).findFirst();
@@ -35,11 +35,11 @@ public class DoseToDoseRealm implements Mapper<Dose, DoseRealm> {
             doseRealm = realm.createObject(DoseRealm.class, UUID.randomUUID().toString());
         }
 
-        return copy(dose, doseRealm);
+        return copy(dose, doseRealm, realm);
     }
 
     @Override
-    public DoseRealm copy(Dose dose, DoseRealm doseRealm) {
+    public DoseRealm copy(Dose dose, DoseRealm doseRealm, Realm realm) {
 
         doseRealm.setWater(dose.getWater());
         doseRealm.setPh(dose.getPh());

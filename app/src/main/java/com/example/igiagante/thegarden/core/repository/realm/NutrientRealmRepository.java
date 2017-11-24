@@ -5,26 +5,12 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
-import com.example.igiagante.thegarden.core.repository.Mapper;
-import com.example.igiagante.thegarden.core.repository.MapperTest;
-import com.example.igiagante.thegarden.core.repository.RealmSpecification;
-import com.example.igiagante.thegarden.core.repository.Repository;
-import com.example.igiagante.thegarden.core.repository.Specification;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.NutrientRealmToNutrient;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.NutrientToNutrientRealm;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
-import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
-import com.example.igiagante.thegarden.core.repository.realm.specification.nutrient.NutrientByIdSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.nutrient.NutrientByNameSpecification;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.GardenTable;
 
-import java.util.Collection;
-import java.util.List;
-
-import io.reactivex.Flowable;
 import io.reactivex.Observable;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 /**
  * @author Ignacio Giagante, on 4/7/16.
@@ -38,7 +24,7 @@ public class NutrientRealmRepository extends RealmRepository<Nutrient, NutrientR
     }
 
     @Override
-    MapperTest<NutrientRealm, Nutrient> initRealmToModelMapper(Context context) {
+    MapToModel<NutrientRealm, Nutrient> initRealmToModelMapper(Context context) {
         return null;
     }
 
@@ -52,103 +38,13 @@ public class NutrientRealmRepository extends RealmRepository<Nutrient, NutrientR
         this.realmClass = NutrientRealm.class;
     }
 
-    /*
-    @Override
-    public Observable<Nutrient> getById(String id) {
-        return query(new NutrientByIdSpecification(id)).flatMap(Observable::fromIterable);
+    public Observable<Nutrient> getNutrientsByUserId(@NonNull String userId) {
+
+        NutrientRealm nutrientRealm = realm.where(NutrientRealm.class)
+                .equalTo(GardenTable.USER_ID, userId)
+                .findFirst();
+
+        return  Observable.just(realmToModel.map(nutrientRealm));
     }
 
-    @Override
-    public Observable<Nutrient> getByName(String name) {
-        return query(new NutrientByNameSpecification(name)).flatMap(Observable::fromIterable);
-    }
-
-    @Override
-    public Observable<Nutrient> add(Nutrient nutrient) {
-        realm = Realm.getInstance(realmConfiguration);
-        realm.executeTransaction(realmParam ->
-                realmParam.copyToRealmOrUpdate(toNutrientRealm.map(nutrient)));
-        realm.close();
-
-        return Observable.just(nutrient);
-    }
-
-    @Override
-    public Observable<Integer> add(Iterable<Nutrient> nutrients) {
-        int size = 0;
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            for (Nutrient nutrient : nutrients) {
-                realmParam.copyToRealmOrUpdate(toNutrientRealm.map(nutrient));
-
-            }
-        });
-
-        realm.close();
-
-        if (nutrients instanceof Collection<?>) {
-            size = ((Collection<?>) nutrients).size();
-        }
-
-        return Observable.just(size);
-    }
-
-    @Override
-    public Observable<Nutrient> update(Nutrient nutrient) {
-        realm = Realm.getInstance(realmConfiguration);
-
-        NutrientRealm nutrientRealm = realm.where(NutrientRealm.class).equalTo(Table.ID, nutrient.getId()).findFirst();
-
-        realm.executeTransaction(realmParam -> {
-            toNutrientRealm.copy(nutrient, nutrientRealm);
-        });
-
-        realm.close();
-
-        return Observable.just(nutrient);
-    }
-
-    @Override
-    public Observable<Integer> remove(String nutrientId) {
-        realm = Realm.getInstance(realmConfiguration);
-
-        NutrientRealm nutrientRealm = realm.where(NutrientRealm.class).equalTo(Table.ID, nutrientId).findFirst();
-
-        realm.executeTransaction(realmParam -> nutrientRealm.deleteFromRealm());
-
-        realm.close();
-
-        // if plantRealm.isValid() is false, it is because the realm object was deleted
-        return Observable.just(nutrientRealm.isValid() ? -1 : 1);
-    }
-
-    @Override
-    public void removeAll() {
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            RealmResults<NutrientRealm> result = realm.where(NutrientRealm.class).findAll();
-            result.deleteAllFromRealm();
-        });
-        realm.close();
-    }
-
-    @Override
-    public Observable<List<Nutrient>> query(Specification specification) {
-        final RealmSpecification realmSpecification = (RealmSpecification) specification;
-
-        final Realm realm = Realm.getInstance(realmConfiguration);
-        final Flowable<RealmResults<NutrientRealm>> realmResults = realmSpecification.toFlowable(realm);
-
-        // convert Flowable<RealmResults<NutrientRealm>> into Observable<List<Nutrient>>
-        return realmResults
-                .filter(nutrients -> nutrients.isLoaded())
-                .switchMap(plants ->
-                        Flowable.fromIterable(plants)
-                                .map(nutrientRealm -> toNutrient.map(nutrientRealm))
-                )
-                .toList()
-                .toObservable();
-    } */
 }

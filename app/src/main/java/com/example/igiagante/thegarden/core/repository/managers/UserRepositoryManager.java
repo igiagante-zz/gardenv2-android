@@ -20,6 +20,7 @@ import com.fernandocejas.frodo.annotation.RxLogObservable;
 import java.util.ArrayList;
 
 import javax.inject.Inject;
+
 import io.reactivex.Observable;
 
 /**
@@ -54,10 +55,7 @@ public class UserRepositoryManager
         if (!checkInternet()) {
             return Observable.just(user);
         }
-
-        Log.d("UserRepositoryManager: ", Thread.currentThread().getName());
-
-        return realmRepository.add(user);
+        return realmRepository.save(user);
     }
 
     @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
@@ -65,7 +63,7 @@ public class UserRepositoryManager
         if (!checkInternet()) {
             return Observable.just(user);
         }
-        return realmRepository.update(user);
+        return realmRepository.save(user);
     }
 
     /**
@@ -103,8 +101,7 @@ public class UserRepositoryManager
                         })
 
                 .flatMap(userUpdated -> {
-                    Log.d("UserRepositoryManager: ", Thread.currentThread().getName());
-                    return realmRepository.update(userUpdated);
+                    return realmRepository.save(userUpdated);
                 });
     }
 }

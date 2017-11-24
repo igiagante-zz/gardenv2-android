@@ -5,23 +5,10 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
-import com.example.igiagante.thegarden.core.repository.Mapper;
-import com.example.igiagante.thegarden.core.repository.MapperTest;
-import com.example.igiagante.thegarden.core.repository.RealmSpecification;
-import com.example.igiagante.thegarden.core.repository.Repository;
-import com.example.igiagante.thegarden.core.repository.Specification;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.SensorTempRealmToSensorTemp;
-import com.example.igiagante.thegarden.core.repository.realm.mapper.SensorTempToSensorTempRealm;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.SensorTempRealm;
 
-import java.util.Collection;
-import java.util.List;
-
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 
 /**
  * @author Ignacio Giagante, on 22/8/16.
@@ -34,7 +21,7 @@ public class SensorTempRealmRepository extends RealmRepository<SensorTemp, Senso
     }
 
     @Override
-    MapperTest<SensorTempRealm, SensorTemp> initRealmToModelMapper(Context context) {
+    MapToModel<SensorTempRealm, SensorTemp> initRealmToModelMapper(Context context) {
         return null;
     }
 
@@ -48,86 +35,4 @@ public class SensorTempRealmRepository extends RealmRepository<SensorTemp, Senso
         this.realmClass = SensorTempRealm.class;
     }
 
-    /*
-
-    @Override
-    public Observable<SensorTemp> getById(String id) {
-        return null;
-    }
-
-    @Override
-    public Observable<SensorTemp> getByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Observable<SensorTemp> add(SensorTemp sensorTemp) {
-
-        realm = Realm.getInstance(realmConfiguration);
-        realm.executeTransaction(realmParam ->
-                realmParam.copyToRealmOrUpdate(toSensorTempRealm.map(sensorTemp)));
-        realm.close();
-
-        return Observable.just(sensorTemp);
-    }
-
-    @Override
-    public Observable<Integer> add(Iterable<SensorTemp> data) {
-        int size = 0;
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            for (SensorTemp sensorTemp : data) {
-                realmParam.copyToRealmOrUpdate(toSensorTempRealm.map(sensorTemp));
-            }
-        });
-
-        realm.close();
-
-        if (data instanceof Collection<?>) {
-            size = ((Collection<?>) data).size();
-        }
-
-        return Observable.just(size);
-    }
-
-    @Override
-    public Observable<SensorTemp> update(SensorTemp item) {
-        return null;
-    }
-
-    @Override
-    public Observable<Integer> remove(String id) {
-        return null;
-    }
-
-    @Override
-    public void removeAll() {
-        realm = Realm.getInstance(realmConfiguration);
-
-        realm.executeTransaction(realmParam -> {
-            RealmResults<SensorTempRealm> result = realm.where(SensorTempRealm.class).findAll();
-            result.deleteAllFromRealm();
-        });
-        realm.close();
-    }
-
-    @Override
-    public Observable<List<SensorTemp>> query(Specification specification) {
-
-        final RealmSpecification realmSpecification = (RealmSpecification) specification;
-        final Realm realm = Realm.getInstance(realmConfiguration);
-        final Flowable<RealmResults<SensorTempRealm>> realmResults = realmSpecification.toFlowable(realm);
-
-        // convert Flowable<RealmResults<SensorTempRealm>> into Observable<List<SensorTemp>>
-        return realmResults
-                .filter(sensorData -> sensorData.isLoaded())
-                .switchMap(sensorData ->
-                        Flowable.fromIterable(sensorData)
-                                .map(sensorTempRealm -> toSensorTemp.map(sensorTempRealm)
-                                )
-                )
-                .toList()
-                .toObservable();
-    } */
 }

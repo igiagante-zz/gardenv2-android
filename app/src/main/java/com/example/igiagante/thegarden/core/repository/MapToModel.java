@@ -6,7 +6,7 @@ import io.realm.RealmObject;
 /**
  * @author Ignacio Giagante, on 26/4/16.
  */
-public interface MapperTest<From extends RealmObject & RealmModel, To> {
+public interface MapToModel<From extends RealmObject & RealmModel, To> {
 
     To map(From from);
 

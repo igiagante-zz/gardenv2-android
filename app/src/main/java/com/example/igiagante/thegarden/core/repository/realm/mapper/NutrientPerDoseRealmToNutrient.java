@@ -1,13 +1,13 @@
 package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientPerDoseRealm;
 
 /**
  * @author Ignacio Giagante, on 8/9/16.
  */
-public class NutrientPerDoseRealmToNutrient implements Mapper<NutrientPerDoseRealm, Nutrient> {
+public class NutrientPerDoseRealmToNutrient implements MapToModel<NutrientPerDoseRealm, Nutrient> {
 
     public NutrientPerDoseRealmToNutrient() {
     }

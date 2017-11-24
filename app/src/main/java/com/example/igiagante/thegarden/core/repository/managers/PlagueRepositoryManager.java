@@ -36,8 +36,7 @@ public class PlagueRepositoryManager {
     public Observable<List<Plague>> query(Specification specification) {
 
         Observable<List<Plague>> attributesObservableDB = plagueRealmRepository.query(specification);
-        Observable<List<Plague>> attributesObservableAPI = apiPlagueRepository.query(specification)
-                .subscribeOn(Schedulers.io());
+        Observable<List<Plague>> attributesObservableAPI = apiPlagueRepository.query(specification);
 
         return attributesObservableDB.switchIfEmpty(attributesObservableAPI)
                 .flatMap(plagues -> {

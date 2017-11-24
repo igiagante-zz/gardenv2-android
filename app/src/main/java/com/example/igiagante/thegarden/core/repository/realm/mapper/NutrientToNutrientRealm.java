@@ -2,12 +2,10 @@ package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
 import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Mapper;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.ImageRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
-
-import java.util.UUID;
 
 import io.realm.Realm;
 import io.realm.RealmList;
@@ -15,7 +13,7 @@ import io.realm.RealmList;
 /**
  * @author Ignacio Giagante, on 4/7/16.
  */
-public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> {
+public class NutrientToNutrientRealm implements MapToRealm<Nutrient, NutrientRealm> {
 
     private final Realm realm;
     private final ImageToImageRealm toImageRealm;
@@ -26,7 +24,7 @@ public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> 
     }
 
     @Override
-    public NutrientRealm map(Nutrient nutrient) {
+    public NutrientRealm map(Nutrient nutrient, Realm realm) {
 
         NutrientRealm nutrientRealm = realm.where(NutrientRealm.class).equalTo(Table.ID, nutrient.getId()).findFirst();
 
@@ -34,11 +32,11 @@ public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> 
             nutrientRealm = realm.createObject(NutrientRealm.class, nutrient.getId());
         }
 
-        return copy(nutrient, nutrientRealm);
+        return copy(nutrient, nutrientRealm, realm);
     }
 
     @Override
-    public NutrientRealm copy(Nutrient nutrient, NutrientRealm nutrientRealm) {
+    public NutrientRealm copy(Nutrient nutrient, NutrientRealm nutrientRealm, Realm realm) {
         nutrientRealm.setUserId(nutrient.getUserId());
         nutrientRealm.setName(nutrient.getName());
         nutrientRealm.setPh(nutrient.getPh());
@@ -57,7 +55,7 @@ public class NutrientToNutrientRealm implements Mapper<Nutrient, NutrientRealm> 
                     // create image realm object and set id
                     imageRealm = realm.createObject(ImageRealm.class, image.getId());
                 }
-                imagesRealm.add(toImageRealm.copy(image, imageRealm));
+                imagesRealm.add(toImageRealm.copy(image, imageRealm, realm));
             }
         }
 

@@ -23,6 +23,8 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import io.reactivex.Observable;
+
 /**
  * Android Main Application
  */

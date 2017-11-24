@@ -4,7 +4,6 @@ import com.example.igiagante.thegarden.core.di.PerActivity;
 import com.example.igiagante.thegarden.core.di.components.ApplicationComponent;
 import com.example.igiagante.thegarden.core.di.modules.ActivityModule;
 import com.example.igiagante.thegarden.core.repository.di.modules.FlavorRepositoryModule;
-import com.example.igiagante.thegarden.core.repository.managers.FlavorRepositoryManager;
 
 import dagger.Component;
 

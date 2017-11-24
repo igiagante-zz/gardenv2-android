@@ -5,15 +5,11 @@ import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
-import com.example.igiagante.thegarden.core.repository.Mapper;
-import com.example.igiagante.thegarden.core.repository.MapperTest;
-import com.example.igiagante.thegarden.core.repository.Repository;
+import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.mapper.GardenRealmToGarden;
 import com.example.igiagante.thegarden.core.repository.realm.mapper.GardenToGardenRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
-import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenByIdSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenByNameAndUserIdSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.garden.GardenByNameSpecification;
+import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.GardenTable;
 
 import io.reactivex.Observable;
 import io.realm.Realm;
@@ -33,7 +29,7 @@ public class GardenRealmRepository extends RealmRepository<Garden, GardenRealm> 
     }
 
     // Mapper<Garden, GardenRealm>
-    MapperTest<GardenRealm, Garden> initRealmToModelMapper(Context context) {
+    MapToModel<GardenRealm, Garden> initRealmToModelMapper(Context context) {
         return new GardenRealmToGarden(context);
     }
 
@@ -42,18 +38,13 @@ public class GardenRealmRepository extends RealmRepository<Garden, GardenRealm> 
         this.realmClass = GardenRealm.class;
     }
 
-    /*
-    @Override
-    public Observable<Garden> getById(String id) {
-        return query(new GardenByIdSpecification(id)).flatMap(Observable::fromIterable);
-    }
+    public Observable<Garden> getByNameAndUserId(@NonNull String gardenName, @NonNull String userId) {
 
-    @Override
-    public Observable<Garden> getByName(String name) {
-        return query(new GardenByNameSpecification(name)).flatMap(Observable::fromIterable);
-    } */
+        GardenRealm gardenRealm = realm.where(GardenRealm.class)
+                .equalTo(GardenTable.NAME, gardenName)
+                .equalTo(GardenTable.USER_ID, userId)
+                .findFirst();
 
-    public Observable<Garden> getByNameAndUserId(@NonNull String name, @NonNull String userId) {
-        return query(new GardenByNameAndUserIdSpecification(name, userId)).flatMap(Observable::fromIterable);
+        return  Observable.just(realmToModel.map(gardenRealm));
     }
 }
