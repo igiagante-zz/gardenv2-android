@@ -20,29 +20,8 @@ import io.reactivex.Observable;
 public class AttributeRepositoryManager
         extends BaseRepositoryManager<Attribute, AttributeRealm, AttributeRealmRepository, RestApiAttributeRepository> {
 
-    private AttributeRealmRepository attributeRealmRepository;
-    private RestApiAttributeRepository apiAttributeRepository;
-
     @Inject
     public AttributeRepositoryManager(Context context) {
         super(context, new AttributeRealmRepository(context), new RestApiAttributeRepository());
-    }
-
-    /**
-     * Return an observable a list of resources.
-     * @param specification {@link Specification}
-     * @return Observable
-     */
-    public Observable<List<Attribute>> query(Specification specification) {
-
-        Observable<List<Attribute>> attributesObservableDB = attributeRealmRepository.query(specification);
-        Observable<List<Attribute>> attributesObservableAPI = apiAttributeRepository.query(specification);
-
-        return attributesObservableDB.switchIfEmpty(attributesObservableAPI)
-                .doOnNext(list -> System.out.print("list size of attributes: " + list.size()))
-                .flatMap(attributes -> {
-                    attributeRealmRepository.add(attributes);
-                    return Observable.just(attributes);
-                });
     }
 }

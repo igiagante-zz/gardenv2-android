@@ -4,7 +4,6 @@ import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.IrrigationRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.irrigations.IrrigationSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
@@ -27,8 +26,6 @@ public class SaveIrrigationUseCase extends UseCase<Irrigation, Irrigation> {
 
     @Override
     protected Observable buildUseCaseObservable(Irrigation irrigation) {
-
-        IrrigationSpecification specification = new IrrigationSpecification();
-        return this.irrigationRepositoryManager.add(irrigation, specification);
+        return this.irrigationRepositoryManager.save(irrigation);
     }
 }

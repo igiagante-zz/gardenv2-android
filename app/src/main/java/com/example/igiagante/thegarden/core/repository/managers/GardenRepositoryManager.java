@@ -6,14 +6,12 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
 import com.example.igiagante.thegarden.core.repository.realm.GardenRealmRepository;
-import com.example.igiagante.thegarden.core.repository.realm.IrrigationRealmRepository;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.GardenRealm;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
@@ -24,6 +22,9 @@ public class GardenRepositoryManager
     private Context context;
     private Session session;
 
+    // TODO - Se debe inicializar esta variable -> como? :S
+    private RestApiGardenRepository api;
+
     @Inject
     public GardenRepositoryManager(Context context, Session session) {
         super(context, new GardenRealmRepository(context), new RestApiGardenRepository(context, session));
@@ -31,29 +32,15 @@ public class GardenRepositoryManager
         this.session = session;
     }
 
-    public Observable delete(@NonNull String gardenId, @NonNull String userId) {
+    public Observable<Boolean> delete(@NonNull String gardenId, @NonNull String userId) {
 
         if (!checkInternet()) {
-            return Observable.just(-1);
+            return Observable.just(false);
         }
 
-        // delete garden from api
-        Observable<Integer> resultFromApi = api.remove(gardenId, userId);
-
-        //Create a list of Integer in order to avoid calling Realm from other Thread
-        Integer result = resultFromApi.subscribeOn(Schedulers.io()).blockingFirst();
-
-        // delete plant from DB
-        if (result!= -1) {
-            Observable<Integer> resultFromDB = db.remove(gardenId);
-            result = resultFromDB.blockingFirst();
-        }
-
-        // delete irrigations from garden
-        IrrigationRealmRepository irrigationRealmRepository = new IrrigationRealmRepository(context);
-        irrigationRealmRepository.removeIrrigationsByGardenId(gardenId);
-
-        return result == -1 ? Observable.just(-1) : Observable.just(gardenId);
+        return api.remove(gardenId, userId)
+                .flatMap(entityDeletedFromAPI -> db.remove(gardenId))
+                .flatMap(entityDeletedFromDB -> Observable::just);
     }
 
     public Observable<Boolean> existGardenByNameAndUserId(Garden garden) {

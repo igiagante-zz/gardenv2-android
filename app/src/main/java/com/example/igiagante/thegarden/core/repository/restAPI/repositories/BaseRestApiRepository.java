@@ -77,7 +77,7 @@ public class BaseRestApiRepository<Entity>  {
 
         final RealmRepository db = dataBase;
 
-        return apiResult.flatMap(element -> update ? db.save(element) : db.save(element));
+        return apiResult.flatMap(element -> db.save(element, update));
     }
 
     /**

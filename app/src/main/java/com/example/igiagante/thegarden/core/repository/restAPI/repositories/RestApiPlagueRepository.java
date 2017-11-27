@@ -33,7 +33,7 @@ public class RestApiPlagueRepository implements Repository<Plague> {
     }
 
     @Override
-    public Observable<Plague> save(Plague item) {
+    public Observable<Plague> save(Plague item, boolean update) {
         return null;
     }
 
@@ -43,7 +43,7 @@ public class RestApiPlagueRepository implements Repository<Plague> {
     }
 
     @Override
-    public Observable<Integer> remove(String plagueId) {
+    public Observable<Boolean> remove(String plagueId) {
         return null;
     }
 

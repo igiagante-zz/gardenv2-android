@@ -6,7 +6,6 @@ import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.NutrientRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.nutrient.NutrientsByUserIdSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
@@ -33,7 +32,6 @@ public class GetNutrientsUseCase extends UseCase<Nutrient, String> {
 
     @Override
     protected Observable buildUseCaseObservable(String userId) {
-        NutrientsByUserIdSpecification nutrientSpecification = new NutrientsByUserIdSpecification(userId);
-        return nutrientRepositoryManager.query(nutrientSpecification);
+        return nutrientRepositoryManager.getAll();
     }
 }

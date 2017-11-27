@@ -1,17 +1,12 @@
 package com.example.igiagante.thegarden.creation.plants.usecase;
 
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 
-import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Plant;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.PlantRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.plant.PlantByNameSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
-
-import java.io.File;
 
 import javax.inject.Inject;
 
@@ -35,12 +30,7 @@ public class SavePlantUseCase extends UseCase<Plant, Plant> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(Plant plant) {
-
-        PlantByNameSpecification specification = new PlantByNameSpecification(plant.getName());
-
-        return TextUtils.isEmpty(plant.getId()) ?
-                plantRepositoryManager.add(plant, specification) :
-                plantRepositoryManager.update(plant);
+    protected Observable<Plant> buildUseCaseObservable(Plant plant) {
+        return plantRepositoryManager.save(plant);
     }
 }

@@ -8,9 +8,6 @@ import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.PlantRepositoryManager;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -18,7 +15,7 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class ExistPlantUseCase extends UseCase<Plant, String> {
+public class ExistPlantUseCase extends UseCase<Boolean, Plant> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -32,19 +29,7 @@ public class ExistPlantUseCase extends UseCase<Plant, String> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(String plantName) {
-
-        Observable<Plant> plantObservable = plantRepositoryManager.getDB().getByName(plantName);
-
-        List<Boolean> list = new ArrayList<>();
-        plantObservable.subscribe(plant -> {
-            if(plant != null) {
-                list.add(Boolean.TRUE);
-            } else {
-                list.add(Boolean.FALSE);
-            }
-        });
-
-        return list.isEmpty() ? Observable.just(Boolean.FALSE) : Observable.just(list.get(0));
+    protected Observable<Boolean> buildUseCaseObservable(Plant plant) {
+        return plantRepositoryManager.exists(plant);
     }
 }

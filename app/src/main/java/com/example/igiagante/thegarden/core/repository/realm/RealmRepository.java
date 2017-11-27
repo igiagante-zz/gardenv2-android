@@ -243,11 +243,11 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
      * @return Observable<Integer>
      */
     @SuppressWarnings("unchecked")
-    public Observable<Integer> remove(String id){
+    public Observable<Boolean> remove(String id){
 
-        return Observable.defer(new Func0<Observable<Integer>>() {
+        return Observable.defer(new Func0<Observable<Boolean>>() {
             @Override
-            public Observable<Integer> call() {
+            public Observable<Boolean> call() {
 
                 Realm realm = Realm.getInstance(realmConfiguration);
 
@@ -264,7 +264,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                 realm.close();
 
                 // if realmEntity.isValid() is false, it is because the realm object was deleted
-                return Observable.just(realmEntity.isValid() ? -1 : 1);
+                return Observable.just(!realmEntity.isValid());
             }
         }).subscribeOn(Schedulers.from(executor));
     }
@@ -288,7 +288,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
             for (int i = 0; i < realmResults.size(); i++) {
                 entities.add(realmToModel.map(realmResults.get(i)));
             }
-            // convert Flowable<RealmResults<RealmEntity>> into Observable<List<Entity>>
+
             return Observable.just(entities);
         });
     }

@@ -6,7 +6,6 @@ import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.NutrientRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.nutrient.NutrientByNameSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
@@ -27,11 +26,6 @@ public class SaveNutrientUseCase extends UseCase<Nutrient, Nutrient> {
 
     @Override
     protected io.reactivex.Observable<Nutrient> buildUseCaseObservable(Nutrient nutrient) {
-
-        NutrientByNameSpecification specification = new NutrientByNameSpecification(nutrient.getName());
-
-        return nutrient.getId() == null ?
-                this.nutrientRepositoryManager.add(nutrient, specification) :
-                this.nutrientRepositoryManager.update(nutrient);
+        return nutrientRepositoryManager.save(nutrient);
     }
 }

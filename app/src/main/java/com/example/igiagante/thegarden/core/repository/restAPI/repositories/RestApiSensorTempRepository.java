@@ -32,7 +32,7 @@ public class RestApiSensorTempRepository implements Repository<SensorTemp> {
     }
 
     @Override
-    public Observable<SensorTemp> save(SensorTemp item) {
+    public Observable<SensorTemp> save(SensorTemp item, boolean update) {
         return null;
     }
 
@@ -42,7 +42,7 @@ public class RestApiSensorTempRepository implements Repository<SensorTemp> {
     }
 
     @Override
-    public Observable<Integer> remove(String id) {
+    public Observable<Boolean> remove(String id) {
         return null;
     }
 

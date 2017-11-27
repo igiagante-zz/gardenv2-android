@@ -38,21 +38,7 @@ public class RestApiGardenRepository extends BaseRestApiRepository<Garden> imple
     }
 
     @Override
-    public Observable<Garden> save(Garden garden) {
-        return addOrUpdate(garden, false);
-    }
-
-    @Override
-    public Observable<Integer> add(Iterable<Garden> gardens) {
-        return null;
-    }
-
-    public Observable<Garden> update(Garden garden) {
-        return addOrUpdate(garden, true);
-    }
-
-    @NonNull
-    private Observable addOrUpdate(Garden garden, boolean update) {
+    public Observable<Garden> save(Garden garden, boolean update) {
 
         Observable<Garden> apiResult;
 
@@ -66,7 +52,12 @@ public class RestApiGardenRepository extends BaseRestApiRepository<Garden> imple
     }
 
     @Override
-    public Observable<Integer> remove(String gardenId) {
+    public Observable<Integer> add(Iterable<Garden> gardens) {
+        return null;
+    }
+
+    @Override
+    public Observable<Boolean> remove(String gardenId) {
         return null;
     }
 

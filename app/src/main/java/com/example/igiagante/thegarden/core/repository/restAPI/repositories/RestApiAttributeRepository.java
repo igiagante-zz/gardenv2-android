@@ -33,7 +33,7 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
     }
 
     @Override
-    public Observable<Attribute> save(Attribute item) {
+    public Observable<Attribute> save(Attribute item, boolean update) {
         return null;
     }
 
@@ -47,7 +47,7 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
     }
 
     @Override
-    public Observable<Integer> remove(String attributeId) {
+    public Observable<Boolean> remove(String attributeId) {
         return null;
     }
 

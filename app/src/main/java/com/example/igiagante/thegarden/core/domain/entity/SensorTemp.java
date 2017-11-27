@@ -11,10 +11,13 @@ import java.util.Date;
 /**
  * @author Ignacio Giagante, on 19/8/16.
  */
-public class SensorTemp implements Parcelable{
+public class SensorTemp implements Parcelable, RealmRepository.Identifiable{
 
     public SensorTemp() {
     }
+
+    @SerializedName("id")
+    private String id;
 
     @SerializedName("date")
     private Date date;
@@ -24,6 +27,10 @@ public class SensorTemp implements Parcelable{
 
     @SerializedName("humidity")
     private int humidity;
+
+    public String getId() {
+        return id;
+    }
 
     public Date getDate() {
         return date;

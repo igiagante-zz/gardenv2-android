@@ -36,7 +36,7 @@ public class RestApiFlavorRepository implements Repository<Flavor> {
     }
 
     @Override
-    public Observable<Flavor> save(Flavor item) {
+    public Observable<Flavor> save(Flavor item, boolean update) {
         return null;
     }
 
@@ -46,7 +46,7 @@ public class RestApiFlavorRepository implements Repository<Flavor> {
     }
 
     @Override
-    public Observable<Integer> remove(String flavorId) {
+    public Observable<Boolean> remove(String flavorId) {
         return null;
     }
 

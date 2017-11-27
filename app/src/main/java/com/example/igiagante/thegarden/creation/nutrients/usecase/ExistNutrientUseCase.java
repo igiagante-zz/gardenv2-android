@@ -18,7 +18,7 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 20/7/16.
  */
-public class ExistNutrientUseCase extends UseCase<Nutrient, String> {
+public class ExistNutrientUseCase extends UseCase<Boolean, Nutrient> {
 
     /**
      * Repository Manager which delegates the actions to the correct repository
@@ -32,18 +32,7 @@ public class ExistNutrientUseCase extends UseCase<Nutrient, String> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(String plantName) {
-        Observable<Nutrient> nutrientObservable = nutrientRepositoryManager.getDB().getByName(plantName);
-
-        List<Boolean> list = new ArrayList<>();
-        nutrientObservable.subscribe(nutrient -> {
-            if (nutrient != null) {
-                list.add(Boolean.TRUE);
-            } else {
-                list.add(Boolean.FALSE);
-            }
-        });
-
-        return list.isEmpty() ? Observable.just(Boolean.FALSE) : Observable.just(list.get(0));
+    protected Observable<Boolean> buildUseCaseObservable(Nutrient nutrient) {
+        return nutrientRepositoryManager.exists(nutrient);
     }
 }

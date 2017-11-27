@@ -52,7 +52,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
     }
 
     @Override
-    public Observable<Plant> save(@NonNull final Plant plant) {
+    public Observable<Plant> save(@NonNull final Plant plant, boolean update) {
 
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
         Observable<Plant> apiResult = api.createPlant(builder.build());
@@ -78,7 +78,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
         int size = 0;
         for (Plant plant : plants) {
-            save(plant);
+            save(plant, false);
         }
 
         if (plants instanceof Collection<?>) {
@@ -105,9 +105,9 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
     }
 
     @Override
-    public Observable<Integer> remove(@NonNull String plantId) {
+    public Observable<Boolean> remove(@NonNull String plantId) {
         return api.deletePlant(plantId)
-                .map(response -> response.isSuccessful() ? 1 : -1);
+                .map(response -> response.isSuccessful());
     }
 
     @Override

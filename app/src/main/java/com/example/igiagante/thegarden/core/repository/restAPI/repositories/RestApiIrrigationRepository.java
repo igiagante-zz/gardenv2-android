@@ -43,7 +43,7 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
     }
 
     @Override
-    public Observable<Irrigation> save(Irrigation irrigation) {
+    public Observable<Irrigation> save(Irrigation irrigation, boolean update) {
         return addOrUpdate(irrigation, false);
     }
 
@@ -73,9 +73,9 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
     }
 
     @Override
-    public Observable<Integer> remove(String irrigationId) {
+    public Observable<Boolean> remove(String irrigationId) {
         return api.deleteIrrigation(irrigationId)
-                .map(response -> response.isSuccessful() ? 1 : -1);
+                .map(response -> response.isSuccessful());
     }
 
     @Override

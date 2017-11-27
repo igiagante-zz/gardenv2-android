@@ -36,7 +36,7 @@ public interface Repository<T> {
      * @param item Object to be inserted into the repository
      * @return Observable<T> The Observable contains an object
      */
-    Observable<T> save(T item);
+    Observable<T> save(T item, boolean update);
 
     /**
      * Return the number of objects which were added.
@@ -53,7 +53,7 @@ public interface Repository<T> {
      * @param id Id from Object to be deleted into the repository
      * @return Observable<Integer>
      */
-    Observable<Integer> remove(String id);
+    Observable<Boolean> remove(String id);
 
 
     void removeAll();

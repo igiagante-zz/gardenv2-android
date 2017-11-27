@@ -45,7 +45,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
     }
 
     @Override
-    public Observable<Nutrient> save(Nutrient nutrient) {
+    public Observable<Nutrient> save(Nutrient nutrient, boolean update) {
         return addOrUpdate(nutrient, false);
     }
 
@@ -76,9 +76,9 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
     }
 
     @Override
-    public Observable<Integer> remove(String nutrientId) {
+    public Observable<Boolean> remove(String nutrientId) {
         return api.deleteNutrient(nutrientId)
-                .map(response -> response.isSuccessful() ? 1 : -1);
+                .map(response -> response.isSuccessful());
     }
 
     @Override
