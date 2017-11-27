@@ -1,11 +1,13 @@
 package com.example.igiagante.thegarden.core.domain.entity;
 
+import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
+
 import java.util.ArrayList;
 
 /**
  * @author Ignacio Giagante, on 2/8/16.
  */
-public class User {
+public class User implements RealmRepository.Identifiable {
 
     private String id;
 

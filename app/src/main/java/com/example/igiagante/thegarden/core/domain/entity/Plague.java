@@ -3,12 +3,13 @@ package com.example.igiagante.thegarden.core.domain.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * @author Ignacio Giagante, on 6/4/16.
  */
-public class Plague implements Parcelable {
+public class Plague implements Parcelable, RealmRepository.Identifiable {
 
     public Plague() {
     }

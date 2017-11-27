@@ -10,6 +10,7 @@ import com.example.igiagante.thegarden.core.repository.realm.mapper.UserRealmToU
 import com.example.igiagante.thegarden.core.repository.realm.mapper.UserToUserRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserRealm;
 
+import io.reactivex.Observable;
 import io.realm.Realm;
 
 /**
@@ -20,6 +21,7 @@ public class UserRealmRepository extends RealmRepository<User, UserRealm> {
     public UserRealmRepository(@NonNull Context context) {
         super(context);
     }
+
 
     // Mapper<GardenRealm, Garden>
     MapToRealm<User, UserRealm> initModelToRealmMapper(Realm realm) {

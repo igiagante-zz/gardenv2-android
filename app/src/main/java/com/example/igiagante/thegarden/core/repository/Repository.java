@@ -36,7 +36,7 @@ public interface Repository<T> {
      * @param item Object to be inserted into the repository
      * @return Observable<T> The Observable contains an object
      */
-    Observable<T> add(T item);
+    Observable<T> save(T item);
 
     /**
      * Return the number of objects which were added.
@@ -46,13 +46,6 @@ public interface Repository<T> {
      */
     Observable<Integer> add(Iterable<T> items);
 
-    /**
-     * Return an observable with the object updated.
-     *
-     * @param item Object to be updated into the repository
-     * @return Observable<Integer> The Observable contains the number of objects added.
-     */
-    Observable<T> update(T item);
 
     /**
      * Return an observable with the integer, which indicates if the resource was deleted or not.
@@ -64,6 +57,13 @@ public interface Repository<T> {
 
 
     void removeAll();
+
+    /**
+     * Return an observable a list of resources.
+     *
+     * @return Observable<List<T>>
+     */
+    Observable<List<T>> getAll();
 
     /**
      * Return an observable a list of resources.

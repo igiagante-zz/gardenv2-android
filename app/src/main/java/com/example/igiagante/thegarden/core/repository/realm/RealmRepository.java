@@ -32,7 +32,8 @@ import rx.functions.Func0;
  * @author Ignacio Giagante, on 14/11/17.
  */
 
-public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & RealmModel>
+public abstract class RealmRepository<Entity extends RealmRepository.Identifiable,
+        RealmEntity extends RealmObject & RealmModel>
         implements Repository<Entity> {
 
     protected Realm realm;
@@ -50,6 +51,10 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
     abstract MapToModel<RealmEntity, Entity> initRealmToModelMapper(Context context);
 
     private final ThreadExecutor executor;
+
+    public interface Identifiable {
+        String getId();
+    }
 
     public RealmRepository(@NonNull Context context) {
 
@@ -81,19 +86,40 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
     /**
      * Return a resource using the id
      *
-     * @param id Object id
+     * @param item Object item
      * @return Observable<T>
      */
     @SuppressWarnings("unchecked")
     @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
-    public Observable getById(String id) {
+    public Observable<Boolean> checkIfRealmObjectExists(final Entity item) {
+
+        return Observable.defer(new Func0<Observable<Boolean>>() {
+            @Override
+            public Observable<Boolean> call() {
+
+                Realm realm = Realm.getInstance(realmConfiguration);
+
+                realm.beginTransaction();
+
+                RealmEntity realmEntity = (RealmEntity) realm.where(realmClass)
+                        .equalTo(Table.ID, item.getId())
+                        .findFirst();
+
+                realm.commitTransaction();
+
+                return realmEntity != null ? Observable.just(true) : Observable.just(false);
+            }
+        });
+    }
+
+    @SuppressWarnings("unchecked")
+    public Observable<Entity> getById(String id){
 
         return Observable.defer(new Func0<Observable<Entity>>() {
             @Override
             public Observable<Entity> call() {
 
                 Realm realm = Realm.getInstance(realmConfiguration);
-
                 realm.beginTransaction();
 
                 RealmEntity realmEntity = (RealmEntity) realm.where(realmClass)
@@ -102,13 +128,16 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
 
                 realm.commitTransaction();
 
+                Entity entity = null;
+
                 if(realmEntity != null) {
-                    return  Observable.just(realmToModel.map(realmEntity));
+                    entity = realmToModel.map(realmEntity);
+                    return  Observable.just(entity);
                 } else {
                     return  Completable.complete().toObservable();
                 }
             }
-        });
+        }).subscribeOn(Schedulers.from(executor));
     }
 
     /**
@@ -118,7 +147,7 @@ public abstract class RealmRepository<Entity, RealmEntity extends RealmObject & 
      * @return Observable<T>
      */
     @SuppressWarnings("unchecked")
-    public Observable getByName(String name){
+    public Observable<Entity> getByName(String name){
 
         return Observable.defer(new Func0<Observable<Entity>>() {
             @Override

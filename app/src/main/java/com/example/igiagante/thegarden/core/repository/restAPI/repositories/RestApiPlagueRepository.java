@@ -33,17 +33,12 @@ public class RestApiPlagueRepository implements Repository<Plague> {
     }
 
     @Override
-    public Observable<Plague> add(Plague item) {
+    public Observable<Plague> save(Plague item) {
         return null;
     }
 
     @Override
     public Observable<Integer> add(Iterable<Plague> items) {
-        return null;
-    }
-
-    @Override
-    public Observable<Plague> update(Plague item) {
         return null;
     }
 
@@ -55,6 +50,11 @@ public class RestApiPlagueRepository implements Repository<Plague> {
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<Plague>> getAll() {
+        return api.getPlagues();
     }
 
     @Override

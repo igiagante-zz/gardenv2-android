@@ -36,17 +36,12 @@ public class RestApiFlavorRepository implements Repository<Flavor> {
     }
 
     @Override
-    public Observable<Flavor> add(Flavor item) {
+    public Observable<Flavor> save(Flavor item) {
         return null;
     }
 
     @Override
     public Observable<Integer> add(Iterable<Flavor> items) {
-        return null;
-    }
-
-    @Override
-    public Observable<Flavor> update(Flavor item) {
         return null;
     }
 
@@ -58,6 +53,11 @@ public class RestApiFlavorRepository implements Repository<Flavor> {
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<Flavor>> getAll() {
+        return api.getFlavors();
     }
 
     @Override

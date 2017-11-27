@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * @author Ignacio Giagante, on 15/4/16.
  */
-public class Plant implements Parcelable {
+public class Plant implements Parcelable, RealmRepository.Identifiable {
 
     public Plant() {
     }

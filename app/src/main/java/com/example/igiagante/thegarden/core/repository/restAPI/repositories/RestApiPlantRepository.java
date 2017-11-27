@@ -52,7 +52,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
     }
 
     @Override
-    public Observable<Plant> add(@NonNull final Plant plant) {
+    public Observable<Plant> save(@NonNull final Plant plant) {
 
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
         Observable<Plant> apiResult = api.createPlant(builder.build());
@@ -78,7 +78,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
         int size = 0;
         for (Plant plant : plants) {
-            add(plant);
+            save(plant);
         }
 
         if (plants instanceof Collection<?>) {
@@ -88,7 +88,7 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
         return Observable.just(size);
     }
 
-    @Override
+
     public Observable<Plant> update(@NonNull final Plant plant) {
 
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
@@ -117,6 +117,11 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
     @Override
     public Observable<List<Plant>> query(Specification specification) {
+        return api.getPlants();
+    }
+
+    @Override
+    public Observable<List<Plant>> getAll() {
         return api.getPlants();
     }
 

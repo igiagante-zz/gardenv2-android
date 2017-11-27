@@ -45,7 +45,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
     }
 
     @Override
-    public Observable<Nutrient> add(Nutrient nutrient) {
+    public Observable<Nutrient> save(Nutrient nutrient) {
         return addOrUpdate(nutrient, false);
     }
 
@@ -54,7 +54,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
         return null;
     }
 
-    @Override
+
     public Observable<Nutrient> update(Nutrient nutrient) {
         return addOrUpdate(nutrient, true);
     }
@@ -84,6 +84,11 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<Nutrient>> getAll() {
+        return api.getNutrients();
     }
 
     @Override

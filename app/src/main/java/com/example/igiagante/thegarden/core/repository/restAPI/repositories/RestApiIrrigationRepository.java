@@ -43,7 +43,7 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
     }
 
     @Override
-    public Observable<Irrigation> add(Irrigation irrigation) {
+    public Observable<Irrigation> save(Irrigation irrigation) {
         return addOrUpdate(irrigation, false);
     }
 
@@ -52,7 +52,6 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
         return null;
     }
 
-    @Override
     public Observable<Irrigation> update(Irrigation irrigation) {
         return addOrUpdate(irrigation, true);
     }
@@ -82,6 +81,11 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<Irrigation>> getAll() {
+        return api.getIrrigations();
     }
 
     @Override

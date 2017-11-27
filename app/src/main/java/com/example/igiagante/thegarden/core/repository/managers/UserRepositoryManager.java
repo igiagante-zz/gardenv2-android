@@ -43,6 +43,9 @@ public class UserRepositoryManager
 
     @SuppressWarnings("unchecked")
     public Observable<Boolean> checkIfUserExistsInDataBase(@Nullable String userId) {
+
+        //return realmRepository.exits(userId);
+
         return realmRepository.getById(userId)
                 .isEmpty()
                 .map(object -> !object.equals(true))

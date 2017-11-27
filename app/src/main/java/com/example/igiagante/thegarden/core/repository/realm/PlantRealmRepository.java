@@ -48,4 +48,8 @@ public class PlantRealmRepository extends RealmRepository<Plant, PlantRealm> {
         return  Observable.just(realmToModel.map(plantRealm));
     }
 
+    @Override
+    Observable<Boolean> exists(@NonNull String id) {
+        return null;
+    }
 }

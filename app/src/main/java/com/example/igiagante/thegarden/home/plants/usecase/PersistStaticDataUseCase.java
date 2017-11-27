@@ -55,14 +55,11 @@ public class PersistStaticDataUseCase extends UseCase<String, Void> {
     protected Observable<String> buildUseCaseObservable(Void aVoid) {
 
         // ask if attributes are already persisted
-        AttributeSpecification attributeSpecification = new AttributeSpecification();
-        Observable<List<Attribute>> attributes = attributeRepositoryManager.query(attributeSpecification);
+        Observable<List<Attribute>> attributes = attributeRepositoryManager.get
 
-        PlagueSpecification plagueSpecification = new PlagueSpecification();
         Observable<List<Plague>> plagues = plagueRepositoryManager.query(plagueSpecification);
 
         // check temp and humidity data
-        SensorTempSpecification sensorTempSpecification = new SensorTempSpecification();
         Observable<List<SensorTemp>> sensorTemps = sensorTempRepositoryManager.query(sensorTempSpecification);
 
         return Observable.zip(attributes.count().toObservable(), plagues.count().toObservable(),

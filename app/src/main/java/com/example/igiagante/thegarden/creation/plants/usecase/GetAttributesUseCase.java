@@ -7,7 +7,6 @@ import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.AttributeRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.attribute.AttributeSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
@@ -34,7 +33,6 @@ public class GetAttributesUseCase extends UseCase<Attribute, Void> {
 
     @Override
     protected Observable buildUseCaseObservable(Void aVoid) {
-        AttributeSpecification specification = new AttributeSpecification();
-        return attributeRepositoryManager.query(specification);
+        return attributeRepositoryManager.getAll();
     }
 }

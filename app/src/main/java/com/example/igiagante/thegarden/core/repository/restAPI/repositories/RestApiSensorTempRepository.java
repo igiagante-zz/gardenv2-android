@@ -32,17 +32,12 @@ public class RestApiSensorTempRepository implements Repository<SensorTemp> {
     }
 
     @Override
-    public Observable<SensorTemp> add(SensorTemp item) {
+    public Observable<SensorTemp> save(SensorTemp item) {
         return null;
     }
 
     @Override
     public Observable<Integer> add(Iterable<SensorTemp> items) {
-        return null;
-    }
-
-    @Override
-    public Observable<SensorTemp> update(SensorTemp item) {
         return null;
     }
 
@@ -54,6 +49,11 @@ public class RestApiSensorTempRepository implements Repository<SensorTemp> {
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<SensorTemp>> getAll() {
+        return api.getValues();
     }
 
     public Observable<SensorTemp> getActualTempAndHumd() {

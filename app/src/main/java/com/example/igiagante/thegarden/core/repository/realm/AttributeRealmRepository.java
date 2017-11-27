@@ -8,6 +8,7 @@ import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 
+import io.reactivex.Observable;
 import io.realm.Realm;
 
 
@@ -27,8 +28,12 @@ public class AttributeRealmRepository extends RealmRepository<Attribute, Attribu
     }
 
     public AttributeRealmRepository(@NonNull Context context) {
-
         super(context);
+    }
+
+    @Override
+    Observable<Boolean> exists(@NonNull String id) {
+        return super.checkIfRealmObjectExists(id);
     }
 
     @Override

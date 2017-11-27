@@ -3,6 +3,7 @@ package com.example.igiagante.thegarden.core.domain.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class Nutrient implements Parcelable {
+public class Nutrient implements Parcelable, RealmRepository.Identifiable {
 
     public Nutrient() {
     }

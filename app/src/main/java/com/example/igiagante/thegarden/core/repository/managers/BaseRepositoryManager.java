@@ -40,20 +40,24 @@ public class BaseRepositoryManager<Entity, RealmEntity extends RealmObject,
         return this.api;
     }
 
+
+
     public Observable<Entity> add(@NonNull Entity entity, Specification specification) {
+
+        //Entity queryEntity = db.exits(entity.id)
 
         List<Entity> entities = db.query(specification).blockingFirst();
 
         Observable<Entity> dbResults = entities.isEmpty() ? Observable.empty()
                 : Observable.just(entities.get(0));
 
-        Observable<Entity> apiResults = api.add(entity);
+        Observable<Entity> apiResults = api.save(entity);
 
         return !checkInternet() ? dbResults : Observable.concat(dbResults, apiResults).first(entity).toObservable();
     }
 
     public Observable<Entity> update(@NonNull Entity entity) {
-        return !checkInternet() ? Observable.just(entity) : api.update(entity);
+        return !checkInternet() ? Observable.just(entity) : api.save(entity);
     }
 
     public Observable<Integer> delete(@NonNull String id) {
@@ -75,6 +79,14 @@ public class BaseRepositoryManager<Entity, RealmEntity extends RealmObject,
         }
 
         return result == -1 ? Observable.just(-1) : Observable.just(Integer.parseInt(id));
+    }
+
+    public Observable<List<Entity>> getAll() {
+
+        Observable<List<Entity>> query = db.getAll();
+        Observable<List<Entity>> apiResult = api.getAll();
+
+        return !checkInternet() ? query : Observable.concat(query, apiResult).firstElement().toObservable();
     }
 
     public Observable<List<Entity>> query(Specification specification) {

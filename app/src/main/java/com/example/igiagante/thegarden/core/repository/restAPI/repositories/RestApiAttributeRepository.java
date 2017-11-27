@@ -33,7 +33,7 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
     }
 
     @Override
-    public Observable<Attribute> add(Attribute item) {
+    public Observable<Attribute> save(Attribute item) {
         return null;
     }
 
@@ -42,7 +42,6 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
         return null;
     }
 
-    @Override
     public Observable<Attribute> update(Attribute item) {
         return null;
     }
@@ -55,6 +54,11 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
     @Override
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<Attribute>> getAll() {
+        return api.getAttributes();
     }
 
     @Override
