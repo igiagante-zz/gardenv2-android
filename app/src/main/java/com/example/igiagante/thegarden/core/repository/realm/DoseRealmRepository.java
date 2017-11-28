@@ -15,7 +15,6 @@ import io.realm.Realm;
  */
 public class DoseRealmRepository extends RealmRepository<Dose, DoseRealm> {
 
-
     @Override
     MapToRealm<Dose, DoseRealm> initModelToRealmMapper(Realm realm) {
         return null;

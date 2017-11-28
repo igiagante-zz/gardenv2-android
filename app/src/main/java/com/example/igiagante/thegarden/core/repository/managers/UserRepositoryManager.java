@@ -58,7 +58,7 @@ public class UserRepositoryManager
         if (!checkInternet()) {
             return Observable.just(user);
         }
-        return realmRepository.save(user);
+        return realmRepository.save(user, true);
     }
 
     @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
@@ -66,7 +66,7 @@ public class UserRepositoryManager
         if (!checkInternet()) {
             return Observable.just(user);
         }
-        return realmRepository.save(user);
+        return realmRepository.save(user, true);
     }
 
     /**
@@ -104,7 +104,7 @@ public class UserRepositoryManager
                         })
 
                 .flatMap(userUpdated -> {
-                    return realmRepository.save(userUpdated);
+                    return realmRepository.save(userUpdated, true);
                 });
     }
 }

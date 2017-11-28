@@ -182,7 +182,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
      */
     @SuppressWarnings("unchecked")
     @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
-    public Observable<Entity> save(final Entity item) {
+    public Observable<Entity> save(final Entity item, boolean update) {
 
         return Observable.defer(new Func0<Observable<Entity>>() {
             @Override

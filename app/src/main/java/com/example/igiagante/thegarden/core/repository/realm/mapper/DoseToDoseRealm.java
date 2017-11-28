@@ -53,7 +53,7 @@ public class DoseToDoseRealm implements MapToRealm<Dose, DoseRealm> {
         if (dose.getNutrients() != null) {
             for (Nutrient nutrient : dose.getNutrients()) {
                 NutrientPerDoseRealm nutrientRealm = realm.createObject(NutrientPerDoseRealm.class, UUID.randomUUID().toString());
-                nutrientRealms.add(toNutrientRealm.copy(nutrient, nutrientRealm));
+                nutrientRealms.add(toNutrientRealm.copy(nutrient, nutrientRealm, realm));
             }
         }
 

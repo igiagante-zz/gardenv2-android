@@ -17,7 +17,6 @@ import io.realm.Realm;
  */
 public class NutrientRealmRepository extends RealmRepository<Nutrient, NutrientRealm> {
 
-
     @Override
     MapToRealm<Nutrient, NutrientRealm> initModelToRealmMapper(Realm realm) {
         return null;

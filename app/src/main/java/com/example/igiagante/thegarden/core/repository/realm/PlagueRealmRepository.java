@@ -4,10 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
-import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlagueRealm;
-import com.example.igiagante.thegarden.core.repository.realm.specification.plague.PlagueByIdSpecification;
 
 import io.realm.Realm;
 
@@ -37,5 +36,4 @@ public class PlagueRealmRepository extends RealmRepository<Plague, PlagueRealm> 
     void setRealmClass() {
         this.realmClass = PlagueRealm.class;
     }
-
 }

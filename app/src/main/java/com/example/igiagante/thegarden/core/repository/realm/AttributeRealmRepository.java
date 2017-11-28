@@ -32,13 +32,12 @@ public class AttributeRealmRepository extends RealmRepository<Attribute, Attribu
     }
 
     @Override
-    Observable<Boolean> exists(@NonNull String id) {
-        return super.checkIfRealmObjectExists(id);
-    }
-
-    @Override
     void setRealmClass() {
         this.realmClass = AttributeRealm.class;
     }
 
+    @Override
+    public Observable<Attribute> save(Attribute item, boolean update) {
+        return null;
+    }
 }

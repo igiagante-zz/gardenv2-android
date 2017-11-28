@@ -51,26 +51,25 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
         return null;
     }
 
+    public Observable<Plant> update(@NonNull final Plant plant) {
+
+        MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
+        Observable<Plant> apiResult = api.updatePlant(plant.getId(), builder.build());
+
+        PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
+
+        return apiResult.flatMap(plantFromAPI -> dataBase.save(plantFromAPI, false));
+    }
+
     @Override
     public Observable<Plant> save(@NonNull final Plant plant, boolean update) {
 
         MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
         Observable<Plant> apiResult = api.createPlant(builder.build());
 
-        // get Data From api
-        List<Plant> listOne = new ArrayList<>();
-        apiResult.subscribe(listOne::add);
-
-        // persist the garden into database
         PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
-        Observable<Plant> dbResult = dataBase.save(listOne.get(0));
 
-        List<Plant> list = new ArrayList<>();
-        dbResult.subscribe(list::add);
-
-        Observable<Plant> observable = Observable.just(list.get(0));
-
-        return observable;
+        return apiResult.flatMap(plantFromAPI -> dataBase.save(plantFromAPI, false));
     }
 
     @Override
@@ -86,22 +85,6 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
         }
 
         return Observable.just(size);
-    }
-
-
-    public Observable<Plant> update(@NonNull final Plant plant) {
-
-        MultipartBody.Builder builder = getMultipartBodyForPostOrPut(plant);
-        Observable<Plant> apiResult = api.updatePlant(plant.getId(), builder.build());
-
-        // get Data From api
-        Plant plantFromApi = apiResult.subscribeOn(Schedulers.io()).blockingFirst();
-
-        // update the plant into database
-        PlantRealmRepository dataBase = new PlantRealmRepository(mContext);
-        Observable<Plant> dbResult = dataBase.save(plantFromApi);
-
-        return Observable.just(dbResult.blockingFirst());
     }
 
     @Override

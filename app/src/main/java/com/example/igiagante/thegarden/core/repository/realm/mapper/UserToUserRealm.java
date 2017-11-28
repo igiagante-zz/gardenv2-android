@@ -74,7 +74,7 @@ public class UserToUserRealm implements MapToRealm<User, UserRealm> {
                     nutrientRealm = realm.createObject(NutrientRealm.class, nutrient.getId());
                     nutrientRealm.setId(nutrient.getId());
                 }
-                nutrientRealms.add(toNutrientRealm.copy(nutrient, nutrientRealm));
+                nutrientRealms.add(toNutrientRealm.copy(nutrient, nutrientRealm, realm));
             }
         }
 

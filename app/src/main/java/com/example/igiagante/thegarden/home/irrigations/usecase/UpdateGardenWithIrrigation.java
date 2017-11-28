@@ -30,6 +30,6 @@ public class UpdateGardenWithIrrigation extends UseCase<Garden, Garden> {
     @Override
     protected Observable buildUseCaseObservable(Garden garden) {
         GardenRealmRepository gardenRealmRepository = new GardenRealmRepository(mContext);
-        return gardenRealmRepository.save(garden);
+        return gardenRealmRepository.save(garden, true);
     }
 }

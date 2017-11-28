@@ -11,9 +11,6 @@ import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
 import com.example.igiagante.thegarden.core.repository.managers.AttributeRepositoryManager;
 import com.example.igiagante.thegarden.core.repository.managers.PlagueRepositoryManager;
 import com.example.igiagante.thegarden.core.repository.managers.SensorTempRepositoryManager;
-import com.example.igiagante.thegarden.core.repository.realm.specification.SensorTempSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.attribute.AttributeSpecification;
-import com.example.igiagante.thegarden.core.repository.realm.specification.plague.PlagueSpecification;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import java.util.List;
@@ -55,12 +52,12 @@ public class PersistStaticDataUseCase extends UseCase<String, Void> {
     protected Observable<String> buildUseCaseObservable(Void aVoid) {
 
         // ask if attributes are already persisted
-        Observable<List<Attribute>> attributes = attributeRepositoryManager.get
+        Observable<List<Attribute>> attributes = attributeRepositoryManager.getAll();
 
-        Observable<List<Plague>> plagues = plagueRepositoryManager.query(plagueSpecification);
+        Observable<List<Plague>> plagues = plagueRepositoryManager.getAll();
 
         // check temp and humidity data
-        Observable<List<SensorTemp>> sensorTemps = sensorTempRepositoryManager.query(sensorTempSpecification);
+        Observable<List<SensorTemp>> sensorTemps = sensorTempRepositoryManager.getAll();
 
         return Observable.zip(attributes.count().toObservable(), plagues.count().toObservable(),
                 sensorTemps.count().toObservable(),

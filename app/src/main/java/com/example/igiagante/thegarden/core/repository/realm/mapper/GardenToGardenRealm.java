@@ -59,7 +59,7 @@ public class GardenToGardenRealm implements MapToRealm<Garden, GardenRealm> {
                     // create plant realm object and set id
                     plantRealm = realm.createObject(PlantRealm.class, plant.getId());
                 }
-                plantRealms.add(toPlantRealm.copy(plant, plantRealm));
+                plantRealms.add(toPlantRealm.copy(plant, plantRealm, realm));
             }
         }
 
@@ -76,7 +76,7 @@ public class GardenToGardenRealm implements MapToRealm<Garden, GardenRealm> {
                     // create irrigation realm object and set id
                     irrigationRealm = realm.createObject(IrrigationRealm.class, irrigation.getId());
                 }
-                irrigationRealms.add(toIrrigationRealm.copy(irrigation, irrigationRealm));
+                irrigationRealms.add(toIrrigationRealm.copy(irrigation, irrigationRealm, realm));
             }
         }
 

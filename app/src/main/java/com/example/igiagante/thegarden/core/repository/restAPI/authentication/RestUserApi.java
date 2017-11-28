@@ -55,7 +55,7 @@ public class RestUserApi implements Repository<User> {
                 httpStatusValue = httpStatus.getHttpStatusValue(response.code());
 
                 realmRepository = new UserRealmRepository(context);
-                realmRepository.save(session.getUser());
+                realmRepository.save(session.getUser(), false);
             } else {
                 try {
                     // TODO - java.lang.IllegalStateException: Expected BEGIN_OBJECT but was STRING at line 1 column 1 path $
@@ -135,6 +135,11 @@ public class RestUserApi implements Repository<User> {
         return Observable.just(new User());
     }
 
+    @Override
+    public Observable<User> save(User item, boolean update) {
+        return null;
+    }
+
     /**
      * Return an Object's id which was added
      *
@@ -172,13 +177,18 @@ public class RestUserApi implements Repository<User> {
      * @param id Id from Object to be deleted into the repository
      * @return Observable<Integer>
      */
-    public Observable<Integer> remove(String id){
-        return Observable.just(1);
+    public Observable<Boolean> remove(String id){
+        return Observable.just(true);
     }
 
 
     public void removeAll() {
 
+    }
+
+    @Override
+    public Observable<List<User>> getAll() {
+        return null;
     }
 
     /**
