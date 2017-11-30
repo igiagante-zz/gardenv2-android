@@ -269,7 +269,7 @@ public class MainActivity extends BaseActivity implements HasComponent<MainCompo
 
     private void setupToolbar() {
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_nav_menu);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);

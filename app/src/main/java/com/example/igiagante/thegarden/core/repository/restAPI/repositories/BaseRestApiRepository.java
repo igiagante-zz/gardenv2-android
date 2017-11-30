@@ -61,23 +61,15 @@ public class BaseRestApiRepository<Entity>  {
         try {
             Constructor<?> cons = repository.getConstructor(Context.class);
             dataBase = (RealmRepository) cons.newInstance(mContext);
-        } catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException | InvocationTargetException
+                | IllegalAccessException | InstantiationException e) {
             Log.e(TAG, e.getMessage());
             e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            Log.e(TAG, e.getMessage());
-            e.printStackTrace();
-        } catch (InstantiationException ei) {
-            Log.e(TAG, ei.getMessage());
-            ei.printStackTrace();
         }
 
         final RealmRepository db = dataBase;
 
-        return apiResult.flatMap(element -> db.save(element, update));
+        return apiResult.flatMap(element -> db.save((RealmRepository.Identifiable) element, update));
     }
 
     /**

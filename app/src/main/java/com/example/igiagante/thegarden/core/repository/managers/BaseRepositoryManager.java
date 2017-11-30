@@ -26,7 +26,7 @@ public class BaseRepositoryManager<Entity extends RealmRepository.Identifiable, 
     protected DB db;
     protected API api;
 
-    public BaseRepositoryManager(Context context, DB db, API api ) {
+    public BaseRepositoryManager(Context context, DB db, API api) {
         this.context = context;
         this.db = db;
         this.api = api;
@@ -69,7 +69,7 @@ public class BaseRepositoryManager<Entity extends RealmRepository.Identifiable, 
         return Observable.concat(dbResult, apiResult).firstElement().toObservable();
     }
 
-    public Observable<List<Entity>> query(Specification specification) {
+    public Observable<List<Entity>> query(@NonNull Specification specification) {
 
         Observable<List<Entity>> dbResult = db.query(specification);
         Observable<List<Entity>> apiResult = api.query(null);

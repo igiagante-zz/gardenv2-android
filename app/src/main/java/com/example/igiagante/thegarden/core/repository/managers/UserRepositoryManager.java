@@ -103,8 +103,6 @@ public class UserRepositoryManager
                             return user2;
                         })
 
-                .flatMap(userUpdated -> {
-                    return realmRepository.save(userUpdated, true);
-                });
+                .flatMap(userUpdated -> realmRepository.save(userUpdated, true));
     }
 }

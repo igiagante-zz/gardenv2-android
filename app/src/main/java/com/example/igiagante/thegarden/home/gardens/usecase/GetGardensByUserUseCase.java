@@ -29,7 +29,7 @@ public class GetGardensByUserUseCase extends UseCase<Garden, User> {
     }
 
     @Override
-    protected Observable buildUseCaseObservable(User user) {
+    protected Observable<Garden> buildUseCaseObservable(User user) {
         return userRepositoryManager.query(user);
     }
 }

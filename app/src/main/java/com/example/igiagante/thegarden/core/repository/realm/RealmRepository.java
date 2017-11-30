@@ -137,7 +137,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                     return  Completable.complete().toObservable();
                 }
             }
-        }).subscribeOn(Schedulers.from(executor));
+        });
     }
 
     /**
@@ -171,7 +171,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                     return  Completable.complete().toObservable();
                 }
             }
-        }).subscribeOn(Schedulers.from(executor));
+        });
     }
 
     /**
@@ -233,7 +233,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
 
                 return Observable.just(size);
             }
-        }).subscribeOn(Schedulers.from(executor));
+        });
     }
 
     /**
@@ -266,7 +266,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                 // if realmEntity.isValid() is false, it is because the realm object was deleted
                 return Observable.just(!realmEntity.isValid());
             }
-        }).subscribeOn(Schedulers.from(executor));
+        });
     }
 
     /**
