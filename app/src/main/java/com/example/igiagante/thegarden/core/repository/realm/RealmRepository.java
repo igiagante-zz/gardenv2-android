@@ -7,20 +7,18 @@ import android.util.Log;
 
 import com.example.igiagante.thegarden.core.executor.JobExecutor;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
-import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.Table;
 import com.fernandocejas.frodo.annotation.RxLogObservable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmModel;
@@ -210,28 +208,26 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
      * @param items Objects to be inserted into the repository
      * @return Observable<Integer> The Observable contains the number of objects added
      */
-    public Observable<Integer> add(Iterable<Entity> items){
+    @SuppressWarnings("unchecked")
+    public Observable<List<Entity>> add(Iterable<Entity> items){
 
-        return Observable.defer(new Func0<Observable<Integer>>() {
+        return Observable.defer(new Func0<Observable<List<Entity>>>() {
             @Override
-            public Observable<Integer> call() {
+            public Observable<List<Entity>> call() {
+
+                List<Entity> entities = new ArrayList<>();
 
                 Realm realm = Realm.getInstance(realmConfiguration);
                 realm.executeTransaction(realmParam -> {
                     for (Entity item : items) {
-                        realmParam.copyToRealmOrUpdate(modelToRealm.map(item, realm));
+                        RealmEntity result = realmParam.copyToRealmOrUpdate(modelToRealm.map(item, realm));
+                        entities.add(realmToModel.map(result));
                     }
                 });
 
                 realm.close();
 
-                int size = 0;
-
-                if (items instanceof Collection<?>) {
-                    size = ((Collection<?>) items).size();
-                }
-
-                return Observable.just(size);
+                return Observable.fromArray(entities);
             }
         });
     }
@@ -312,7 +308,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                 entities.add(realmToModel.map(realmResults.get(i)));
             }
 
-            return Observable.just(entities);
+            return !entities.isEmpty() ? Observable.just(entities) : Completable.complete().toObservable();
         });
     }
 

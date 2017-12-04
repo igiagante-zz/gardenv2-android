@@ -85,19 +85,31 @@ public class UserRepositoryManager
         //check if the user has gardens into the database
         Observable<User> query = realmRepository.getById(user.getId());
 
-        return query.filter(userData ->
-                        userData.getGardens() != null
-                        && userData.getGardens().isEmpty()
-                        && !TextUtils.isEmpty(userData.getUserName()))
-
-                .flatMap(user1 -> api.getGardensByUser(user1.getUserName()),
+        return query
+                .flatMap(user1 ->
+                        {
+                            if(user1.getGardens() != null && user1.getGardens().isEmpty()) {
+                                return api.getGardensByUser(user1.getUserName());
+                            }
+                            else {
+                                return Observable.just(user1.getGardens());
+                            }
+                        },
                         (user1, gardensByUser) -> {
 
                             user1.setGardens((ArrayList<Garden>) gardensByUser);
                             return user1;
                         })
 
-                .flatMap(user2 -> restApiNutrientRepository.getNutrientsByUser(user2.getUserName()),
+                .flatMap(user2 ->
+                        {
+                            if(user2.getNutrients() != null && user2.getNutrients().isEmpty()) {
+                                return restApiNutrientRepository.getNutrientsByUser(user2.getUserName());
+                            } else {
+                                return Observable.just(user2.getNutrients());
+                            }
+
+                        },
                         (user2, nutrientsByUser) -> {
                             user2.setNutrients((ArrayList<Nutrient>) nutrientsByUser);
                             return user2;

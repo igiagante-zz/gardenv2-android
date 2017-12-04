@@ -38,7 +38,7 @@ public class RestApiPlagueRepository implements Repository<Plague> {
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Plague> items) {
+    public Observable<List<Plague>> add(Iterable<Plague> items) {
         return null;
     }
 

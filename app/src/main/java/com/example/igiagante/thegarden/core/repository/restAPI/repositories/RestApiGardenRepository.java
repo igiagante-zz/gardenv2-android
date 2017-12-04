@@ -52,7 +52,7 @@ public class RestApiGardenRepository extends BaseRestApiRepository<Garden> imple
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Garden> gardens) {
+    public Observable<List<Garden>> add(Iterable<Garden> gardens) {
         return null;
     }
 

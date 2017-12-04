@@ -38,7 +38,7 @@ public class RestApiAttributeRepository implements Repository<Attribute> {
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Attribute> items) {
+    public Observable<List<Attribute>> add(Iterable<Attribute> items) {
         return null;
     }
 

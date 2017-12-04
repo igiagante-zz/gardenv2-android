@@ -4,11 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -66,7 +68,16 @@ public class BaseRepositoryManager<Entity extends RealmRepository.Identifiable, 
         Observable<List<Entity>> dbResult = db.getAll();
         Observable<List<Entity>> apiResult = api.getAll();
 
-        return Observable.concat(dbResult, apiResult).firstElement().toObservable();
+        Observable<List<Entity>> flatMap = apiResult.flatMap(entityList -> {
+            Log.d("DB", "size of : " + entityList.getClass().getName() + " list " + entityList.size());
+            return db.add(entityList);
+        });
+
+        return Observable.concat(flatMap, dbResult)
+                 .doOnNext(entityList -> Log.d("DB", "size of list concat  --> " + entityList.size()))
+                .filter(entityList -> !entityList.isEmpty())
+                .first(new ArrayList<>())
+                .toObservable();
     }
 
     public Observable<List<Entity>> query(@NonNull Specification specification) {

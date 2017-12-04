@@ -37,7 +37,7 @@ public class RestApiSensorTempRepository implements Repository<SensorTemp> {
     }
 
     @Override
-    public Observable<Integer> add(Iterable<SensorTemp> items) {
+    public Observable<List<SensorTemp>> add(Iterable<SensorTemp> items) {
         return null;
     }
 

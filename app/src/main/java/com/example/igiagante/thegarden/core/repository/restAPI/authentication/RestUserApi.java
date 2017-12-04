@@ -154,11 +154,11 @@ public class RestUserApi implements Repository<User> {
     /**
      * Return the number of objects which were added.
      *
-     * @param items Objects to be inserted into the repository
+     * @param users Objects to be inserted into the repository
      * @return Observable<Integer> The Observable contains the number of objects added
      */
-    public Observable<Integer> add(Iterable<User> items) {
-        return Observable.just(1);
+    public Observable<List<User>> add(Iterable<User> users) {
+        return Observable.just((List<User>)users);
     }
 
     /**

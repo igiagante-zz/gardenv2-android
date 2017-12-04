@@ -41,7 +41,7 @@ public class RestApiFlavorRepository implements Repository<Flavor> {
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Flavor> items) {
+    public Observable<List<Flavor>> add(Iterable<Flavor> items) {
         return null;
     }
 

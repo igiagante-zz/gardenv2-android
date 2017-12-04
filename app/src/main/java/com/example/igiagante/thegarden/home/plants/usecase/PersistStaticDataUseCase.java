@@ -59,6 +59,8 @@ public class PersistStaticDataUseCase extends UseCase<String, Void> {
         // check temp and humidity data
         Observable<List<SensorTemp>> sensorTemps = sensorTempRepositoryManager.getAll();
 
+        //attributes.concatMap(attributeList -> )
+
         return Observable.zip(attributes.count().toObservable(), plagues.count().toObservable(),
                 sensorTemps.count().toObservable(),
                 new Function3<Long, Long, Long, Long>() {

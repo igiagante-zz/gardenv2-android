@@ -48,7 +48,7 @@ public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigatio
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Irrigation> items) {
+    public Observable<List<Irrigation>> add(Iterable<Irrigation> items) {
         return null;
     }
 

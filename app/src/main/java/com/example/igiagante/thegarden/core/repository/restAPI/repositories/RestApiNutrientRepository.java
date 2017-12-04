@@ -50,7 +50,7 @@ public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> i
     }
 
     @Override
-    public Observable<Integer> add(Iterable<Nutrient> items) {
+    public Observable<List<Nutrient>> add(Iterable<Nutrient> items) {
         return null;
     }
 

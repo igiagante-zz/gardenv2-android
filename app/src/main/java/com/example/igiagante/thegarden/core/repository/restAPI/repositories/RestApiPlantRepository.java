@@ -73,18 +73,12 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
     }
 
     @Override
-    public Observable<Integer> add(@NonNull final Iterable<Plant> plants) {
+    public Observable<List<Plant>> add(@NonNull final Iterable<Plant> plants) {
 
-        int size = 0;
         for (Plant plant : plants) {
             save(plant, false);
         }
-
-        if (plants instanceof Collection<?>) {
-            size = ((Collection<?>) plants).size();
-        }
-
-        return Observable.just(size);
+        return Observable.just((List<Plant>) plants);
     }
 
     @Override

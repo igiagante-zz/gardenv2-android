@@ -1,5 +1,7 @@
 package com.example.igiagante.thegarden.core.repository;
 
+import org.w3c.dom.Entity;
+
 import java.util.List;
 
 import io.reactivex.Flowable;
@@ -44,7 +46,7 @@ public interface Repository<T> {
      * @param items Objects to be inserted into the repository
      * @return Observable<Integer> The Observable contains the number of objects added
      */
-    Observable<Integer> add(Iterable<T> items);
+    Observable<List<T>> add(Iterable<T> items);
 
 
     /**
