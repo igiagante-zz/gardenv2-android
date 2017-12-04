@@ -72,7 +72,7 @@ public class RestUserApi implements Repository<User> {
         });
     }
 
-    public Observable<String> loginUser(User user) {
+    public Observable<String>  loginUser(User user) {
 
         Observable<Response<InnerResponse>> result = api.loginUser(user.getUserName(), user.getPassword());
 

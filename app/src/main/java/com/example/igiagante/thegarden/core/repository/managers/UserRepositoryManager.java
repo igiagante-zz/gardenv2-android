@@ -76,7 +76,7 @@ public class UserRepositoryManager
      */
     @SuppressWarnings("unchecked")
     @RxLogObservable(RxLogObservable.Scope.EVERYTHING)
-    public Observable query(@Nullable User user) {
+    public Observable query(@NonNull User user) {
 
         if (!checkInternet()) {
             return Observable.just(user);
