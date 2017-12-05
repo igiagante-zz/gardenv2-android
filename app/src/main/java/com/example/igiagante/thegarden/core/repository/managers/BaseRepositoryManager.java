@@ -4,7 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import io.realm.RealmObject;
 
 /**
@@ -69,7 +67,6 @@ public class BaseRepositoryManager<Entity extends RealmRepository.Identifiable, 
         Observable<List<Entity>> apiResult = api.getAll();
 
         return Observable.concat(dbResult, apiResult.switchMap(entityList -> db.add(entityList)))
-                 .doOnNext(entityList -> Log.d("DB", "size of list concat  --> " + entityList.size()))
                 .filter(entityList -> !entityList.isEmpty())
                 .first(new ArrayList<>())
                 .toObservable();

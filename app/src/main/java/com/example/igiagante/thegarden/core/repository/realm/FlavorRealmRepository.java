@@ -36,7 +36,7 @@ public class FlavorRealmRepository extends RealmRepository<Flavor, FlavorRealm> 
 
     @Override
     void setRealmClass() {
-        this.realmClass = AttributeRealm.class;
+        this.realmClass = FlavorRealm.class;
     }
 
 }

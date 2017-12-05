@@ -28,9 +28,7 @@ public class AttributeToAttributeRealm implements MapToRealm<Attribute, Attribut
             attributeRealm = realm.createObject(AttributeRealm.class, attribute.getId());
         }
 
-        copy(attribute, attributeRealm, realm);
-
-        return attributeRealm;
+        return copy(attribute, attributeRealm, realm);
     }
 
     @Override

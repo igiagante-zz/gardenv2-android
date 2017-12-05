@@ -34,6 +34,8 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
         RealmEntity extends RealmObject & RealmModel>
         implements Repository<Entity> {
 
+    private static final String TAG = RealmRepository.class.getSimpleName();
+
     protected Realm realm;
     protected final RealmConfiguration realmConfiguration;
 
@@ -48,18 +50,15 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
 
     abstract MapToModel<RealmEntity, Entity> initRealmToModelMapper();
 
-    private final ThreadExecutor executor;
-
     public interface Identifiable {
         String getId();
     }
 
     public RealmRepository(@NonNull Context context) {
 
-        executor = new JobExecutor();
-
         // throw exception in case child class has not implemented setRealmClass()
         setRealmClass();
+        checkIfClassAttributeIsInitialized();
 
         Realm.init(context);
         this.realmConfiguration = new RealmConfiguration.Builder()
@@ -73,13 +72,20 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
         realmToModel = initRealmToModelMapper();
     }
 
-    /*
+    /**
+     * Force child class to initialize this property.
+     */
     private void checkIfClassAttributeIsInitialized() {
 
-        if(this.clazz == null) {
-            throw new Exception("class property was not initialized");
+        if(this.realmClass == null) {
+            try {
+                throw new Exception("class property was not initialized");
+            } catch (Exception e) {
+                Log.e(TAG, e.getMessage());
+                e.printStackTrace();
+            }
         }
-    }*/
+    }
 
     /**
      * Return a resource using the id
@@ -189,11 +195,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                 Realm realm = Realm.getInstance(realmConfiguration);
                 realm.beginTransaction();
 
-                Log.d("RealmRepositoryBefore: ", Thread.currentThread().getName());
-
                 RealmEntity result = realm.copyToRealmOrUpdate(modelToRealm.map(item, realm));
-
-                Log.d("RealmRepositoryMiddle: ", Thread.currentThread().getName());
 
                 realm.commitTransaction();
 
@@ -224,6 +226,9 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
                         entities.add(realmToModel.map(result));
                     }
                 });
+
+                Log.d("DB", " number of " + realmClass.getName()
+                        + "rows inserted  --> " + entities.size());
 
                 realm.close();
 
