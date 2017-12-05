@@ -35,7 +35,7 @@ public class PlantRealmToPlant implements MapToModel<PlantRealm, Plant> {
     private Realm realm;
     private final RealmConfiguration realmConfiguration;
 
-    public PlantRealmToPlant(@NonNull Context context){
+    public PlantRealmToPlant(){
         this.toImage = new ImageRealmToImage();
         this.toFlavor = new FlavorRealmToFlavor();
         this.toAttribute = new AttributeRealmToAttribute();

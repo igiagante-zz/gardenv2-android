@@ -46,7 +46,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
 
     abstract MapToRealm<Entity, RealmEntity> initModelToRealmMapper(Realm realm);
 
-    abstract MapToModel<RealmEntity, Entity> initRealmToModelMapper(Context context);
+    abstract MapToModel<RealmEntity, Entity> initRealmToModelMapper();
 
     private final ThreadExecutor executor;
 
@@ -70,7 +70,7 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
         this.realm = Realm.getInstance(realmConfiguration);
 
         modelToRealm = initModelToRealmMapper(this.realm);
-        realmToModel = initRealmToModelMapper(context);
+        realmToModel = initRealmToModelMapper();
     }
 
     /*

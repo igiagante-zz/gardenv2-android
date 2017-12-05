@@ -4,8 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.domain.entity.Dose;
-import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.MapToRealm;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.DoseRealmToDose;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.DoseToDoseRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.DoseRealm;
 
 import io.realm.Realm;
@@ -17,12 +19,12 @@ public class DoseRealmRepository extends RealmRepository<Dose, DoseRealm> {
 
     @Override
     MapToRealm<Dose, DoseRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new DoseToDoseRealm(realm);
     }
 
     @Override
-    MapToModel<DoseRealm, Dose> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<DoseRealm, Dose> initRealmToModelMapper() {
+        return new DoseRealmToDose();
     }
 
     public DoseRealmRepository(@NonNull Context context) {

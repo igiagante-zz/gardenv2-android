@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.domain.entity.Irrigation;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.IrrigationRealmToIrrigation;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.IrrigationToIrrigationRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.IrrigationRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.IrrigationTable;
 
@@ -17,15 +19,14 @@ import io.realm.RealmResults;
  */
 public class IrrigationRealmRepository extends RealmRepository<Irrigation, IrrigationRealm> {
 
-
     @Override
     MapToRealm<Irrigation, IrrigationRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new IrrigationToIrrigationRealm(realm);
     }
 
     @Override
-    MapToModel<IrrigationRealm, Irrigation> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<IrrigationRealm, Irrigation> initRealmToModelMapper() {
+        return new IrrigationRealmToIrrigation();
     }
 
     public IrrigationRealmRepository(@NonNull Context context) {

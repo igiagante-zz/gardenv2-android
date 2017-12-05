@@ -27,9 +27,7 @@ public class PlagueToPlagueRealm implements MapToRealm<Plague, PlagueRealm> {
             plagueRealm = realm.createObject(PlagueRealm.class, plague.getId());
         }
 
-        copy(plague, plagueRealm, realm);
-
-        return plagueRealm;
+        return copy(plague, plagueRealm, realm);
     }
 
     @Override

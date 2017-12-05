@@ -7,6 +7,8 @@ import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 import com.example.igiagante.thegarden.core.domain.entity.Flavor;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.FlavorRealmToFlavor;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.FlavorToFlavorRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.FlavorRealm;
 
@@ -20,12 +22,12 @@ public class FlavorRealmRepository extends RealmRepository<Flavor, FlavorRealm> 
 
     @Override
     MapToRealm<Flavor, FlavorRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new FlavorToFlavorRealm(realm);
     }
 
     @Override
-    MapToModel<FlavorRealm, Flavor> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<FlavorRealm, Flavor> initRealmToModelMapper() {
+        return new FlavorRealmToFlavor();
     }
 
     public FlavorRealmRepository(@NonNull Context context) {

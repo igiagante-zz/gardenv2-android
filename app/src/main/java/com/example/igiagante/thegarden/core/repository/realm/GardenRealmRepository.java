@@ -29,8 +29,8 @@ public class GardenRealmRepository extends RealmRepository<Garden, GardenRealm> 
     }
 
     // Mapper<Garden, GardenRealm>
-    MapToModel<GardenRealm, Garden> initRealmToModelMapper(Context context) {
-        return new GardenRealmToGarden(context);
+    MapToModel<GardenRealm, Garden> initRealmToModelMapper() {
+        return new GardenRealmToGarden();
     }
 
     @Override

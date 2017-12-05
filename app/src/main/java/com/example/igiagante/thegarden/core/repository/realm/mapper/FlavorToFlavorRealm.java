@@ -29,9 +29,7 @@ public class FlavorToFlavorRealm implements MapToRealm<Flavor, FlavorRealm> {
             flavorRealm = realm.createObject(FlavorRealm.class, flavor.getId());
         }
 
-        copy(flavor, flavorRealm, realm);
-
-        return flavorRealm;
+        return copy(flavor, flavorRealm, realm);
     }
 
     @Override

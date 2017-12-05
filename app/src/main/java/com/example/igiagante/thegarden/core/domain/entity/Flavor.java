@@ -23,9 +23,6 @@ public class Flavor implements Parcelable, RealmRepository.Identifiable{
     @SerializedName("imageUrl")
     private String imageUrl;
 
-    @SerializedName("mongoId")
-    private String mongoId;
-
     public String getId() {
         return id;
     }
@@ -50,14 +47,6 @@ public class Flavor implements Parcelable, RealmRepository.Identifiable{
         this.imageUrl = imageUrl;
     }
 
-    public String getMongoId() {
-        return mongoId;
-    }
-
-    public void setMongoId(String mongoId) {
-        this.mongoId = mongoId;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -68,7 +57,6 @@ public class Flavor implements Parcelable, RealmRepository.Identifiable{
         dest.writeString(id);
         dest.writeString(name);
         dest.writeString(imageUrl);
-        dest.writeString(mongoId);
     }
 
     public static final Parcelable.Creator<Flavor> CREATOR = new Parcelable.Creator<Flavor>() {
@@ -85,6 +73,5 @@ public class Flavor implements Parcelable, RealmRepository.Identifiable{
         id = in.readString();
         name = in.readString();
         imageUrl = in.readString();
-        mongoId = in.readString();
     }
 }

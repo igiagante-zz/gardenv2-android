@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.NutrientRealmToNutrient;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.NutrientToNutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.NutrientRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.tables.GardenTable;
 
@@ -19,12 +21,12 @@ public class NutrientRealmRepository extends RealmRepository<Nutrient, NutrientR
 
     @Override
     MapToRealm<Nutrient, NutrientRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new NutrientToNutrientRealm(realm);
     }
 
     @Override
-    MapToModel<NutrientRealm, Nutrient> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<NutrientRealm, Nutrient> initRealmToModelMapper() {
+        return new NutrientRealmToNutrient();
     }
 
     public NutrientRealmRepository(@NonNull Context context) {

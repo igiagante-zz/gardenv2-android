@@ -29,8 +29,8 @@ public class UserRealmRepository extends RealmRepository<User, UserRealm> {
     }
 
     // Mapper<Garden, GardenRealm>
-    MapToModel<UserRealm, User> initRealmToModelMapper(Context context) {
-        return new UserRealmToUser(context);
+    MapToModel<UserRealm, User> initRealmToModelMapper() {
+        return new UserRealmToUser();
     }
 
     @Override

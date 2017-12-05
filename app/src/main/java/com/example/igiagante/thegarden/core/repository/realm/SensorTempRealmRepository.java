@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.domain.entity.SensorTemp;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.SensorTempRealmToSensorTemp;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.SensorTempToSensorTempRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.SensorTempRealm;
 
 import io.realm.Realm;
@@ -17,12 +19,12 @@ public class SensorTempRealmRepository extends RealmRepository<SensorTemp, Senso
 
     @Override
     MapToRealm<SensorTemp, SensorTempRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new SensorTempToSensorTempRealm(realm);
     }
 
     @Override
-    MapToModel<SensorTempRealm, SensorTemp> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<SensorTempRealm, SensorTemp> initRealmToModelMapper() {
+        return new SensorTempRealmToSensorTemp();
     }
 
     public SensorTempRealmRepository(@NonNull Context context) {

@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.domain.entity.Attribute;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.AttributeRealmToAttribute;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.AttributeToAttributeRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.AttributeRealm;
 
 import io.reactivex.Observable;
@@ -19,12 +21,12 @@ public class AttributeRealmRepository extends RealmRepository<Attribute, Attribu
 
     @Override
     MapToRealm<Attribute, AttributeRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new AttributeToAttributeRealm(realm);
     }
 
     @Override
-    MapToModel<AttributeRealm, Attribute> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<AttributeRealm, Attribute> initRealmToModelMapper() {
+        return new AttributeRealmToAttribute();
     }
 
     public AttributeRealmRepository(@NonNull Context context) {

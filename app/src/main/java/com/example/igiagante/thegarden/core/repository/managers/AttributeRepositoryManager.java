@@ -24,4 +24,6 @@ public class AttributeRepositoryManager
     public AttributeRepositoryManager(Context context) {
         super(context, new AttributeRealmRepository(context), new RestApiAttributeRepository());
     }
+
+
 }

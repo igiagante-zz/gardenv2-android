@@ -1,6 +1,5 @@
 package com.example.igiagante.thegarden.core.repository.realm.mapper;
 
-import android.content.Context;
 import android.util.Log;
 
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
@@ -23,8 +22,8 @@ public class UserRealmToUser implements MapToModel<UserRealm, User> {
     private final GardenRealmToGarden toGarden;
     private final NutrientRealmToNutrient toNutrient;
 
-    public UserRealmToUser(Context context) {
-        this.toGarden = new GardenRealmToGarden(context);
+    public UserRealmToUser() {
+        this.toGarden = new GardenRealmToGarden();
         this.toNutrient = new NutrientRealmToNutrient();
     }
 

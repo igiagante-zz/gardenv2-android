@@ -43,9 +43,7 @@ public class PlantToPlantRealm implements MapToRealm<Plant, PlantRealm> {
             plantRealm = realm.createObject(PlantRealm.class, plant.getId());
         }
         // copy values which should be updated
-        copy(plant, plantRealm, realm);
-
-        return plantRealm;
+        return copy(plant, plantRealm, realm);
     }
 
     @Override

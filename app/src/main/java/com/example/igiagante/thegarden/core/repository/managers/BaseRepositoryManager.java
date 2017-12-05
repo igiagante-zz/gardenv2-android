@@ -68,12 +68,7 @@ public class BaseRepositoryManager<Entity extends RealmRepository.Identifiable, 
         Observable<List<Entity>> dbResult = db.getAll();
         Observable<List<Entity>> apiResult = api.getAll();
 
-        Observable<List<Entity>> flatMap = apiResult.flatMap(entityList -> {
-            Log.d("DB", "size of : " + entityList.getClass().getName() + " list " + entityList.size());
-            return db.add(entityList);
-        });
-
-        return Observable.concat(flatMap, dbResult)
+        return Observable.concat(dbResult, apiResult.switchMap(entityList -> db.add(entityList)))
                  .doOnNext(entityList -> Log.d("DB", "size of list concat  --> " + entityList.size()))
                 .filter(entityList -> !entityList.isEmpty())
                 .first(new ArrayList<>())

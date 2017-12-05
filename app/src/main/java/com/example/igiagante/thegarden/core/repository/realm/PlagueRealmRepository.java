@@ -6,6 +6,8 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.domain.entity.Plague;
 import com.example.igiagante.thegarden.core.repository.MapToModel;
 import com.example.igiagante.thegarden.core.repository.MapToRealm;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.PlagueRealmToPlague;
+import com.example.igiagante.thegarden.core.repository.realm.mapper.PlagueToPlagueRealm;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.PlagueRealm;
 
 import io.realm.Realm;
@@ -19,12 +21,12 @@ public class PlagueRealmRepository extends RealmRepository<Plague, PlagueRealm> 
 
     @Override
     MapToRealm<Plague, PlagueRealm> initModelToRealmMapper(Realm realm) {
-        return null;
+        return new PlagueToPlagueRealm(realm);
     }
 
     @Override
-    MapToModel<PlagueRealm, Plague> initRealmToModelMapper(Context context) {
-        return null;
+    MapToModel<PlagueRealm, Plague> initRealmToModelMapper() {
+        return new PlagueRealmToPlague();
     }
 
     public PlagueRealmRepository(@NonNull Context context) {
