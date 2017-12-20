@@ -13,9 +13,9 @@ import retrofit2.http.GET;
  */
 public interface SensorTempApi {
 
-    @GET("sensor/")
+    @GET("sensors/")
     Observable<List<SensorTemp>> getValues();
 
-    @GET("sensor/actual")
+    @GET("sensors/actual")
     Observable<SensorTemp> getActualTempAndHumd();
 }

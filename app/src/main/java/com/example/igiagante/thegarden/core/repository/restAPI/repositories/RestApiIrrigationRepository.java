@@ -23,12 +23,11 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 19/7/16.
  */
-public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigation> implements Repository<Irrigation> {
+public class RestApiIrrigationRepository extends BaseRestApiRepository<Irrigation> {
 
     private final IrrigationRestApi api;
 
     public RestApiIrrigationRepository(Context context, Session session) {
-        super(context, session);
         api = ServiceFactory.createRetrofitService(IrrigationRestApi.class, session.getToken());
     }
 

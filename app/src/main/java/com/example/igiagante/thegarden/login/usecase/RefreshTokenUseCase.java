@@ -6,7 +6,7 @@ import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.executor.PostExecutionThread;
 import com.example.igiagante.thegarden.core.executor.ThreadExecutor;
-import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestUserApi;
+import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestAuthApi;
 import com.example.igiagante.thegarden.core.usecase.UseCase;
 
 import javax.inject.Inject;
@@ -18,14 +18,14 @@ import io.reactivex.Observable;
  */
 public class RefreshTokenUseCase extends UseCase<User, Void> {
 
-    private final RestUserApi api;
+    private final RestAuthApi api;
     private Session session;
 
     @Inject
     public RefreshTokenUseCase(Context context, Session session, ThreadExecutor threadExecutor, PostExecutionThread postExecutionThread) {
         super(threadExecutor, postExecutionThread);
         this.session = session;
-        this.api = new RestUserApi(context, session);
+        this.api = new RestAuthApi(context, session);
     }
 
     @Override

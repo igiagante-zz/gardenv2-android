@@ -20,18 +20,18 @@ import io.reactivex.Observable;
  */
 public interface IrrigationRestApi {
 
-    @GET("irrigation/{id}")
+    @GET("irrigations/{id}")
     Observable<Irrigation> getIrrigation(@Path("id") String id);
 
-    @GET("irrigation/")
+    @GET("irrigations/")
     Observable<List<Irrigation>> getIrrigations();
 
-    @POST("irrigation/")
+    @POST("irrigations/")
     Observable<Irrigation> createIrrigation(@Body RequestBody body);
 
-    @PUT("irrigation/{id}")
+    @PUT("irrigations/{id}")
     Observable<Irrigation> updateIrrigation(@Path("id") String id, @Body RequestBody body);
 
-    @DELETE("irrigation/{id}")
+    @DELETE("irrigations/{id}")
     Observable<Response<Message>> deleteIrrigation(@Path("id") String id);
 }

@@ -20,21 +20,21 @@ import io.reactivex.Observable;
  */
 public interface NutrientRestApi {
 
-    @GET("nutrient/{id}")
+    @GET("nutrients/{id}")
     Observable<Nutrient> getNutrient(@Path("id") String id);
 
-    @GET("nutrient/")
+    @GET("nutrients/")
     Observable<List<Nutrient>> getNutrients();
 
-    @GET("nutrient/user/{username}")
+    @GET("nutrients/user/{username}")
     Observable<List<Nutrient>> getNutrientsByUserName(@Path("username") String username);
 
-    @POST("nutrient/")
+    @POST("nutrients/")
     Observable<Nutrient> createNutrient(@Body RequestBody body);
 
-    @PUT("nutrient/{id}")
+    @PUT("nutrients/{id}")
     Observable<Nutrient> updateNutrient(@Path("id") String id, @Body RequestBody body);
 
-    @DELETE("nutrient/{id}")
+    @DELETE("nutrients/{id}")
     Observable<Response<Message>> deleteNutrient(@Path("id") String id);
 }

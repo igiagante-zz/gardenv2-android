@@ -93,7 +93,7 @@ public class AndroidApplication extends Application {
 
         @Override
         public void onError(Throwable e) {
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 

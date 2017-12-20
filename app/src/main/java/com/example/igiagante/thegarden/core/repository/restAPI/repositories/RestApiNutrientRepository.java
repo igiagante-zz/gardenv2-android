@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Image;
 import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.network.ServiceFactory;
 import com.example.igiagante.thegarden.core.repository.realm.NutrientRealmRepository;
@@ -19,18 +18,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.MultipartBody;
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> implements Repository<Nutrient> {
+public class RestApiNutrientRepository extends BaseRestApiRepository<Nutrient> {
 
     private final NutrientRestApi api;
 
     public RestApiNutrientRepository(Context context, Session session) {
-        super(context, session);
         api = ServiceFactory.createRetrofitService(NutrientRestApi.class, session.getToken());
     }
 

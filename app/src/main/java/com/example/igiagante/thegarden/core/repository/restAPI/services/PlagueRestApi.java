@@ -12,6 +12,6 @@ import io.reactivex.Observable;
  */
 public interface PlagueRestApi {
 
-    @GET("plague/")
+    @GET("plagues/")
     Observable<List<Plague>> getPlagues();
 }

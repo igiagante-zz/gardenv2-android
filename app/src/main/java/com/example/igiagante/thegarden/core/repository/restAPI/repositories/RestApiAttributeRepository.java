@@ -1,7 +1,6 @@
 package com.example.igiagante.thegarden.core.repository.restAPI.repositories;
 
 import com.example.igiagante.thegarden.core.domain.entity.Attribute;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.network.ServiceFactory;
 import com.example.igiagante.thegarden.core.repository.restAPI.services.AttributeRestApi;
@@ -13,47 +12,12 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 3/6/16.
  */
-public class RestApiAttributeRepository implements Repository<Attribute> {
+public class RestApiAttributeRepository extends BaseRestApiRepository<Attribute> {
 
     private final AttributeRestApi api;
 
     public RestApiAttributeRepository() {
-
         this.api = ServiceFactory.createRetrofitService(AttributeRestApi.class);
-    }
-
-    @Override
-    public Observable<Attribute> getById(String id) {
-        return null;
-    }
-
-    @Override
-    public Observable<Attribute> getByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Observable<Attribute> save(Attribute item, boolean update) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<Attribute>> add(Iterable<Attribute> items) {
-        return null;
-    }
-
-    public Observable<Attribute> update(Attribute item) {
-        return null;
-    }
-
-    @Override
-    public Observable<Boolean> remove(String attributeId) {
-        return null;
-    }
-
-    @Override
-    public void removeAll() {
-
     }
 
     @Override

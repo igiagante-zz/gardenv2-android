@@ -74,7 +74,7 @@ public class SavePlantPresenter extends AbstractPresenter<SavePlantView> {
         @Override
         public void onError(Throwable e) {
             SavePlantPresenter.this.hideViewLoading();
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 
@@ -94,7 +94,7 @@ public class SavePlantPresenter extends AbstractPresenter<SavePlantView> {
         @Override
         public void onError(Throwable e) {
             SavePlantPresenter.this.hideViewLoading();
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 

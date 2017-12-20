@@ -17,13 +17,11 @@ import com.google.gson.Gson;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.MultipartBody;
 
 /**
@@ -36,7 +34,6 @@ public class RestApiPlantRepository extends BaseRestApiRepository<Plant> impleme
 
     @Inject
     public RestApiPlantRepository(Context context, Session session) {
-        super(context, session);
         this.mContext = context;
         api = ServiceFactory.createRetrofitService(PlantRestAPI.class, session.getToken());
     }

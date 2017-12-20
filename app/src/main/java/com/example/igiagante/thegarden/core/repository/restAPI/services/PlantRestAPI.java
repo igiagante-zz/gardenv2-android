@@ -21,18 +21,18 @@ import retrofit2.http.Path;
  */
 public interface PlantRestAPI {
 
-    @GET("plant/{id}")
+    @GET("plants/{id}")
     Observable<Plant> getPlant(@Path("id") String id);
 
-    @GET("plant/")
+    @GET("plants/")
     Observable<List<Plant>> getPlants();
 
-    @POST("plant/")
+    @POST("plants/")
     Observable<Plant> createPlant(@Body RequestBody body);
 
-    @PUT("plant/{id}")
+    @PUT("plants/{id}")
     Observable<Plant> updatePlant(@Path("id") String id, @Body RequestBody body);
 
-    @DELETE("plant/{id}")
+    @DELETE("plants/{id}")
     Observable<Response<Message>> deletePlant(@Path("id") String id);
 }

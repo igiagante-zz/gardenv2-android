@@ -1,7 +1,7 @@
 package com.example.igiagante.thegarden.core.repository.restAPI.services;
 
 import com.example.igiagante.thegarden.core.domain.entity.User;
-import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestUserApi;
+import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestAuthApi;
 
 import retrofit2.Response;
 import retrofit2.http.Field;
@@ -16,18 +16,18 @@ import io.reactivex.Observable;
  */
 public interface UserRestApi {
 
-    @GET("user/{username}")
+    @GET("users/{username}")
     Observable<User> getUser(@Path("username") String userName);
 
     @FormUrlEncoded
-    @POST("user/refreshToken")
-    Observable<Response<RestUserApi.InnerResponse>> refreshToken(@Field("userId") String userId);
+    @POST("users/refreshToken")
+    Observable<Response<RestAuthApi.InnerResponse>> refreshToken(@Field("userId") String userId);
 
     @FormUrlEncoded
-    @POST("user/signup")
-    Observable<Response<RestUserApi.InnerResponse>> createUser(@Field("username") String userName, @Field("password") String password);
+    @POST("users/signup")
+    Observable<Response<RestAuthApi.InnerResponse>> createUser(@Field("username") String userName, @Field("password") String password);
 
     @FormUrlEncoded
-    @POST("user/login")
-    Observable<Response<RestUserApi.InnerResponse>> loginUser(@Field("username") String userName, @Field("password") String password);
+    @POST("users/login")
+    Observable<Response<RestAuthApi.InnerResponse>> loginUser(@Field("username") String userName, @Field("password") String password);
 }

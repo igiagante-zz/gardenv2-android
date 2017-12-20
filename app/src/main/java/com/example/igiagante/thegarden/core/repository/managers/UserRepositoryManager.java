@@ -3,8 +3,6 @@ package com.example.igiagante.thegarden.core.repository.managers;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
-import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
@@ -12,7 +10,7 @@ import com.example.igiagante.thegarden.core.domain.entity.Nutrient;
 import com.example.igiagante.thegarden.core.domain.entity.User;
 import com.example.igiagante.thegarden.core.repository.realm.UserRealmRepository;
 import com.example.igiagante.thegarden.core.repository.realm.modelRealm.UserRealm;
-import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestUserApi;
+import com.example.igiagante.thegarden.core.repository.restAPI.authentication.RestAuthApi;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiGardenRepository;
 import com.example.igiagante.thegarden.core.repository.restAPI.repositories.RestApiNutrientRepository;
 import com.fernandocejas.frodo.annotation.RxLogObservable;
@@ -27,7 +25,7 @@ import io.reactivex.Observable;
  * @author Ignacio Giagante, on 5/8/16.
  */
 public class UserRepositoryManager
-        extends BaseRepositoryManager<User, UserRealm, UserRealmRepository, RestUserApi>  {
+        extends BaseRepositoryManager<User, UserRealm, UserRealmRepository, RestAuthApi>  {
 
     private UserRealmRepository realmRepository;
     private RestApiGardenRepository api;
@@ -35,7 +33,7 @@ public class UserRepositoryManager
 
     @Inject
     public UserRepositoryManager(Context context, Session session) {
-        super(context, new UserRealmRepository(context), new RestUserApi(context, session));
+        super(context, new UserRealmRepository(context), new RestAuthApi(context, session));
         realmRepository = new UserRealmRepository(context);
         api = new RestApiGardenRepository(context, session);
         restApiNutrientRepository = new RestApiNutrientRepository(context, session);
@@ -43,8 +41,6 @@ public class UserRepositoryManager
 
     @SuppressWarnings("unchecked")
     public Observable<Boolean> checkIfUserExistsInDataBase(@Nullable String userId) {
-
-        //return realmRepository.exits(userId);
 
         return realmRepository.getById(userId)
                 .isEmpty()

@@ -20,18 +20,18 @@ import io.reactivex.Observable;
  */
 public interface DoseRestApi {
 
-    @GET("dose/{id}")
+    @GET("doses/{id}")
     Observable<Dose> getDose(@Path("id") String id);
 
-    @GET("dose/")
+    @GET("doses/")
     Observable<List<Dose>> getDoses();
 
-    @POST("dose/")
+    @POST("doses/")
     Observable<Dose> createDose(@Body RequestBody body);
 
-    @PUT("dose/{id}")
+    @PUT("doses/{id}")
     Observable<Dose> updateDose(@Path("id") String id, @Body RequestBody body);
 
-    @DELETE("dose/{id}")
+    @DELETE("doses/{id}")
     Observable<Response<Message>> deleteIrrigation(@Path("id") String id);
 }

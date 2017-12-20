@@ -78,7 +78,7 @@ public class FlavorGalleryPresenter extends AbstractPresenter<FlavorGalleryView>
 
         @Override
         public void onError(Throwable e) {
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 

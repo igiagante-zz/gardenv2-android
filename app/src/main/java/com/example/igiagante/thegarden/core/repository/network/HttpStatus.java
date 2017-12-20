@@ -16,7 +16,7 @@ public class HttpStatus {
     private static final int NOT_FOUND_KEY = 404;
     private static final int CONFLICT_KEY = 409;
 
-    private static final int INTERNAL_SERVER_ERROR_KEY = 505;
+    private static final int INTERNAL_SERVER_ERROR_KEY = 500;
 
     private static final String OK = "OK";
 

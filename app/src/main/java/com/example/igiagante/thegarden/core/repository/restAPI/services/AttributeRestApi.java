@@ -12,6 +12,6 @@ import retrofit2.http.GET;
  */
 public interface AttributeRestApi {
 
-    @GET("attribute/")
+    @GET("attributes/")
     Observable<List<Attribute>> getAttributes();
 }

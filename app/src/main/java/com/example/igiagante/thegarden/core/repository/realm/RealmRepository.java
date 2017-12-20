@@ -76,14 +76,8 @@ public abstract class RealmRepository<Entity extends RealmRepository.Identifiabl
      * Force child class to initialize this property.
      */
     private void checkIfClassAttributeIsInitialized() {
-
         if(this.realmClass == null) {
-            try {
-                throw new Exception("class property was not initialized");
-            } catch (Exception e) {
-                Log.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
+            throw new IllegalStateException("realmClass property was not initialized");
         }
     }
 

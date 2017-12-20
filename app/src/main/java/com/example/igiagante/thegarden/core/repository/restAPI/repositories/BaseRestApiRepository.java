@@ -6,12 +6,15 @@ import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.example.igiagante.thegarden.core.Session;
+import com.example.igiagante.thegarden.core.repository.Repository;
+import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.realm.RealmRepository;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import okhttp3.MediaType;
@@ -21,30 +24,13 @@ import okhttp3.RequestBody;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class BaseRestApiRepository<Entity>  {
+public class BaseRestApiRepository<Entity> implements Repository<Entity> {
 
     private static final String TAG = BaseRestApiRepository.class.getSimpleName();
 
     protected Context mContext;
 
-    protected Session session;
-
-    public BaseRestApiRepository(Context context, Session session) {
-        this.mContext = context;
-        this.session = session;
-    }
-
-    public boolean checkInternet() {
-
-        boolean isConnected;
-
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) this.mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-        isConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
-
-        return isConnected;
-    }
+    public BaseRestApiRepository(){}
 
     /**
      * Go to the api and then continue with the DB
@@ -109,5 +95,45 @@ public class BaseRestApiRepository<Entity>  {
             type = chain[1];
         }
         return type;
+    }
+
+    @Override
+    public Observable<Entity> getById(String id) {
+        return null;
+    }
+
+    @Override
+    public Observable<Entity> getByName(String name) {
+        return null;
+    }
+
+    @Override
+    public Observable<Entity> save(Entity item, boolean update) {
+        return null;
+    }
+
+    @Override
+    public Observable<List<Entity>> add(Iterable<Entity> items) {
+        return null;
+    }
+
+    @Override
+    public Observable<Boolean> remove(String id) {
+        return null;
+    }
+
+    @Override
+    public void removeAll() {
+
+    }
+
+    @Override
+    public Observable<List<Entity>> getAll() {
+        return null;
+    }
+
+    @Override
+    public Observable<List<Entity>> query(Specification specification) {
+        return null;
     }
 }

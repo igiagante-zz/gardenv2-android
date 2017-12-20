@@ -56,7 +56,7 @@ public class PhotoGalleryPresenter extends AbstractPresenter<PhotoGalleryView> {
 
         @Override
         public void onError(Throwable e) {
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 

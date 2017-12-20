@@ -12,6 +12,6 @@ import io.reactivex.Observable;
  */
 public interface FlavorRestApi {
 
-    @GET("flavor/")
+    @GET("flavors/")
     Observable<List<Flavor>> getFlavors();
 }

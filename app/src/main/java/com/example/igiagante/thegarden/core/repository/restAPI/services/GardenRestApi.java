@@ -19,22 +19,22 @@ import io.reactivex.Observable;
  */
 public interface GardenRestApi {
 
-    @GET("garden/{id}")
+    @GET("gardens/{id}")
     Observable<Garden> getGarden(@Path("id") String id);
 
-    @GET("garden/user/{username}")
+    @GET("gardens/user/{username}")
     Observable<List<Garden>> getGardensByUserName(@Path("username") String username);
 
-    @GET("garden/")
+    @GET("gardens/")
     Observable<List<Garden>> getGardens();
 
-    @POST("garden/")
+    @POST("gardens/")
     Observable<Garden> createGarden(@Body Garden body);
 
-    @PUT("garden/{id}")
+    @PUT("gardens/{id}")
     Observable<Garden> updateGarden(@Path("id") String id, @Body Garden body);
 
-    @DELETE("garden/{id}/{userId}")
+    @DELETE("gardens/{id}/{userId}")
     Observable<Response<Message>> deleteGarden(@Path("id") String id, @Path("userId") String userId);
 
 }

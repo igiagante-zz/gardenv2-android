@@ -59,7 +59,7 @@ public class ChartsPresenter extends AbstractPresenter<SensorTempView> {
         @Override
         public void onError(Throwable e) {
             ChartsPresenter.this.hideViewLoading();
-            Log.e("Error", e.getMessage());
+            Log.e("ErrorResponse", e.getMessage());
             e.printStackTrace();
         }
 

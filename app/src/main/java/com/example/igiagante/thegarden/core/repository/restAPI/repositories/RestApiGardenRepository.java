@@ -1,11 +1,9 @@
 package com.example.igiagante.thegarden.core.repository.restAPI.repositories;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 
 import com.example.igiagante.thegarden.core.Session;
 import com.example.igiagante.thegarden.core.domain.entity.Garden;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.network.ServiceFactory;
 import com.example.igiagante.thegarden.core.repository.realm.GardenRealmRepository;
@@ -18,12 +16,11 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 3/7/16.
  */
-public class RestApiGardenRepository extends BaseRestApiRepository<Garden> implements Repository<Garden> {
+public class RestApiGardenRepository extends BaseRestApiRepository<Garden> {
 
     private final GardenRestApi api;
 
     public RestApiGardenRepository(Context context, Session session) {
-        super(context, session);
         api = ServiceFactory.createRetrofitService(GardenRestApi.class, session.getToken());
     }
 

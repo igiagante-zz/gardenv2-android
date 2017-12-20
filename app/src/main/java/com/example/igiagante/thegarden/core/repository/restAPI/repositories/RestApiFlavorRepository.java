@@ -1,7 +1,6 @@
 package com.example.igiagante.thegarden.core.repository.restAPI.repositories;
 
 import com.example.igiagante.thegarden.core.domain.entity.Flavor;
-import com.example.igiagante.thegarden.core.repository.Repository;
 import com.example.igiagante.thegarden.core.repository.Specification;
 import com.example.igiagante.thegarden.core.repository.network.ServiceFactory;
 import com.example.igiagante.thegarden.core.repository.restAPI.services.FlavorRestApi;
@@ -16,43 +15,13 @@ import io.reactivex.Observable;
 /**
  * @author Ignacio Giagante, on 27/5/16.
  */
-public class RestApiFlavorRepository implements Repository<Flavor> {
+public class RestApiFlavorRepository extends BaseRestApiRepository<Flavor> {
 
     private final FlavorRestApi api;
 
     @Inject
     public RestApiFlavorRepository() {
         api = ServiceFactory.createRetrofitService(FlavorRestApi.class);
-    }
-
-    @Override
-    public Observable<Flavor> getById(String id) {
-        return null;
-    }
-
-    @Override
-    public Observable<Flavor> getByName(String name) {
-        return null;
-    }
-
-    @Override
-    public Observable<Flavor> save(Flavor item, boolean update) {
-        return null;
-    }
-
-    @Override
-    public Observable<List<Flavor>> add(Iterable<Flavor> items) {
-        return null;
-    }
-
-    @Override
-    public Observable<Boolean> remove(String flavorId) {
-        return null;
-    }
-
-    @Override
-    public void removeAll() {
-
     }
 
     @Override
